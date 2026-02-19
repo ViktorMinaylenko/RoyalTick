@@ -135,13 +135,10 @@
 }
 
 .cart-list__item__title {
-  color: #E8E9EA;
-  font-size: 16px;
-  transition: color .2s ease-in-out;
-  text-decoration: none;
-  width: max-content;
   display: flex;
-  align-items: center;
+  flex-direction: column; /* Ставимо назву і розмір один під одним */
+  text-decoration: none;
+  gap: 2px; /* Невелика відстань між рядками */
 }
 
 .cart-list__item__title span:first-child {
@@ -162,6 +159,26 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.cart-list__item__name {
+  display: block;
+  color: #E8E9EA;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.cart-list__item__size {
+  display: block;
+  color: #A5A8AD; /* Світліший колір для другорядного тексту */
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cart-list__item__bottom {

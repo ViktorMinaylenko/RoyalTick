@@ -3,13 +3,14 @@ import { setCurrentProduct } from '@/context/goods'
 import {
   closeSearchModal,
   closeSizeTable,
-  showQuickViewModal,
   showSizeTable,
 } from '@/context/modals'
 import { setSizeTableSizes } from '@/context/sizeTable'
 import { loginCheck } from '@/context/user'
 import { ICartItem } from '@/types/cart'
 import { IProduct } from '@/types/common'
+import { EventCallable } from 'effector'
+import toast from 'react-hot-toast'
 
 export const removeOverflowHiddenFromBody = () => {
   const body = document.querySelector('body') as HTMLBodyElement
@@ -154,7 +155,6 @@ export const getCartItemCountBySize = (
   const foundItem = cartItems.find((item) => {
     if (!item.size || !currentSize) return false
 
-    // Очищуємо все: пробіли, регістр, одиниці виміру
     const itemSize = String(item.size)
       .toLowerCase()
       .replace(/\s/g, '')
@@ -164,12 +164,29 @@ export const getCartItemCountBySize = (
       .replace(/\s/g, '')
       .replace('mm', '')
 
-    // РОЗКОМЕНТУЙ РЯДОК НИЖЧЕ, якщо лічильник не з'явиться — побачиш різницю в консолі
-    // console.log(`Cart item: "${itemSize}" | Table size: "${targetSize}"`)
 
     return itemSize === targetSize
   })
 
   return foundItem ? Number(foundItem.count) : 0
 }
+
+export const deleteProductFromLS = <T>(
+  id: string,
+  key: string,
+  event: EventCallable<T>,
+  message: string,
+  withToast = true,) =>{
+    let items = JSON.parse(localStorage.getItem(key) as string)
+
+    if(!items) {
+      items = []
+    }
+
+    const updatedItems = items.filter((item: {clientId: string}) => item.clientId !== id)
+
+    localStorage.setItem(key, JSON.stringify(updatedItems))
+    event(updatedItems)
+    withToast && toast.success(message)
+  }
 

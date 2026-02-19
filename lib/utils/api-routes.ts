@@ -22,11 +22,10 @@ export const getNewAndBestsellerGoods = async (
   db: Db,
   fieldName: 'isBestseller' | 'isNew'
 ) => {
-  // Налаштовуємо кількість елементів з кожної колекції
   const collectionsConfig = [
     { name: 'watches', size: 4 },
     { name: 'straps', size: 2 },
-    { name: 'boxes', size: 2 }, // Наші нові коробки
+    { name: 'boxes', size: 2 },
   ]
 
   const results = await Promise.all(
@@ -46,7 +45,6 @@ export const getNewAndBestsellerGoods = async (
     )
   )
 
-  // Об’єднуємо всі масиви (flat) і перетасовуємо функцією shuffle
   return shuffle(results.flat())
 }
 
@@ -83,9 +81,8 @@ export const createUserAndGenerateTokens = async (
     image?: string
   }
 ) => {
-  // Якщо це OAuth, не хешуємо пароль bcrypt-ом (або використовуємо UID як є)
   const passwordToSave = reqBody.isOAuth
-    ? reqBody.password // Firebase UID зберігаємо як ідентифікатор
+    ? reqBody.password
     : bcrypt.hashSync(reqBody.password, bcrypt.genSaltSync(10))
 
   const newUser = {
@@ -230,5 +227,29 @@ export const replaceProductsInCollection = async (
   return NextResponse.json({
     status: 201,
     items,
+  })
+}
+
+export const deleteProduct = async (
+  clientPromise: Promise<MongoClient>,
+  req: Request,
+  id: string,
+  collection: string
+) => {
+  const { db, validatedTokenResult } = await getAuthRouteData(
+    clientPromise,
+    req,
+    false
+  )
+
+  if (validatedTokenResult.status !== 200) {
+    return NextResponse.json(validatedTokenResult)
+  }
+
+  await db.collection(collection).deleteOne({ _id: new ObjectId(id) })
+
+  return NextResponse.json({
+    status: 204,
+    id,
   })
 }

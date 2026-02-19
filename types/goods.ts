@@ -9,14 +9,20 @@ export interface IProductSizesItemProps {
   currentSize: string | number
   selectedSize: string
   setSelectedSize: (size: string) => void
-  currentCartItems: any[]
+  currentCartItems: ICartItem[]
   isInStock: boolean
 }
 
 export interface IProductCounterProps {
   className: string
   count: number
-  setCount?: (count: number) => void
+  setCount: (arg0: number) => void
+  cartItem: ICartItem
+  updateCountAsync: boolean
+  initialCount?: number
+  totalCount?: number
+  increasePrice?: VoidFunction
+  decreasePrice?: VoidFunction
 }
 
 export interface IAddToCartBtnProps {

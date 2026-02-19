@@ -100,12 +100,17 @@ export const addProductToCartBySizeTable = (
   count: number,
   selectedSize = ''
 ) => {
-  if (productsWithoutSizes.includes(product.type)) {
+  const hasNoSizes =
+    productsWithoutSizes.includes(product.type) ||
+    !product.sizes ||
+    Object.keys(product.sizes).length === 0
+
+  if (hasNoSizes) {
     addItemToCart(product, setSpinner, count, selectedSize)
     return
   }
 
-  if (selectedSize) {
+  if (selectedSize && selectedSize !== 'undefined' && selectedSize.length > 0) {
     addItemToCart(product, setSpinner, count, selectedSize)
     return
   }
@@ -135,3 +140,4 @@ export const handleDeleteAllFromCart = (jwt: string) => {
 
   localStorage.setItem('cart', JSON.stringify([]))
 }
+

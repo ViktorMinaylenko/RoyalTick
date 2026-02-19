@@ -275,6 +275,8 @@
         font-weight: 500;
         cursor: pointer;
         transition: background-color 0.2s ease-in-out;
+        height: 52px; // Висота кнопки повинна збігатися з висотою лічильника для ідеального вирівнювання
+        flex-shrink: 0;
 
         &:hover {
           background-color: #70f !important;
@@ -289,6 +291,10 @@
       &__counter {
         margin-right: 24px;
         width: 212px;
+        height: 52px; // Вкажіть точну висоту, яку має ваш ProductCounter
+        display: flex;
+        align-items: center;
+        overflow: hidden; // Щоб контент не розпирав блок
       }
     }
 

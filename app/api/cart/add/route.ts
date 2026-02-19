@@ -60,7 +60,6 @@ export async function POST(req: Request) {
       inStock: productItem.inStock,
       clientId: reqBody.clientId,
       material: productItem.characteristics?.material || '',
-      // ВИПРАВЛЕННЯ: беремо розмір з запиту (reqBody)
       size:
         reqBody.size ||
         (productItem.characteristics

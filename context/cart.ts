@@ -1,10 +1,15 @@
-import { addProductToCartFx, updateCartItemCountFx } from '@/api/cart'
+import {
+  addProductToCartFx,
+  deleteCartItemFx,
+  updateCartItemCountFx,
+} from '@/api/cart'
 import { handleJWTError } from '@/lib/utils/errors'
 import api from '../api/apiInstance'
 import {
   IAddProductsFromLSToCartFx,
   IAddProductToCartFx,
   ICartItem,
+  IDeleteCartItemsFx,
   IUpdateCartItemCountFx,
 } from '@/types/cart'
 import { createDomain, createEffect, sample } from 'effector'
@@ -48,13 +53,13 @@ export const addProductToCart = cart.createEvent<IAddProductToCartFx>()
 export const addProductsFromLSToCart =
   cart.createEvent<IAddProductsFromLSToCartFx>()
 export const updateCartItemCount = cart.createEvent<IUpdateCartItemCountFx>()
+export const setTotalPrice = cart.createEvent<number>()
+export const deleteProductFromCart = cart.createEvent<IDeleteCartItemsFx>()
 
 export const $cart = cart
   .createStore<ICartItem[]>([])
   .on(addProductsFromLSToCartFx.done, (_, { result }) => result.items)
   .on(addProductToCartFx.done, (cart, { result }) => {
-    console.log('Результат з сервера:', result)
-    console.log('Новий елемент з сервера:', result.newCartItem)
     if (!result || !result.newCartItem) {
       return cart
     }
@@ -74,10 +79,17 @@ export const $cart = cart
       item._id === result.id ? { ...item, count: result.count } : item
     )
   )
+  .on(deleteCartItemFx.done, (cart, { result }) =>
+    cart.filter((item) => item._id !== result.id)
+  )
 
 export const $cartFromLs = cart
   .createStore<ICartItem[]>([])
   .on(setCartFromLS, (_, cart) => cart)
+
+export const $totalPrice = cart
+  .createStore<number>(0)
+  .on(setTotalPrice, (_, value) => value)
 
 sample({
   clock: addProductToCart,
@@ -100,4 +112,9 @@ sample({
   target: updateCartItemCountFx,
 })
 
-
+sample({
+  clock: deleteProductFromCart,
+  source: $cart,
+  fn: (_, data) => data,
+  target: deleteCartItemFx,
+})

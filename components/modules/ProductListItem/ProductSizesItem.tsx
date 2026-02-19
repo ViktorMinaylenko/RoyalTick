@@ -1,17 +1,15 @@
 'use client'
 import { IProductSizesItemProps } from '@/types/goods'
 import styles from '@/styles/quick-view-modal/index.module.scss'
+import ProductCountBySize from './ProductCountBySize'
 
-// Ми просто перевикористовуємо IProductSizesItemProps.
-// Якщо в оригіналі isInStock вже є, нам не потрібно нічого розширювати.
 const ProductSizesItem = ({
   currentSize,
   selectedSize,
   setSelectedSize,
   isInStock,
+  currentCartItems,
 }: IProductSizesItemProps) => {
-  // Оскільки ми змінили стратегію в БД, currentSize тепер — це просто назва розміру (рядок)
-  // Наприклад: "40" або "180 / 18"
   const sizeString = String(currentSize)
 
   const handleSelectSize = () => {
@@ -20,7 +18,6 @@ const ProductSizesItem = ({
     }
   }
 
-  // Визначаємо, чи обраний цей розмір
   const isSelected = selectedSize === sizeString
 
   return (
@@ -31,9 +28,14 @@ const ProductSizesItem = ({
       style={{
         backgroundColor: isSelected ? '#9466FF' : 'rgba(255, 255, 255, 0.10)',
         cursor: isInStock ? 'pointer' : 'not-allowed',
-        opacity: isInStock ? 1 : 0.5, // Візуально приглушуємо, якщо немає в наявності
+        opacity: isInStock ? 1 : 0.5,
       }}
     >
+      <ProductCountBySize
+        size={sizeString}
+        products={currentCartItems}
+        withCartIcon={false}
+      />
       <button
         className='btn-reset'
         onClick={handleSelectSize}

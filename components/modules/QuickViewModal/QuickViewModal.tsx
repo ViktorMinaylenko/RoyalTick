@@ -16,6 +16,7 @@ import AddToCartBtn from '../ProductListItem/AddToCartBtn'
 import ProductCounter from '../ProductListItem/ProductCounter'
 import ProductSizesItem from '../ProductListItem/ProductSizesItem'
 import ProductSizeTableBtn from '../ProductListItem/ProductSizeTableBtn'
+import { ICartItem } from '@/types/cart'
 
 const QuickViewModal = () => {
   const { lang, translations } = useLang()
@@ -25,6 +26,12 @@ const QuickViewModal = () => {
     setSelectedSize,
     handleAddToCart,
     addToCartSpinner,
+    updateCountSpinner,
+    allCurrentCartItemCount,
+    currentCartItems,
+    existingItem,
+    setCount,
+    count,
   } = useCartAction()
   const images = useProductImages(product)
 
@@ -33,12 +40,15 @@ const QuickViewModal = () => {
   const isStrap = product.category === 'straps'
   const isBox = product.type === 'boxes'
 
-  // Визначаємо наявність розмірів через об'єкт product.sizes
   const hasSizes = product.sizes && Object.keys(product.sizes).length > 0
 
   const handleCloseModal = () => {
     removeOverflowHiddenFromBody()
     closeQuickViewModal()
+  }
+
+  const addToCart = () => {
+    handleAddToCart(count)
   }
 
   return (
@@ -134,10 +144,10 @@ const QuickViewModal = () => {
                   {Object.entries(product.sizes).map(([size, isInStock]) => (
                     <ProductSizesItem
                       key={size}
-                      currentSize={size} // Передаємо рядок, TS тепер це дозволяє
+                      currentSize={size}
                       selectedSize={selectedSize}
                       setSelectedSize={setSelectedSize}
-                      currentCartItems={[]}
+                      currentCartItems={currentCartItems}
                       isInStock={isInStock as boolean}
                     />
                   ))}
@@ -154,22 +164,33 @@ const QuickViewModal = () => {
               {isBox || !!selectedSize ? (
                 <ProductCounter
                   className={`counter ${styles.modal__right__bottom__counter}`}
-                  count={1}
+                  count={count}
+                  totalCount={+product.inStock}
+                  initialCount={+(existingItem?.count || 1)}
+                  setCount={setCount}
+                  cartItem={existingItem as ICartItem}
+                  updateCountAsync={false}
                 />
               ) : (
                 <div
                   className={`counter ${styles.modal__right__bottom__counter}`}
                   style={{ justifyContent: 'center', fontSize: '12px' }}
                 >
-                  <span>{translations[lang].product.select_size}</span>
+                  <span>{translations[lang].product.total_in_cart}{' '}
+                    {allCurrentCartItemCount}
+                  </span>
                 </div>
               )}
               <AddToCartBtn
                 className={styles.modal__right__bottom__add}
                 text={translations[lang].product.to_cart}
-                handleAddToCart={handleAddToCart}
-                addToCartSpinner={addToCartSpinner}
-                btnDisabled={!isBox && !selectedSize}
+                handleAddToCart={addToCart}
+                addToCartSpinner={addToCartSpinner || updateCountSpinner}
+                btnDisabled={
+                  addToCartSpinner ||
+                  updateCountSpinner ||
+                  allCurrentCartItemCount === +product.inStock
+                }
               />
             </div>
           </div>
