@@ -13,6 +13,7 @@ import './globalStyles/slick.css'
 import './globalStyles/slick-theme.css'
 import './globalStyles/auth-popup.css'
 import './globalStyles/header-profile.css'
+import './globalStyles/cookie-popup.css'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
