@@ -6,6 +6,7 @@ import { handleShowSizeTable, idGenerator, isUserAuth } from './common'
 import {
   addProductToCart,
   setCartFromLS,
+  setShouldShowEmpty,
 } from '@/context/cart'
 import { productsWithoutSizes } from '@/constants/product'
 
@@ -48,6 +49,8 @@ export const addCartItemToLS = (
   if (!cartFromLS) {
     cartFromLS = []
   }
+
+  setShouldShowEmpty(false)
 
   const existingItem = cartFromLS.find(
     (item) => item.productId === product._id && item.size === selectedSize

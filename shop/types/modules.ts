@@ -49,3 +49,19 @@ export interface IOrderInfoBlock {
   isCorrectPromotionalCode?: boolean
   isOrderPage?: boolean
 }
+
+export interface IEmptyPageContentProps {
+  subtitle: string
+  description: string
+  btnText: string
+  bgClassName: string
+  emptyWord?: string
+  bgWordClassName?: string
+  oopsWord?: string
+  title?: string
+}
+
+export interface IContentTitleProps {
+  title: string
+  oopsWord: string
+}

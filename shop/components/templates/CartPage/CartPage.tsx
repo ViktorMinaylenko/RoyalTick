@@ -17,6 +17,8 @@ import OrderInfoBlock from '@/components/modules/OrderInfoBlock/OrderInfoBlock'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import PromotionalCode from '@/components/modules/CartPage/PromotionalCode'
 import { useState } from 'react'
+import EmptyPageContent from '@/components/modules/EmptyPageContent/EmptyPageContent'
+import { $shouldShowEmpty } from '@/context/cart'
 
 const CartPage = () => {
   const cartSpinner = useUnit(getCartItemsFx.pending)
@@ -26,6 +28,7 @@ const CartPage = () => {
   const isMedia930 = useMediaQuery(930)
   const [isCorrectPromotionalCode, setIsCorrectPromotionalCode] =
     useState(false)
+  const shouldShowEmpty = useUnit($shouldShowEmpty)
 
   return (
     <main>
@@ -33,11 +36,12 @@ const CartPage = () => {
         getDefaultTextGenerator={getDefaultTextGenerator}
         getTextGenerator={getTextGenerator}
       />
-      <section className={styles.cart}>
+      {!shouldShowEmpty ? (<section className={styles.cart}>
         <div className='container'>
           <HeadingWithCount
             count={countWholeCartItemsAmount(currentCartByAuth)}
             title={translations[lang].breadcrumbs.cart}
+            spinner={cartSpinner}
           />
           <div className={styles.cart__inner}>
             <div className={styles.cart__left}>
@@ -84,6 +88,16 @@ const CartPage = () => {
           )}
         </div>
       </section>
+      ): (<section>
+        <div className='container'>
+          <EmptyPageContent
+            subtitle={translations[lang].common.cart_empty}
+            description={translations[lang].common.cart_empty_advice}
+            btnText={translations[lang].common.go_shopping}
+            bgClassName={styles.empty_bg}
+          />
+        </div>
+      </section>)}
     </main>
   )
 }
