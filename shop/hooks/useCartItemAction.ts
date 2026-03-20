@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ICartItem } from '@/types/cart'
 import { deleteProductFromLS, isUserAuth } from '@/lib/utils/common'
-import { deleteProductFromCart, setCartFromLS } from '@/context/cart'
+import { deleteProductFromCart, setCartFromLS, setShouldShowEmpty } from '@/context/cart'
 import { usePriceAction } from './usePriceAction'
 import { usePriceAnimation } from './usePriceAnimation'
 
@@ -36,6 +36,7 @@ export const useCartItemAction = (cartItem: ICartItem) => {
         cartItem.clientId,
         'cart',
         setCartFromLS,
+        setShouldShowEmpty,
         'Видалено з кошика!'
       )
       return
@@ -47,6 +48,7 @@ export const useCartItemAction = (cartItem: ICartItem) => {
        cartItem.clientId,
        'cart',
        setCartFromLS,
+       setShouldShowEmpty,
        '',
        false,
      )

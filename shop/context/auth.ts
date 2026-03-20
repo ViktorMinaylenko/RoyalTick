@@ -1,4 +1,4 @@
-import { singInFx, singUpFx } from '@/api/auth'
+import { signInFx, signUpFx } from '@/api/auth'
 import { ISignUpFx } from '@/types/authPopup'
 import { createDomain, sample } from 'effector'
 import toast from 'react-hot-toast'
@@ -22,12 +22,12 @@ export const $isAuth = auth
 
 export const $auth = auth
   .createStore({})
-  .on(singUpFx.done, (_, { result }) => result)
-  .on(singUpFx.fail, (_, { error }) => {
+  .on(signUpFx.done, (_, { result }) => result)
+  .on(signUpFx.fail, (_, { error }) => {
     toast.error(error.message)
   })
-  .on(singInFx.done, (_, { result }) => result)
-  .on(singInFx.fail, (_, { error }) => {
+  .on(signInFx.done, (_, { result }) => result)
+  .on(signInFx.fail, (_, { error }) => {
     toast.error(error.message)
   })
 
@@ -41,7 +41,7 @@ sample({
     isOAuth,
     image,
   }),
-  target: singUpFx,
+  target: signUpFx,
 })
 
 sample({
@@ -54,5 +54,5 @@ sample({
     name,
     image,
   }),
-  target: singInFx,
+  target: signInFx,
 })

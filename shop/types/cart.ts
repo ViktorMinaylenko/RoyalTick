@@ -32,7 +32,7 @@ export interface IAddProductsFromLSToCartFx {
   cartItems: ICartItem[]
 }
 
-export interface IUpdateCartItemCountFx extends IBaseEffectProps {
+export interface IupdateCartItemQuantityFx extends IBaseEffectProps {
   count: number
 }
 

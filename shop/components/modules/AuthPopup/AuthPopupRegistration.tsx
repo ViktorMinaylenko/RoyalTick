@@ -5,7 +5,7 @@ import { useLang } from '@/hooks/useLang'
 import AuthPopupClose from './AuthPopupClose'
 import { IAuthSideProps, IInputs } from '@/types/authPopup'
 import { useAuthForm } from '@/hooks/useAuthForm'
-import { singUpFx } from '@/api/auth'
+import { signUpFx } from '@/api/auth'
 import { handleSignUp } from '@/context/auth'
 import NameInput from './NameInput'
 import EmailInput from './EmailInput'
@@ -18,8 +18,8 @@ const AuthPopupRegistration = ({
 }: IAuthSideProps) => {
   const { lang, translations } = useLang()
 
-  const { spinner, register, errors, handleSubmit, handleSignupWithOAuth } =
-    useAuthForm(singUpFx.pending, isSideActive, handleSignUp)
+  const { spinner, register, errors, handleSubmit, submitSignUpWithOAuth } =
+    useAuthForm(signUpFx.pending, isSideActive, handleSignUp)
 
   const submitForm = (data: IInputs) =>
     handleSignUp({
@@ -67,7 +67,7 @@ const AuthPopupRegistration = ({
             </div>
           </div>
         </form>
-        <AuthPopupSocials handleSignupWithOAuth={handleSignupWithOAuth} />
+        <AuthPopupSocials submitSignUpWithOAuth={submitSignUpWithOAuth} />
       </div>
     </div>
   )

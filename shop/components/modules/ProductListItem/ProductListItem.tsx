@@ -14,7 +14,7 @@ import ProductLabel from './ProductLable'
 import ProductItemActionBtn from '@/components/elements/ProductItemActionBtn/ProductItemActionBtn'
 import ProductAvailable from '@/components/elements/ProductAvailable/ProductAvailable'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { showQuickViewModal } from '@/context/modals'
+import { openQuickViewModal } from '@/context/modals'
 import { setCurrentProduct } from '@/context/goods'
 import { productsWithoutSizes } from '@/constants/product'
 import { useCartAction } from '@/hooks/useCartAction'
@@ -37,9 +37,9 @@ const ProductListItem = ({ item, title }: IProductsListItemProps) => {
     isProductInFavorites,
   } = useFavoritesAction(item)
 
-  const handleShowQuickViewModal = () => {
+  const handleopenQuickViewModal = () => {
     addOverflowHiddenToBody()
-    showQuickViewModal()
+    openQuickViewModal()
     setCurrentProduct(item)
   }
 
@@ -100,7 +100,13 @@ const ProductListItem = ({ item, title }: IProductsListItemProps) => {
             <ProductItemActionBtn
               spinner={addToFavoritesSpinner}
               text={translations[lang].product.add_to_favorites}
-              iconClass={`${isProductInFavorites ? 'actions__btn_favorite_checked' : 'actions__btn_favorite'}`}
+              iconClass={`${
+                addToFavoritesSpinner
+                  ? 'actions__btn_spinner'
+                  : isProductInFavorites
+                    ? 'actions__btn_favorite_checked'
+                    : 'actions__btn_favorite'
+              }`}
               callback={handleAddProductToFavorites}
             />
             <ProductItemActionBtn
@@ -111,7 +117,7 @@ const ProductListItem = ({ item, title }: IProductsListItemProps) => {
               <ProductItemActionBtn
                 text={translations[lang].product.quick_view}
                 iconClass='actions__btn_quick_view'
-                callback={handleShowQuickViewModal}
+                callback={handleopenQuickViewModal}
               />
             )}
           </div>

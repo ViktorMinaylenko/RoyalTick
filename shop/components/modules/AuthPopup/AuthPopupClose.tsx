@@ -1,13 +1,13 @@
 import { useUnit } from 'effector-react'
-import { closeAuthPopupWhenSomeModalOpened } from '@/lib/utils/common'
-import { $showQuickViewModal, $showSizeTable } from '@/context/modals'
+import { closeAuthModalWhenSomeModalOpened } from '@/lib/utils/common'
+import { $openQuickViewModal, $showSizeTable } from '@/context/modals'
 
 const AuthPopupClose = () => {
-  const showQuickViewModal = useUnit($showQuickViewModal)
+  const openQuickViewModal = useUnit($openQuickViewModal)
   const showSizeTable = useUnit($showSizeTable)
 
   const closePopup = () =>
-    closeAuthPopupWhenSomeModalOpened(showQuickViewModal, showSizeTable)
+    closeAuthModalWhenSomeModalOpened(openQuickViewModal, showSizeTable)
 
   return <button className='btn-reset auth-popup__close' onClick={closePopup} />
 }

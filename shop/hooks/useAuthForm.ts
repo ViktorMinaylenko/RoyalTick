@@ -25,7 +25,7 @@ export const useAuthForm = (
     handleSubmit,
   } = useForm<IInputs>()
 
-  const handleSignupWithOAuth = async (providerName: string) => {
+  const submitSignUpWithOAuth = async (providerName: string) => {
     try {
       let provider
 
@@ -51,7 +51,7 @@ export const useAuthForm = (
       const result = await signInWithPopup(auth, provider)
       const user = result.user
 
-      // 2. Відправляємо дані в Effector (singUpFx або singInFx)
+      // 2. Відправляємо дані в Effector (signUpFx або signInFx)
       // ВАЖЛИВО: Передаємо isOAuth: true, щоб бекенд знав, що bcrypt не потрібен
       event({
         name: user.displayName || 'Користувач',
@@ -70,6 +70,6 @@ export const useAuthForm = (
     register,
     errors,
     handleSubmit,
-    handleSignupWithOAuth,
+    submitSignUpWithOAuth,
   }
 }

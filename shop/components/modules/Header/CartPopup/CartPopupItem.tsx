@@ -4,7 +4,7 @@ import { formatPrice } from '@/lib/utils/common'
 import { ICartItem } from '@/types/cart'
 import ProductCounter from '../../ProductListItem/ProductCounter'
 import { useCartItemAction } from '@/hooks/useCartItemAction'
-import DeleteCartItemBtn from '@/components/elements/DeleteCartItemBtn/DeleteCartItemBtn'
+import DeleteItemBtn from '@/components/elements/DeleteItemBtn/DeleteItemBtn'
 
 const CartPopupItem = ({ item }: { item: ICartItem }) => {
   const {
@@ -19,7 +19,7 @@ const CartPopupItem = ({ item }: { item: ICartItem }) => {
 
   return (
     <>
-      <DeleteCartItemBtn
+      <DeleteItemBtn
         btnDisabled={deleteSpinner}
         callback={handleDeleteCartItem}
       />

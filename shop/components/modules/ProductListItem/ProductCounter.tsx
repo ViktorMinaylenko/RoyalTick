@@ -1,5 +1,5 @@
-import { updateCartItemCount } from '@/context/cart'
-import { updateCartItemCountInLS } from '@/lib/utils/cart'
+import { updateCartItemQuantity } from '@/context/cart'
+import { updateCartItemQuantityInLS } from '@/lib/utils/cart'
 import { isUserAuth } from '@/lib/utils/common'
 import { IProductCounterProps } from '@/types/goods'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
@@ -44,7 +44,7 @@ const ProductCounter = ({
   const updateCountWithRequest = (count: number) => {
     if (!cartItem) return
 
-    updateCartItemCountInLS(cartItem.clientId, count)
+    updateCartItemQuantityInLS(cartItem.clientId, count)
 
     if (!isUserAuth()) {
       return
@@ -52,7 +52,7 @@ const ProductCounter = ({
 
     const auth = JSON.parse(localStorage.getItem('auth') as string)
 
-    updateCartItemCount({
+    updateCartItemQuantity({
       jwt: auth.accessToken,
       id: cartItem._id,
       setSpinner,

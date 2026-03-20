@@ -1,5 +1,4 @@
 import { closeAuthPopup, openAuthPopup, setIsAuth } from '@/context/auth'
-import { setShouldShowEmpty } from '@/context/cart'
 import { setCurrentProduct } from '@/context/goods'
 import {
   closeSearchModal,
@@ -73,37 +72,40 @@ export const idGenerator = () => {
   )
 }
 
-export const closeSizeTableByCheck = (showQuickViewModal: boolean) => {
-  if (!showQuickViewModal) {
+export const closeSizeTableByCheck = (openQuickViewModal: boolean) => {
+  if (!openQuickViewModal) {
     removeOverflowHiddenFromBody()
   }
 
   closeSizeTable()
 }
 
-export const handleOpenAuthPopup = () => {
+export const handleopenAuthModal = () => {
   removeOverflowHiddenFromBody()
   openAuthPopup()
 }
 
-export const handleCloseAuthPopup = () => {
+export const handlecloseAuthModal = () => {
   removeOverflowHiddenFromBody()
   closeAuthPopup()
 }
 
-export const closeAuthPopupWhenSomeModalOpened = (
-  showQuickViewModal: boolean,
+export const closeAuthModalWhenSomeModalOpened = (
+  openQuickViewModal: boolean,
   showSizeTable: boolean
 ) => {
-  if (showQuickViewModal || showSizeTable) {
+  if (openQuickViewModal || showSizeTable) {
     closeAuthPopup()
     return
   }
 
-  handleCloseAuthPopup()
+  handlecloseAuthModal()
 }
 
 export const isUserAuth = () => {
+
+  if (typeof window === 'undefined') return false
+
   const auth = JSON.parse(localStorage.getItem('auth') as string)
 
   if (!auth?.accessToken) {
@@ -176,24 +178,28 @@ export const deleteProductFromLS = <T>(
   id: string,
   key: string,
   event: EventCallable<T>,
+  setShouldShowEmpty: (arg0: boolean) => void,
   message: string,
-  withToast = true,) =>{
-    let items = JSON.parse(localStorage.getItem(key) as string)
+  withToast = true
+) => {
+  let items = JSON.parse(localStorage.getItem(key) as string)
 
-    if(!items) {
-      items = []
-    }
-
-    const updatedItems = items.filter((item: {clientId: string}) => item.clientId !== id)
-
-    localStorage.setItem(key, JSON.stringify(updatedItems))
-    event(updatedItems)
-    withToast && toast.success(message)
-
-    if(!updatedItems.length){
-      setShouldShowEmpty(true)
-    }
+  if (!items) {
+    items = []
   }
+
+  const updatedItems = items.filter(
+    (item: { clientId: string }) => item.clientId !== id
+  )
+
+  localStorage.setItem(key, JSON.stringify(updatedItems))
+  event(updatedItems)
+  withToast && toast.success(message)
+
+  if (!updatedItems.length) {
+    setShouldShowEmpty(true)
+  }
+}
 
 export const showCountMessage = (count: string, lang: string) => {
   if (count == '11' || count == '12' || count == '13' || count == '14') {

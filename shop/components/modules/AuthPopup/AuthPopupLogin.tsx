@@ -8,15 +8,15 @@ import EmailInput from './EmailInput'
 import PasswordInput from './PasswordInput'
 import { useLang } from '@/hooks/useLang'
 import AuthPopupSocials from './AuthPopupSocials'
-import { handleCloseAuthPopup } from '@/lib/utils/common'
+import { handlecloseAuthModal } from '@/lib/utils/common'
 import { handleSignIn } from '@/context/auth'
 import { useAuthForm } from '@/hooks/useAuthForm'
-import { singInFx } from '@/api/auth'
+import { signInFx } from '@/api/auth'
 
 const AuthPopupLogin = ({ toggleAuth, isSideActive }: IAuthSideProps) => {
   const { lang, translations } = useLang()
-  const { spinner, register, errors, handleSubmit, handleSignupWithOAuth } =
-    useAuthForm(singInFx.pending, isSideActive, handleSignIn)
+  const { spinner, register, errors, handleSubmit, submitSignUpWithOAuth } =
+    useAuthForm(signInFx.pending, isSideActive, handleSignIn)
 
   const submitForm = (data: IInputs) =>
     handleSignIn({
@@ -50,7 +50,7 @@ const AuthPopupLogin = ({ toggleAuth, isSideActive }: IAuthSideProps) => {
               <Link
                 href='/password-restore'
                 className='inner__reset'
-                onClick={handleCloseAuthPopup}
+                onClick={handlecloseAuthModal}
               >
                 {translations[lang].auth_popup.forgot_password}
               </Link>
@@ -69,7 +69,7 @@ const AuthPopupLogin = ({ toggleAuth, isSideActive }: IAuthSideProps) => {
             </div>
           </div>
         </form>
-        <AuthPopupSocials handleSignupWithOAuth={handleSignupWithOAuth} />
+        <AuthPopupSocials submitSignUpWithOAuth={submitSignUpWithOAuth} />
       </div>
     </div>
   )

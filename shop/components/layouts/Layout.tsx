@@ -6,12 +6,12 @@ import { AnimatePresence, motion } from 'framer-motion'
 import SearchModal from '../modules/Header/SearchModal'
 import {
   $searchModal,
-  $showQuickViewModal,
+  $openQuickViewModal,
   $showSizeTable,
 } from '@/context/modals'
 import { useUnit } from 'effector-react'
 import {
-  handleCloseAuthPopup,
+  handlecloseAuthModal,
   handleCloseSearchModal,
 } from '@/lib/utils/common'
 import Footer from '../modules/Footer/Footer'
@@ -24,18 +24,18 @@ import { MutableRefObject, useRef } from 'react'
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const isMedia800 = useMediaQuery(800)
   const searchModal = useUnit($searchModal)
-  const showQuickViewModal = useUnit($showQuickViewModal)
+  const openQuickViewModal = useUnit($openQuickViewModal)
   const showSizeTable = useUnit($showSizeTable)
-  const openAuthPopup = useUnit($openAuthPopup)
+  const openAuthModal = useUnit($openAuthPopup)
   const authWrapperRef = useRef<HTMLDivElement>(null)
 
-  const handleCloseAuthPopupByTarget = (
+  const handlecloseAuthModalByTarget = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     const target = e.target as Element
 
     if (target === authWrapperRef.current) {
-      handleCloseAuthPopup()
+      handlecloseAuthModal()
     }
   }
 
@@ -45,14 +45,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       {children}
       {isMedia800 && <MobileNavbar />}
       <AnimatePresence>
-        {openAuthPopup && (
+        {openAuthModal && (
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
             exit={{ opacity: 0, scale: 0.5 }}
             className='auth-popup-wrapper'
-            onClick={handleCloseAuthPopupByTarget}
+            onClick={handlecloseAuthModalByTarget}
             ref={authWrapperRef}
           >
             <AuthPopup />
@@ -79,7 +79,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </AnimatePresence>
       {!isMedia800 && (
         <AnimatePresence>
-          {showQuickViewModal && (
+          {openQuickViewModal && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

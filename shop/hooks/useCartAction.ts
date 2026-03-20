@@ -7,7 +7,7 @@ import {
   addItemToCart,
   addProductToCartBySizeTable,
 } from '@/lib/utils/cart'
-import { $cart, $cartFromLs, updateCartItemCount } from '@/context/cart'
+import { $cart, $cartFromLs, updateCartItemQuantity } from '@/context/cart'
 import { useGoodsByAuth } from './useGoodsByAuth'
 
 export const useCartAction = (isSizeTable = false) => {
@@ -54,7 +54,7 @@ export const useCartAction = (isSizeTable = false) => {
           : +existingItem.count + 1
         : +existingItem.count + 1
 
-      updateCartItemCount({
+      updateCartItemQuantity({
         jwt: auth.accessToken,
         id: existingItem._id as string,
         setSpinner: setUpdateCountSpinner,

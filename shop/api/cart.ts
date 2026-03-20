@@ -3,7 +3,7 @@ import {
   IAddProductToCartFx,
   ICartItem,
   IDeleteCartItemsFx,
-  IUpdateCartItemCountFx,
+  IupdateCartItemQuantityFx,
 } from '@/types/cart'
 import { createEffect } from 'effector'
 import toast from 'react-hot-toast'
@@ -57,8 +57,8 @@ export const addProductToCartFx = createEffect(
   }
 )
 
-export const updateCartItemCountFx = createEffect(
-  async ({ jwt, id, setSpinner, count }: IUpdateCartItemCountFx) => {
+export const updateCartItemQuantityFx = createEffect(
+  async ({ jwt, id, setSpinner, count }: IupdateCartItemQuantityFx) => {
     try {
       setSpinner(true)
       const { data } = await api.patch(
@@ -73,7 +73,7 @@ export const updateCartItemCountFx = createEffect(
         const newData: { count: string; id: string } = await handleJWTError(
           data.error.name,
           {
-            repeatRequestMethodName: 'updateCartItemCountFx',
+            repeatRequestMethodName: 'updateCartItemQuantityFx',
             payload: { id, setSpinner, count },
           }
         )
@@ -88,7 +88,7 @@ export const updateCartItemCountFx = createEffect(
   }
 )
 
-export const deleteCartItemFx = createEffect(
+export const removeCartItemFx = createEffect(
   async ({ jwt, id, setSpinner }: IDeleteCartItemsFx) => {
     try {
       setSpinner(true)
@@ -98,7 +98,7 @@ export const deleteCartItemFx = createEffect(
 
       if (data?.error) {
         const newData: { id: string } = await handleJWTError(data.error.name, {
-          repeatRequestMethodName: 'deleteCartItemFx',
+          repeatRequestMethodName: 'removeCartItemFx',
           payload: { id, setSpinner },
         })
         return newData

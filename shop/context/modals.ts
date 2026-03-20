@@ -8,16 +8,16 @@ export const closeCatalogMenu = modals.createEvent()
 export const openSearchModal = modals.createEvent()
 export const closeSearchModal = modals.createEvent()
 export const closeQuickViewModal = modals.createEvent()
-export const showQuickViewModal = modals.createEvent()
+export const openQuickViewModal = modals.createEvent()
 export const closeSizeTable = modals.createEvent()
 export const showSizeTable = modals.createEvent()
 
-export const $menuIsOpen = modals
+export const $isMainMenuOpen = modals
   .createStore(false)
   .on(openMenu, () => true)
   .on(closeMenu, () => false)
 
-export const $catalogMenuIsOpen = modals
+export const $isCatalogMenuOpen = modals
   .createStore(false)
   .on(openCatalogMenu, () => true)
   .on(closeCatalogMenu, () => false)
@@ -27,9 +27,9 @@ export const $searchModal = modals
   .on(openSearchModal, () => true)
   .on(closeSearchModal, () => false)
 
-export const $showQuickViewModal = modals
+export const $openQuickViewModal = modals
   .createStore(false)
-  .on(showQuickViewModal, () => true)
+  .on(openQuickViewModal, () => true)
   .on(closeQuickViewModal, () => false)
 
 export const $showSizeTable = modals

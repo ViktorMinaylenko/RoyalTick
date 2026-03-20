@@ -1,14 +1,14 @@
 'use client'
 import { useUnit } from 'effector-react'
 import {
-  $showQuickViewModal,
+  $openQuickViewModal,
   $showSizeTable,
   closeQuickViewModal,
 } from '@/context/modals'
 import Layout from './Layout'
 import {
   closeSizeTableByCheck,
-  handleCloseAuthPopup,
+  handlecloseAuthModal,
   removeOverflowHiddenFromBody,
 } from '@/lib/utils/common'
 import { $openAuthPopup } from '@/context/auth'
@@ -19,17 +19,17 @@ import { motion } from 'framer-motion'
 import { Next13ProgressBar } from 'next13-progressbar'
 
 const PagesLayout = ({ children }: { children: React.ReactNode }) => {
-  const showQuickViewModal = useUnit($showQuickViewModal)
+  const openQuickViewModal = useUnit($openQuickViewModal)
   const [cookieAlertOpen, setCookieAlertOpen] = useState(false)
   const showSizeTable = useUnit($showSizeTable)
-  const openAuthPopup = useUnit($openAuthPopup)
+  const openAuthModal = useUnit($openAuthPopup)
 
   const handleCloseQuickViewModal = () => {
     removeOverflowHiddenFromBody()
     closeQuickViewModal()
   }
 
-  const handleCloseSizeTable = () => closeSizeTableByCheck(showQuickViewModal)
+  const handleCloseSizeTable = () => closeSizeTableByCheck(openQuickViewModal)
 
   useEffect(() => {
     const checkCookie = document.cookie.indexOf('CookieBy=RoyalTick')
@@ -44,7 +44,7 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
         <Next13ProgressBar height='4px' color='#9466FF' showOnShallow />
         <Layout>{children}</Layout>
         <div
-          className={`quick-view-modal-overlay ${showQuickViewModal ? 'overlay-active' : ''}`}
+          className={`quick-view-modal-overlay ${openQuickViewModal ? 'overlay-active' : ''}`}
           onClick={handleCloseQuickViewModal}
         />
         <div
@@ -52,8 +52,8 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
           onClick={handleCloseSizeTable}
         />
         <div
-          className={`auth-overlay ${openAuthPopup ? 'overlay-active' : ''}`}
-          onClick={handleCloseAuthPopup}
+          className={`auth-overlay ${openAuthModal ? 'overlay-active' : ''}`}
+          onClick={handlecloseAuthModal}
         />
         {cookieAlertOpen && (
           <motion.div

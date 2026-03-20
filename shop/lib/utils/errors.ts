@@ -1,9 +1,10 @@
 import { loginCheckFx, refreshToken } from '@/api/auth'
-import { addProductToCartFx, deleteCartItemFx, getCartItemsFx } from '@/api/cart'
-import { addProductToFavoriteFx, getFavoriteItemsFx } from '@/api/favorites'
+import { addProductToCartFx, removeCartItemFx, getCartItemsFx } from '@/api/cart'
 import { JWTError } from '@/constants/jwt'
 import { addProductsFromLSToCartFx } from '@/context/cart'
+import { addProductsFromLSToFavoritesFx, addProductToFavoriteFx, deleteFavoriteItemFx, getFavoriteItemsFx } from '@/context/favorites'
 import { IAddProductsFromLSToCartFx, IAddProductToCartFx, IDeleteCartItemsFx } from '@/types/cart'
+import { IAddProductsFromLSToFavoriteFx, IDeleteFavoriteItemsFx } from '@/types/favorites'
 
 export const handleJWTError = async (
   errorName: string,
@@ -34,8 +35,8 @@ export const handleJWTError = async (
             ...(payload as IAddProductsFromLSToCartFx),
             jwt: newTokens.accessToken,
           })
-        case 'deleteCartItemFx':
-          return deleteCartItemFx({
+        case 'removeCartItemFx':
+          return removeCartItemFx({
             ...(payload as IDeleteCartItemsFx),
             jwt: newTokens.accessToken,
           })
@@ -43,9 +44,19 @@ export const handleJWTError = async (
           return getFavoriteItemsFx({
             jwt: newTokens.accessToken,
           })
+        case 'addProductsFromLSToFavoritesFx':
+          return addProductsFromLSToFavoritesFx({
+            ...(payload as IAddProductsFromLSToFavoriteFx),
+            jwt: newTokens.accessToken,
+          })
         case 'addProductToFavoriteFx':
           return addProductToFavoriteFx({
             ...(payload as Omit<IAddProductToCartFx, 'count'>),
+            jwt: newTokens.accessToken,
+          })
+        case 'deleteFavoriteItemFx':
+          return deleteFavoriteItemFx({
+            ...(payload as IDeleteFavoriteItemsFx),
             jwt: newTokens.accessToken,
           })
         case 'loginCheckFx':

@@ -1,8 +1,8 @@
 import {
   addProductToCartFx,
-  deleteCartItemFx,
+  removeCartItemFx,
   getCartItemsFx,
-  updateCartItemCountFx,
+  updateCartItemQuantityFx,
 } from '@/api/cart'
 import { handleJWTError } from '@/lib/utils/errors'
 import api from '../api/apiInstance'
@@ -11,7 +11,7 @@ import {
   IAddProductToCartFx,
   ICartItem,
   IDeleteCartItemsFx,
-  IUpdateCartItemCountFx,
+  IupdateCartItemQuantityFx,
 } from '@/types/cart'
 import { createDomain, createEffect, sample } from 'effector'
 import toast from 'react-hot-toast'
@@ -38,7 +38,7 @@ export const addProductsFromLSToCartFx = createEffect(
         return newData
       }
 
-      loadCartItems({ jwt })
+      fetchCart({ jwt })
       return data
     } catch (error) {
       toast.error((error as Error).message)
@@ -48,12 +48,12 @@ export const addProductsFromLSToCartFx = createEffect(
 
 const cart = createDomain()
 
-export const loadCartItems = cart.createEvent<{ jwt: string }>()
+export const fetchCart = cart.createEvent<{ jwt: string }>()
 export const setCartFromLS = cart.createEvent<ICartItem[]>()
 export const addProductToCart = cart.createEvent<IAddProductToCartFx>()
 export const addProductsFromLSToCart =
   cart.createEvent<IAddProductsFromLSToCartFx>()
-export const updateCartItemCount = cart.createEvent<IUpdateCartItemCountFx>()
+export const updateCartItemQuantity = cart.createEvent<IupdateCartItemQuantityFx>()
 export const setTotalPrice = cart.createEvent<number>()
 export const deleteProductFromCart = cart.createEvent<IDeleteCartItemsFx>()
 export const setShouldShowEmpty = cart.createEvent<boolean>()
@@ -77,12 +77,12 @@ export const $cart = cart
       ).values(),
     ]
   })
-  .on(updateCartItemCountFx.done, (cart, { result }) =>
+  .on(updateCartItemQuantityFx.done, (cart, { result }) =>
     cart.map((item) =>
       item._id === result.id ? { ...item, count: result.count } : item
     )
   )
-  .on(deleteCartItemFx.done, (cart, { result }) =>
+  .on(removeCartItemFx.done, (cart, { result }) =>
     cart.filter((item) => item._id !== result.id)
   )
 
@@ -99,7 +99,7 @@ export const $shouldShowEmpty = cart
   .on(setShouldShowEmpty, (_, value) => value)
 
 sample({
-  clock: loadCartItems,
+  clock: fetchCart,
   source: $cart,
   fn: (_, data) => data,
   target: getCartItemsFx,
@@ -120,15 +120,15 @@ sample({
 })
 
 sample({
-  clock: updateCartItemCount,
+  clock: updateCartItemQuantity,
   source: $cart,
   fn: (_, data) => data,
-  target: updateCartItemCountFx,
+  target: updateCartItemQuantityFx,
 })
 
 sample({
   clock: deleteProductFromCart,
   source: $cart,
   fn: (_, data) => data,
-  target: deleteCartItemFx,
+  target: removeCartItemFx,
 })

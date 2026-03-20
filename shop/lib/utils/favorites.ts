@@ -3,6 +3,7 @@ import { IProduct } from '@/types/common'
 import { idGenerator } from './common'
 import {
   setFavoritesFromLS,
+  setShouldShowEmptyFavorites,
 } from '@/context/favorites'
 import { IFavoriteItem } from '@/types/favorites'
 
@@ -21,6 +22,7 @@ export const addFavoriteItemToLS = (
     favoritesFromLS = []
   }
 
+  setShouldShowEmptyFavorites(false)
 
   const existingItem = favoritesFromLS.find(
     (item) => item.productId === product._id && item.size === selectedSize

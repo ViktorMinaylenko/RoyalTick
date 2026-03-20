@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useUnit } from 'effector-react'
 import { $sizeTableSizes } from '@/context/sizeTable'
-import { $showQuickViewModal } from '@/context/modals'
+import { $openQuickViewModal } from '@/context/modals'
 import { useCartAction } from '@/hooks/useCartAction'
 import { useLang } from '@/hooks/useLang'
 import { closeSizeTableByCheck, isUserAuth } from '@/lib/utils/common'
@@ -22,7 +22,7 @@ import { useFavoritesAction } from '@/hooks/useFavoritesAction'
 
 const SizeTable = () => {
   const { lang, translations } = useLang()
-  const showQuickViewModal = useUnit($showQuickViewModal)
+  const openQuickViewModal = useUnit($openQuickViewModal)
   const productSizes = useUnit($sizeTableSizes)
   const isAddToFavorites = useUnit($isAddToFavorites)
 
@@ -52,7 +52,7 @@ const SizeTable = () => {
   const favoriteItemBySize = currentFavoriteItems.find(
     (item) => item.size === selectedSize
   )
-  const handleCloseSizeTable = () => closeSizeTableByCheck(showQuickViewModal)
+  const handleCloseSizeTable = () => closeSizeTableByCheck(openQuickViewModal)
 
   const handleSelectSize = (size: string) => {
     setSelectedSize(size)
@@ -80,7 +80,8 @@ const SizeTable = () => {
     },
   })
 
-  const checkInFavorites = (size: string) => currentFavoriteItems.find((item) => item.size === size)
+  const checkInFavorites = (size: string) =>
+    currentFavoriteItems.find((item) => item.size === size)
 
   const watchSizes = [
     {
@@ -278,7 +279,7 @@ const SizeTable = () => {
       </div>
 
       <AddToCartBtn
-        className={styles.size_table__btn}
+        className={`${styles.size_table__btn} ${styles.size_table__btn_favorite}`}
         text={
           isAddToFavorites
             ? translations[lang].product.to_favorite

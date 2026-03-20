@@ -1,6 +1,6 @@
 'use client'
 
-import { $catalogMenuIsOpen, closeCatalogMenu } from '@/context/modals'
+import { $isCatalogMenuOpen, closeCatalogMenu } from '@/context/modals'
 import { useLang } from '@/hooks/useLang'
 import { useMenuAnimation } from '@/hooks/useMenuAnimation'
 import { useStore, useUnit } from 'effector-react'
@@ -15,7 +15,7 @@ import Accordion from '../Accordion/Accordion'
 import Link from 'next/link'
 
 const CatalogMenu = () => {
-  const catalogMenuIsOpen = useUnit($catalogMenuIsOpen)
+  const catalogMenuIsOpen = useUnit($isCatalogMenuOpen)
   const { lang, translations } = useLang()
 
   const [activeListId, setActiveListId] = useState(0)

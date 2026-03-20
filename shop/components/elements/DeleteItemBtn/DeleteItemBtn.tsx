@@ -2,7 +2,7 @@ import { IDeleteCartItemBtnProps } from '@/types/cart'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const DeleteItemBtn = ({
+const DeleteBtn = ({
   btnDisabled,
   callback,
   className,
@@ -20,4 +20,4 @@ const DeleteItemBtn = ({
   </button>
 )
 
-export default DeleteItemBtn
+export default DeleteBtn

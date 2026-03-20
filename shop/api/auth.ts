@@ -29,7 +29,7 @@ export const oauthFx = createEffect(
   }
 )
 
-export const singUpFx = createEffect(
+export const signUpFx = createEffect(
   async ({ name, password, email, isOAuth, image }: ISignUpFx) => {
     if (isOAuth) {
       return await oauthFx({
@@ -57,7 +57,7 @@ export const singUpFx = createEffect(
   }
 )
 
-export const singInFx = createEffect(
+export const signInFx = createEffect(
   async ({ email, password, isOAuth, image }: ISignUpFx) => {
     if (isOAuth) {
       return await oauthFx({

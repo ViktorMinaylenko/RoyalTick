@@ -121,7 +121,7 @@ export const addProductToCartBySizeTable = (
   handleShowSizeTable(product)
 }
 
-export const updateCartItemCountInLS = (cartItemId: string, count: number) => {
+export const updateCartItemQuantityInLS = (cartItemId: string, count: number) => {
   let cart: ICartItem[] = JSON.parse(localStorage.getItem('cart') as string)
 
   if (!cart) {

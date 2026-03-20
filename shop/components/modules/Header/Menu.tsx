@@ -1,7 +1,7 @@
 import Logo from '@/components/elements/Logo/Logo'
 import { AllowedLangs } from '@/constants/lang'
 import { setLang } from '@/context/lang'
-import { $menuIsOpen, closeMenu } from '@/context/modals'
+import { $isMainMenuOpen, closeMenu } from '@/context/modals'
 import { useLang } from '@/hooks/useLang'
 import { removeOverflowHiddenFromBody } from '@/lib/utils/common'
 import { useUnit } from 'effector-react'
@@ -17,7 +17,7 @@ import ContactsListItems from './ContactsListItems'
 
 const Menu = () => {
   const [activelistId, setActiveListId] = useState(0)
-  const menuIsOpen = useUnit($menuIsOpen)
+  const menuIsOpen = useUnit($isMainMenuOpen)
   const { lang, translations } = useLang()
   const pathname = usePathname()
 
