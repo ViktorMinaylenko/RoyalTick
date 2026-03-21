@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { setIsAddToFavorites } from '@/context/favorites'
 import { useFavoritesAction } from '@/hooks/useFavoritesAction'
+import { useComparisonAction } from '@/hooks/useComparisonAction'
 
 const ProductListItem = ({ item, title }: IProductsListItemProps) => {
   const { lang, translations } = useLang()
@@ -36,6 +37,12 @@ const ProductListItem = ({ item, title }: IProductsListItemProps) => {
     addToFavoritesSpinner,
     isProductInFavorites,
   } = useFavoritesAction(item)
+
+  const {
+    handleAddToComparison,
+    isItemInComparison,
+    addToComparisonSpinner,
+  } = useComparisonAction(item)
 
   const handleopenQuickViewModal = () => {
     addOverflowHiddenToBody()
@@ -73,7 +80,7 @@ const ProductListItem = ({ item, title }: IProductsListItemProps) => {
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   //@ts-ignore
                   translations[lang].main_page[
-                    item.images[0].split('/img/').join('').split('-')[0]
+                  item.images[0].split('/img/').join('').split('-')[0]
                   ]
                 }
               </span>
@@ -100,18 +107,23 @@ const ProductListItem = ({ item, title }: IProductsListItemProps) => {
             <ProductItemActionBtn
               spinner={addToFavoritesSpinner}
               text={translations[lang].product.add_to_favorites}
-              iconClass={`${
-                addToFavoritesSpinner
+              iconClass={`${addToFavoritesSpinner
                   ? 'actions__btn_spinner'
                   : isProductInFavorites
                     ? 'actions__btn_favorite_checked'
                     : 'actions__btn_favorite'
-              }`}
+                }`}
               callback={handleAddProductToFavorites}
             />
             <ProductItemActionBtn
               text={translations[lang].product.add_to_comparison}
-              iconClass='actions__btn_comparison'
+              iconClass={`${addToComparisonSpinner
+                ? 'actions__btn_spinner'
+                : isItemInComparison
+                  ? 'actions__btn_comparison_checked'
+                  : 'actions__btn_comparison'
+                }`}
+              callback={handleAddToComparison}
             />
             {!iseMedia800 && (
               <ProductItemActionBtn

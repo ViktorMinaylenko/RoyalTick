@@ -154,7 +154,7 @@ const Header = () => {
           </li>
           <li className='header__link-item'>
             <Link
-              href='/comparision'
+              href='/comparison'
               className='header__links__item__btn header__links__item__btn--compare'
             ></Link>
           </li>
