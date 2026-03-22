@@ -8,10 +8,10 @@ const boxMaterials = [
   'leatherette',
   'velvet',
   'plastic',
-  'carbon fiber',
+  'carbon_fiber',
 ]
 const boxColors = ['black', 'cherry', 'dark brown', 'carbon', 'navy']
-const capacities = [1, 2, 4, 6, 12] // на скільки годинників
+const capacities = [1, 2, 4, 6, 12]
 const interiorMaterials = ['suede', 'velvet', 'silk']
 
 const boxImages = [
@@ -27,19 +27,19 @@ module.exports = {
         const material = getRandomArrayValue(boxMaterials)
 
         return {
-          category: 'accessories', // загальна категорія
-          type: 'boxes', // тип для перевірки логіки кошика
+          category: 'boxes',
+          type: 'boxes',
           price: +faker.string.numeric(4).replace(/.{0,2}$/, 99),
           name: `${getRandomArrayValue(boxColors)} ${material} box for watches`,
           description: faker.lorem.sentences(3),
           characteristics: {
+            type: 'boxes',
             material: material,
             color: getRandomArrayValue(boxColors),
             capacity: getRandomArrayValue(capacities),
             interior: getRandomArrayValue(interiorMaterials),
             weight: faker.string.numeric(3) + 'g',
           },
-          // Зверни увагу: тут немає caseSize або width, тому таблиця розмірів не відкриється
           images: [getRandomArrayValue(boxImages)],
           vendorCode: faker.string.alphanumeric(6).toUpperCase(),
           inStock: +faker.string.numeric(2),

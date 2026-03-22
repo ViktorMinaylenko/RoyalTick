@@ -3,8 +3,8 @@ const { faker } = require('@faker-js/faker')
 
 const getRandomArrayValue = (arr) => arr[Math.floor(Math.random() * arr.length)]
 
-const brands = ['Casio', 'Seiko', 'Orient', 'Citizen', 'Tissot']
-const collections = ['Classic', 'Sport', 'Premium', 'Line', 'Urban', 'Chrono']
+const brands = ['casio', 'seiko', 'orient', 'citizen', 'tissot']
+const collections = ['classic', 'sport', 'premium', 'line', 'urban', 'chrono']
 const genders = ['men', 'women', 'unisex']
 const mechanisms = ['quartz', 'mechanical', 'automatic']
 const glassTypes = ['mineral', 'sapphire']
@@ -32,7 +32,7 @@ const images = [
 
 const lineImages = ['/img/cartier.png', '/img/omega.png', '/img/patek.png']
 
-const types = ['Classic', 'Sport', 'Premium', 'Line']
+const types = ['classic', 'sport', 'premium', 'line']
 
 module.exports = {
   async up(db) {
@@ -42,7 +42,7 @@ module.exports = {
 
         const characteristics = [
           {
-            type: 'Classic',
+            type: 'classic',
             brand: getRandomArrayValue(brands),
             mechanism: getRandomArrayValue(mechanisms),
             glassType: getRandomArrayValue(glassTypes),
@@ -60,7 +60,7 @@ module.exports = {
             gender: getRandomArrayValue(genders),
           },
           {
-            type: 'Sport',
+            type: 'sport',
             brand: getRandomArrayValue(brands),
             mechanism: getRandomArrayValue(mechanisms),
             glassType: getRandomArrayValue(glassTypes),
@@ -78,7 +78,7 @@ module.exports = {
             gender: getRandomArrayValue(genders),
           },
           {
-            type: 'Premium',
+            type: 'premium',
             brand: getRandomArrayValue(brands),
             mechanism: getRandomArrayValue(mechanisms),
             glassType: getRandomArrayValue(glassTypes),
@@ -96,7 +96,7 @@ module.exports = {
             gender: getRandomArrayValue(genders),
           },
           {
-            type: 'Line',
+            type: 'line',
             brand: getRandomArrayValue(brands),
             mechanism: getRandomArrayValue(mechanisms),
             glassType: getRandomArrayValue(glassTypes),
@@ -120,7 +120,7 @@ module.exports = {
         )
 
         const itemImages =
-          type === 'Line' && currentCharacteristics.collection === 'Line'
+          type === 'line' && currentCharacteristics.collection === 'line'
             ? [getRandomArrayValue(lineImages)]
             : images.filter((img) =>
                 img.toLowerCase().includes(type.toLowerCase())
@@ -139,7 +139,6 @@ module.exports = {
           isBestseller: faker.datatype.boolean(),
           isNew: faker.datatype.boolean(),
           popularity: +faker.string.numeric(3),
-          // ТУТ НОВА ЛОГІКА РОЗМІРІВ
           sizes: {
             38: faker.datatype.boolean(),
             40: faker.datatype.boolean(),

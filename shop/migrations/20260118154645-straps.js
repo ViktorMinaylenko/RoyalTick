@@ -4,16 +4,16 @@ const { faker } = require('@faker-js/faker')
 const getRandomArrayValue = (arr) => arr[Math.floor(Math.random() * arr.length)]
 
 const types = [
-  'leather strap',
-  'metal bracelet',
-  'rubber strap',
-  'nato strap',
-  'mesh bracelet',
+  'leather_strap',
+  'metal_bracelet',
+  'rubber_strap',
+  'nato_strap',
+  'mesh_bracelet',
 ]
 
 const colors = ['black', 'brown', 'blue', 'green', 'red', 'white', 'gray']
-const lengths = [180, 200, 220, 240] // мм
-const widths = [18, 20, 22, 24] // мм
+const lengths = [180, 200, 220, 240]
+const widths = [18, 20, 22, 24]
 const claspTypes = ['buckle', 'deployant', 'folding', 'pin']
 const textures = ['smooth', 'embossed', 'woven', 'stitched']
 const patterns = ['plain', 'patterned', 'stitch detail', 'perforated']
@@ -32,11 +32,10 @@ module.exports = {
       [...Array(50)].map(() => {
         const type = getRandomArrayValue(types)
 
-        // Характеристики тепер без окремих довжини і ширини
         const characteristics = [
           {
-            type: 'leather strap',
-            collection: getRandomArrayValue(['Classic', 'Premium', 'Casual']),
+            type: 'leather_strap',
+            collection: getRandomArrayValue(['classic', 'premium', 'casual']),
             material: 'leather',
             claspType: getRandomArrayValue(claspTypes),
             texture: getRandomArrayValue(textures),
@@ -44,8 +43,8 @@ module.exports = {
             waterResistant: faker.datatype.boolean(),
           },
           {
-            type: 'metal bracelet',
-            collection: getRandomArrayValue(['Classic', 'Mesh', 'Premium']),
+            type: 'metal_bracelet',
+            collection: getRandomArrayValue(['classic', 'mesh', 'premium']),
             material: 'steel',
             claspType: getRandomArrayValue(claspTypes),
             texture: getRandomArrayValue(textures),
@@ -53,8 +52,8 @@ module.exports = {
             waterResistant: faker.datatype.boolean(),
           },
           {
-            type: 'rubber strap',
-            collection: getRandomArrayValue(['Sport', 'Casual']),
+            type: 'rubber_strap',
+            collection: getRandomArrayValue(['sport', 'casual']),
             material: 'rubber',
             claspType: getRandomArrayValue(claspTypes),
             texture: getRandomArrayValue(textures),
@@ -62,8 +61,8 @@ module.exports = {
             waterResistant: faker.datatype.boolean(),
           },
           {
-            type: 'nato strap',
-            collection: getRandomArrayValue(['Casual', 'Urban']),
+            type: 'nato_strap',
+            collection: getRandomArrayValue(['casual', 'urban']),
             material: 'fabric',
             claspType: getRandomArrayValue(claspTypes),
             texture: getRandomArrayValue(textures),
@@ -71,8 +70,8 @@ module.exports = {
             waterResistant: faker.datatype.boolean(),
           },
           {
-            type: 'mesh bracelet',
-            collection: getRandomArrayValue(['Classic', 'Premium']),
+            type: 'mesh_bracelet',
+            collection: getRandomArrayValue(['classic', 'premium']),
             material: 'steel',
             claspType: getRandomArrayValue(claspTypes),
             texture: getRandomArrayValue(textures),

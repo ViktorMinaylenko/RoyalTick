@@ -19,8 +19,8 @@ import { useState } from 'react'
 import EmptyPageContent from '@/components/modules/EmptyPageContent/EmptyPageContent'
 import { $cart, $cartFromLs, $shouldShowEmpty } from '@/context/cart'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
-import { loginCheckFx } from '@/api/auth'
 import { isUserAuth } from '@/lib/utils/common'
+import { loginCheckFx } from '@/context/user'
 
 const CartPage = () => {
   const cartSpinner = useUnit(getCartItemsFx.pending)

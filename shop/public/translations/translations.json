@@ -70,7 +70,19 @@
       "chronograph": "Chronographs",
       "vintage_watches": "Vintage Watches",
       "limited_edition": "Limited Edition",
-      "main_heading": "Comparison"
+      "main_heading": "Comparison",
+      "classic": "classic",
+      "sport": "Sport Watches",
+      "premium": "Premium Watches",
+      "line": "Line Series",
+      "boxes": "Watch Boxes",
+      "basic": "Basic Care Set",
+      "professional": "Professional Care Set",
+      "rubber_strap": "Rubber Straps",
+      "leather_strap": "Leather Straps",
+      "mesh_bracelet": "Mesh Bracelets",
+      "metal_bracelet": "Metal Bracelets",
+      "nato_strap": "NATO Straps"
     },
     "breadcrumbs": {
       "main": "Home",
@@ -378,6 +390,7 @@
       "styles": "Стиль"
     },
     "comparison": {
+      "classic": "Класичні годинники",
       "mens_watches": "Чоловічі годинники",
       "womens_watches": "Жіночі годинники",
       "smart_watches": "Смарт-годинники",
@@ -389,7 +402,18 @@
       "chronograph": "Хронографи",
       "vintage_watches": "Вінтажні годинники",
       "limited_edition": "Лімітовані серії",
-      "main_heading": "Порівняння"
+      "main_heading": "Порівняння",
+      "sport": "Спортивні годинники",
+      "premium": "Преміум годинники",
+      "line": "Лінійка Line",
+      "boxes": "Коробочки для годинників",
+      "basic": "Базовий набір для догляду",
+      "professional": "Професійний набір для догляду",
+      "rubber_strap": "Гумові ремінці",
+      "leather_strap": "Шкіряні ремінці",
+      "mesh_bracelet": "Браслети міланського плетіння",
+      "metal_bracelet": "Металеві браслети",
+      "nato_strap": "Ремінці NATO"
     },
     "breadcrumbs": {
       "main": "Головна",

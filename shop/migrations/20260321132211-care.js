@@ -60,7 +60,6 @@ module.exports = {
       [...Array(50)].map(() => {
         const type = getRandomArrayValue(kitTypes)
 
-        // Формуємо набори характеристик під кожен тип
         const characteristics = [
           {
             type: 'basic',

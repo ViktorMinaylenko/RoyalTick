@@ -9,9 +9,8 @@ import PasswordInput from './PasswordInput'
 import { useLang } from '@/hooks/useLang'
 import AuthPopupSocials from './AuthPopupSocials'
 import { handlecloseAuthModal } from '@/lib/utils/common'
-import { handleSignIn } from '@/context/auth'
+import { handleSignIn, signInFx } from '@/context/auth'
 import { useAuthForm } from '@/hooks/useAuthForm'
-import { signInFx } from '@/api/auth'
 
 const AuthPopupLogin = ({ toggleAuth, isSideActive }: IAuthSideProps) => {
   const { lang, translations } = useLang()

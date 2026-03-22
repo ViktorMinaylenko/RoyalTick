@@ -116,6 +116,7 @@ const ProductListItem = ({ item, title }: IProductsListItemProps) => {
               callback={handleAddProductToFavorites}
             />
             <ProductItemActionBtn
+                spinner={addToComparisonSpinner}
               text={translations[lang].product.add_to_comparison}
               iconClass={`${addToComparisonSpinner
                 ? 'actions__btn_spinner'

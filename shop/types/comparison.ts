@@ -23,7 +23,7 @@ export interface IComparisonItem {
   characteristics: { [index: string]: string }
 }
 
-export interface IAddProductsFromLSToComparisonFx {
+export interface IAddItemsFromLSToComparisonFx {
   jwt: string
   comparisonItems: IComparisonItem[]
 }
