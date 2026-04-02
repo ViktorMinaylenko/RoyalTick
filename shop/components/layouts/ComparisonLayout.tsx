@@ -1,8 +1,6 @@
 'use client'
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useCrumbText } from "@/hooks/useCrumbText";
 import { useLang } from "@/hooks/useLang";
-import { usePageTitle } from "@/hooks/usePageTitle";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Breadcrumbs from "../modules/Breadcrumbs/Breadcrumbs";
@@ -23,8 +21,8 @@ import { loginCheckFx } from "@/context/user";
 
 const ComparisonLayout = ({ children }: { children: React.ReactNode }) => {
     const [isMounted, setIsMounted] = useState(false)
-    const [dynamicTitle, setDynamicTitle] = useState('')
-    const { crumbText } = useCrumbText('comparison')
+    // const [dynamicTitle, setDynamicTitle] = useState('')
+    // const { crumbText } = useCrumbText('comparison')
     const { lang, translations } = useLang()
     const { getDefaultTextGenerator, getTextGenerator } = useBreadcrumbs('comparison')
     const pathname = usePathname()
@@ -41,21 +39,21 @@ const ComparisonLayout = ({ children }: { children: React.ReactNode }) => {
     const showSkeleton = !isMounted || mainSpinner
     
 
-    usePageTitle('comparison', dynamicTitle)
+    // usePageTitle('comparison', dynamicTitle)
 
-    useEffect(() => {
-        if (typeof window === 'undefined') return;
-        const lastCrumb = document.querySelector('.last-crumb') as HTMLElement
-        if (!lastCrumb) return
+    // useEffect(() => {
+    //     if (typeof window === 'undefined') return;
+    //     const lastCrumb = document.querySelector('.last-crumb') as HTMLElement
+    //     if (!lastCrumb) return
 
-        const productTypePathname = pathname.split('/comparison/')[1]
-        const text = productTypePathname
-            ? (translations[lang].comparison as { [index: string]: string })[productTypePathname]
-            : crumbText
+    //     const productTypePathname = pathname.split('/comparison/')[1]
+    //     const text = productTypePathname
+    //         ? (translations[lang].comparison as { [index: string]: string })[productTypePathname]
+    //         : crumbText
 
-        setDynamicTitle(text || '')
-        lastCrumb.textContent = text || crumbText
-    }, [crumbText, lang, pathname, translations])
+    //     setDynamicTitle(text || '')
+    //     lastCrumb.textContent = text || crumbText
+    // }, [crumbText, lang, pathname, translations])
 
 
     if (!isMounted) {

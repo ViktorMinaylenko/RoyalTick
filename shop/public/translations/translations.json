@@ -56,7 +56,9 @@
       "ins": "Instagram",
       "types": "By Type",
       "collections": "Collections",
-      "styles": "Style"
+      "styles": "Style",
+      "straps": "Straps",
+      "boxes": "Watch Boxes"
     },
     "comparison": {
       "mens_watches": "Men's Watches",
@@ -98,7 +100,10 @@
       "personal_data_policy": "Data Processing Policy",
       "privacy_policy": "Privacy Policy",
       "watched_products": "Viewed Products",
-      "collection_products": "Products by Collection"
+      "collection_products": "Products by Collection",
+      "straps": "Straps",
+      "boxes": "Boxes",
+      "care": "Care Kits"
     },
     "footer": {
       "copyright": "©RoyalTick All rights reserved",
@@ -387,7 +392,9 @@
       "ins": "Інстаграм",
       "types": "За типом",
       "collections": "Колекції",
-      "styles": "Стиль"
+      "styles": "Стиль",
+      "straps": "Ремінці",
+      "boxes": "Коробочки для годинників"
     },
     "comparison": {
       "classic": "Класичні годинники",
@@ -429,7 +436,10 @@
       "personal_data_policy": "Політика обробки даних",
       "privacy_policy": "Політика конфіденційності",
       "watched_products": "Переглянуті товари",
-      "collection_products": "Товари за колекцією"
+      "collection_products": "Товари за колекцією",
+      "straps": "Ремінці",
+      "boxes": "Коробочки",
+      "care": "Набори для догляду"
     },
     "footer": {
       "copyright": "© RoyalTick. Усі права захищені",

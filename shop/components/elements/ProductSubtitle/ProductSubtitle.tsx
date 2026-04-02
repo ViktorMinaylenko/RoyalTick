@@ -11,10 +11,10 @@ function ProductSubtitle({
 
   return (
     <div
-      className={`${styles.product_subtitle__subtitle} ${subtitleClassName}`}
+      className={subtitleClassName}
     >
       <div
-        className={`${styles.product_subtitle__subtitle__rect} ${subtitleRectClassName}`}
+        className={subtitleRectClassName}
       />
       <span>
         {translations[lang].main_page.hero_description.slice(

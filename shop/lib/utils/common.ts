@@ -41,10 +41,10 @@ export const shuffle = <T>(array: T[]) => {
   while (currentIndex != 0) {
     randomIndex = Math.floor(Math.random() * currentIndex)
     currentIndex--
-    ;[array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ]
+      ;[array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ]
   }
 
   return array
@@ -135,12 +135,12 @@ export const handleShowSizeTable = (product: IProduct) => {
   const sizesData =
     product.category === 'straps'
       ? {
-          width: Number(product.characteristics.width),
-          length: Number(product.characteristics.length),
-        }
+        width: Number(product.characteristics.width),
+        length: Number(product.characteristics.length),
+      }
       : {
-          caseSize: Number(product.characteristics.caseSize),
-        }
+        caseSize: Number(product.characteristics.caseSize),
+      }
 
   setSizeTableSizes({
     sizes: sizesData as any,
@@ -215,5 +215,31 @@ export const showCountMessage = (count: string, lang: string) => {
   }
 
   return lang === 'ua' ? 'товарів' : 'items'
+}
+
+export const checkOffsetParam = (offset: string | string[] | undefined) => {
+  if (typeof offset === 'undefined' || offset === null) return false
+
+  const num = Number(offset)
+
+  return !isNaN(num) && isFinite(num) && num >= 0
+}
+
+export const getSearchParamsUrl = () => {
+  const paramsString = window.location.search
+  const urlParams = new URLSearchParams(paramsString)
+
+  return urlParams
+}
+
+export const updateSearchParam = (
+  key: string,
+  value: string | number,
+  pathname: string
+) => {
+  const urlParams = getSearchParamsUrl()
+  urlParams.set(key, `${value}`)
+  const newUrl = `${pathname}?${urlParams.toString()}`
+  window.history.pushState({path: newUrl}, '', newUrl)
 }
 

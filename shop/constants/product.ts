@@ -14,3 +14,10 @@ export const productTypes = [
     'line',              // Лінійка Line 📏
     'classic',           // Класичні годинники 🎩
 ]
+
+export const itemCategories = [
+    'watches', // Годинники
+    'straps',  // Ремінці
+    'boxes',   // Коробки
+    'care',    // Засоби для догляду (нове)
+]
