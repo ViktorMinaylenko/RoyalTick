@@ -1,20 +1,26 @@
+import ProductsPage from "@/components/templates/ProductsPage/ProductsPage"
 import { itemCategories } from "@/constants/product"
 import { notFound } from "next/navigation"
 
-// 1. Робимо функцію асинхронною
 export default async function Category({
-    params
+    params,
+    searchParams
 }: {
     params: Promise<{ category: string }>
+    searchParams: Promise<any>
 }) {
+
     const resolvedParams = await params
     const category = resolvedParams.category
 
-    const isCategoryValid = itemCategories.includes(category)
-
-    if (!isCategoryValid) {
+    if (!itemCategories.includes(category)) {
         notFound()
     }
 
-    return <h1>{category}</h1>
+    return (
+        <ProductsPage
+            searchParams={searchParams as any}
+            pageName={category}
+        />
+    )
 }

@@ -61,6 +61,9 @@
       "boxes": "Watch Boxes"
     },
     "comparison": {
+      "classic_watches": "Classic Watches",
+      "premium_watches": "Premium Watches",
+      "line_watches": "Line Series",
       "mens_watches": "Men's Watches",
       "womens_watches": "Women's Watches",
       "smart_watches": "Smart Watches",
@@ -397,6 +400,9 @@
       "boxes": "Коробочки для годинників"
     },
     "comparison": {
+      "classic_watches": "Класичні годинники",
+      "premium_watches": "Преміум годинники",
+      "line_watches": "Лінійка Line",
       "classic": "Класичні годинники",
       "mens_watches": "Чоловічі годинники",
       "womens_watches": "Жіночі годинники",

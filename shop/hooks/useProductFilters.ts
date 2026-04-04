@@ -13,13 +13,8 @@ export const useProductFilters = (
 ) => {
     const products = useUnit($products)
 
-    console.log('--- useProductFilters Debug ---')
-    console.log('Raw searchParams:', searchParams)
-    console.log('searchParams.offset:', searchParams.offset)
-
     const isValidOffset = checkOffsetParam(searchParams.offset)
 
-    console.log('Is offset valid?:', isValidOffset)
     const pagesCount = Math.ceil((products.count || 12) / 12)
     const [currentPage, setCurrentPage] = useState(
         isValidOffset ? +(searchParams.offset || 0) : 0

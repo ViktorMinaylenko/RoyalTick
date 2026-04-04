@@ -9,7 +9,11 @@ export async function GET(req: Request) {
         const limit = url.searchParams.get('limit') || 12
         const offset = url.searchParams.get('offset') || 0
         const isCatalogParam = url.searchParams.get('catalog')
-        const filter = {}
+        const categoryParam = url.searchParams.get('category')
+        const typeParam = url.searchParams.get('type')
+        const filter = {
+            ...(typeParam && { type: typeParam }),
+        }
 
         if (isCatalogParam) {
             const getFilteredCollection = async (collection: string) => {
@@ -51,9 +55,11 @@ export async function GET(req: Request) {
             })
         }
 
+        const currentGoods = await db.collection(categoryParam as string).find(filter).toArray()
+
         return NextResponse.json({
-            count: 0,
-            items: [],
+            count: currentGoods.length,
+            items: currentGoods.slice(+offset, +limit),
         })
     } catch (error) {
         throw new Error((error as Error).message);
