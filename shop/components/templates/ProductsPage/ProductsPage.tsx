@@ -152,7 +152,7 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
         }
         spinner={productsSpinner}
       />
-      <CatalogFilters/>
+      <CatalogFilters handleApplyFiltersWithPrice={handleApplyFiltersWithPrice} />
       {productsSpinner && (
         <motion.ul
           {...basePropsForMotion}

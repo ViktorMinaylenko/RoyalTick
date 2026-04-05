@@ -243,3 +243,4 @@ export const updateSearchParam = (
   window.history.pushState({path: newUrl}, '', newUrl)
 }
 
+export const checkPriceParam = (price: number) => price && !isNaN(price) &&  price >= 0 && price <= 100000

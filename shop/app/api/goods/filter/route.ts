@@ -1,5 +1,6 @@
 import clientPromise from "@/lib/mongodb";
 import { getDbAndReqBody } from "@/lib/utils/api-routes";
+import { checkPriceParam } from "@/lib/utils/common";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -11,8 +12,12 @@ export async function GET(req: Request) {
         const isCatalogParam = url.searchParams.get('catalog')
         const categoryParam = url.searchParams.get('category')
         const typeParam = url.searchParams.get('type')
+        const priceFromParam = url.searchParams.get('priceFrom')
+        const priceToParam = url.searchParams.get('priceTo')
+        const isFullyFilteredByPrice = priceFromParam && priceToParam && checkPriceParam(+priceFromParam) && checkPriceParam(+priceToParam)
         const filter = {
             ...(typeParam && { type: typeParam }),
+            ...(isFullyFilteredByPrice && { price: { $gt: +priceFromParam, $lt: +priceToParam } }),
         }
 
         if (isCatalogParam) {

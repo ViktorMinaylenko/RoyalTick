@@ -4,6 +4,7 @@ import { useLang } from '@/hooks/useLang'
 import styles from '@/styles/catalog/index.module.scss'
 import { useCategoryFilter } from '@/hooks/useCategoryFilter'
 import CategoryFilterList from './CategoryFilterList'
+import SelectBtn from './SelectBtn'
 
 
 const CategorySelect = () => {
@@ -20,23 +21,13 @@ const CategorySelect = () => {
 
     return (
         <div className={styles.catalog__filters__select} ref={ref}>
-            <button
-                className={`btn-reset ${styles.catalog__filters__btn} ${open ? styles.is_open : ''}`}
-                onClick={toggle}
-            >
-                {option ? (
-                    <span className={styles.catalog__filters__btn__inner}>
-                        <span className={styles.catalog__filters__btn__text}>
-                            {translations[lang].catalog.categories}
-                        </span>
-                        <span className={styles.catalog__filters__btn__info}>
-                            {option}
-                        </span>
-                    </span>
-                ) : (
-                    translations[lang].catalog.categories
-                )}
-            </button>
+            <SelectBtn
+                open={open}
+                toggle={toggle}
+                bgClassName={styles.bg_category}
+                defaultText={translations[lang].catalog.categories}
+                dynamicText={option}
+            />
             <AnimatePresence>
                 {open && (
                     <CategoryFilterList
