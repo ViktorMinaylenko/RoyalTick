@@ -21,3 +21,17 @@ export const itemCategories = [
     'boxes',   // Коробки
     'care',    // Засоби для догляду (нове)
 ]
+
+export const watchSizes = [
+    { id: 1, size: '38', checked: false },
+    { id: 2, size: '40', checked: false },
+    { id: 3, size: '42', checked: false },
+    { id: 4, size: '44', checked: false },
+]
+
+export const strapSizes = [
+    { id: 1, size: '180 / 18', checked: false },
+    { id: 2, size: '200 / 20', checked: false },
+    { id: 3, size: '220 / 22', checked: false },
+    { id: 4, size: '240 / 24', checked: false },
+]

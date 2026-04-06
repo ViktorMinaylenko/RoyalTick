@@ -31,6 +31,7 @@ import {
   setShouldShowEmptyFavorites,
 } from '@/context/favorites'
 import { $comparison, $comparisonFromLs, addItemsFromLSToComparison, setComparisonFromLS, setShouldShowEmptyComparison } from '@/context/comparison'
+import { setLang } from '@/context/lang'
 
 const Header = () => {
   const isAuth = useUnit($isAuth)
@@ -62,7 +63,7 @@ const Header = () => {
 
     if (lang) {
       if (lang === 'ua' || lang === 'en') {
-        setShouldShowEmptyFavorites(lang)
+        setLang(lang)
       }
     }
 
@@ -72,7 +73,7 @@ const Header = () => {
       setShouldShowEmptyFavorites(true)
     }
 
-    if (!cart || !cart?.lenght) {
+    if (!cart || !cart?.length) {
       setShouldShowEmpty(true)
     }
 

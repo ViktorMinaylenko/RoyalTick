@@ -10,8 +10,9 @@ import { basePropsForMotion } from "@/constants/motion"
 import ProductListItem from '@/components/modules/ProductListItem/ProductListItem'
 import { useLang } from '@/hooks/useLang'
 import HeadingWithCount from '@/components/elements/HeadingWithCount/HeadingWithCount'
-import {setCatalogCategoryOptions } from '@/context/catalog'
+import {setCatalogCategoryOptions, setSizesOptions } from '@/context/catalog'
 import CatalogFilters from '@/components/modules/CatalogFilters/CatalogFilters'
+import { strapSizes, watchSizes } from '@/constants/product'
 
 const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
   const { lang, translations } = useLang()
@@ -36,6 +37,8 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
   useEffect(() => {
     if (!translations[lang]) return
 
+    setSizesOptions([])
+
     switch (pageName) {
       case 'catalog':
         setCatalogCategoryOptions({
@@ -49,6 +52,7 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
         break
 
       case 'watches':
+        setSizesOptions(watchSizes)
         setCatalogCategoryOptions({
           watchesCategoryOptions: [
             {
@@ -76,6 +80,7 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
         break
 
       case 'straps':
+        setSizesOptions(strapSizes)
         setCatalogCategoryOptions({
           strapsCategoryOptions: [
             {
@@ -139,7 +144,7 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
       default:
         break
     }
-  }, [lang, pageName, translations, handleApplyFiltersWithCategory])
+  }, [lang, pageName, translations])
 
   return (
     <>
@@ -152,7 +157,7 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
         }
         spinner={productsSpinner}
       />
-      <CatalogFilters handleApplyFiltersWithPrice={handleApplyFiltersWithPrice} />
+      <CatalogFilters handleApplyFiltersWithPrice={handleApplyFiltersWithPrice} handleApplyFiltersWithSizes={handleApplyFiltersWithSizes} pageName={pageName} />
       {productsSpinner && (
         <motion.ul
           {...basePropsForMotion}

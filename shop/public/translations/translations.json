@@ -182,6 +182,7 @@
       "share": "Share"
     },
     "catalog": {
+      "size": "Size",
       "all_categories": "All categories",
       "popular": "Popular",
       "new": "New arrivals",
@@ -521,6 +522,7 @@
       "share": "Поділитися"
     },
     "catalog": {
+      "size": "Розмір",
       "all_categories": "Усі категорії",
       "popular": "Популярні",
       "new": "Новинки",

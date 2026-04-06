@@ -244,3 +244,15 @@ export const updateSearchParam = (
 }
 
 export const checkPriceParam = (price: number) => price && !isNaN(price) &&  price >= 0 && price <= 100000
+
+export const getCheckedSizesArrayParam = (param: string) => {
+  try {
+    const sizesArr = JSON.parse(decodeURIComponent(param))
+
+    if(Array.isArray(sizesArr) && sizesArr.length) {
+      return sizesArr
+    }
+  } catch (error) {
+    return false
+  }
+}
