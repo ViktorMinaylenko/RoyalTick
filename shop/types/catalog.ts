@@ -54,7 +54,7 @@ export interface ICatalogFiltersProps {
     handleApplyFiltersWithSizes: (arg0: string[]) => void
     handleApplyFiltersWithColors: (arg0: string[]) => void
     handleApplyFiltersBySort: (arg0: string) => void
-    pageName: string
+    pageName?: string
 }
 
 export interface ISizeOption {
@@ -83,7 +83,7 @@ export interface IColorOption {
 
 export interface IColorsSelectProps {
     handleApplyFiltersWithColors: (colors: string[]) => void
-    pageName: string
+    pageName?: string
 }
 
 export interface ISelectInfoItem {

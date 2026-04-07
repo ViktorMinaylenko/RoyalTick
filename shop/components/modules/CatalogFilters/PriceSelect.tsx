@@ -5,6 +5,7 @@ import { usePriceFilter } from '@/hooks/usePriceFilter'
 import { basePropsForMotion } from '@/constants/motion'
 import styles from '@/styles/catalog/index.module.scss'
 import SelectBtn from './SelectBtn'
+import { getCheckedPriceFrom, getCheckedPriceTo } from '@/lib/utils/catalog'
 
 const PriceSelect = ({
     handleApplyFiltersWithPrice,
@@ -27,8 +28,8 @@ const PriceSelect = ({
     } = usePriceFilter()
 
     const handleSelectPrice = () => {
-        const validPriceFrom = +priceFrom > 100000 ? '50000' : priceFrom
-        const validPriceTo = +priceTo > 100000 ? '100000' : priceTo
+        const validPriceFrom = getCheckedPriceFrom(+priceFrom) as string
+        const validPriceTo = getCheckedPriceTo(+priceTo) as string
 
         setPriceFrom(validPriceFrom)
         setPriceTo(validPriceTo)

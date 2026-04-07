@@ -16,7 +16,7 @@ const ColorsSelect = ({
     const { open, ref, toggle } = useClickOutside()
     const { handleSelectColor, colors, colorsOptions } = useColorsFilter(
         handleApplyFiltersWithColors,
-        pageName
+        pageName!
     )
 
     return (

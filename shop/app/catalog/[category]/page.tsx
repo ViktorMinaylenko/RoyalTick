@@ -6,8 +6,8 @@ export default async function Category({
     params,
     searchParams
 }: {
-    params: Promise<{ category: string }>
-    searchParams: Promise<any>
+        params: { category: string }
+        searchParams: Record<string, string | string[] | undefined>
 }) {
 
     const resolvedParams = await params

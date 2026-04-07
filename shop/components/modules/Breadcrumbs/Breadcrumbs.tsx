@@ -14,6 +14,7 @@ const generatePathParts = (pathStr: string) => {
 const Breadcrumbs = ({
   getTextGenerator,
   getDefaultTextGenerator,
+  
 }: IBreadcrumbsProps) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()

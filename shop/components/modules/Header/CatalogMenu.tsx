@@ -41,71 +41,39 @@ const CatalogMenu = () => {
       name: translations[lang].main_menu.watches,
       handler: () => setActiveListId(1),
       items: [
-        {
-          title: translations[lang].comparison.mens_watches,
-          href: '/catalog/watches?offset=0&type=mens_watches',
-        },
-        {
-          title: translations[lang].comparison.womens_watches,
-          href: '/catalog/watches?offset=0&type=womens_watches',
-        },
-        {
-          title: translations[lang].comparison.smart_watches,
-          href: '/catalog/watches?offset=0&type=smart_watches',
-        },
-        {
-          title: translations[lang].comparison.mechanical_watches,
-          href: '/catalog/watches?offset=0&type=mechanical_watches',
-        },
+        { title: translations[lang].comparison.classic_watches, href: '/catalog/watches?offset=0&type=classic' },
+        { title: translations[lang].comparison.premium_watches, href: '/catalog/watches?offset=0&type=premium' },
+        { title: translations[lang].comparison.sport_watches, href: '/catalog/watches?offset=0&type=sport' },
+        { title: translations[lang].comparison.line_watches, href: '/catalog/watches?offset=0&type=line' },
       ],
     },
     {
       id: 2,
-      name: translations[lang].main_menu.types,
+      name: translations[lang].main_menu.straps,
       handler: () => setActiveListId(2),
       items: [
-        {
-          title: translations[lang].comparison.quartz_watches,
-          href: '/catalog/watches?offset=0&type=quartz_watches',
-        },
-        {
-          title: translations[lang].comparison.automatic_watches,
-          href: '/catalog/watches?offset=0&type=automatic_watches',
-        },
-        {
-          title: translations[lang].comparison.chronograph,
-          href: '/catalog/watches?offset=0&type=chronograph',
-        },
+        { title: translations[lang].comparison.leather_strap, href: '/catalog/straps?offset=0&type=leather_strap' },
+        { title: translations[lang].comparison.metal_bracelet, href: '/catalog/straps?offset=0&type=metal_bracelet' },
+        { title: translations[lang].comparison.rubber_strap, href: '/catalog/straps?offset=0&type=rubber_strap' },
+        { title: translations[lang].comparison.nato_strap, href: '/catalog/straps?offset=0&type=nato_strap' },
+        { title: translations[lang].comparison.mesh_bracelet, href: '/catalog/straps?offset=0&type=mesh_bracelet' },
       ],
     },
     {
       id: 3,
-      name: translations[lang].main_menu.collections,
+      name: translations[lang].main_menu.boxes,
       handler: () => setActiveListId(3),
       items: [
-        {
-          title: translations[lang].comparison.luxury_watches,
-          href: '/catalog/watches?offset=0&type=luxury_watches',
-        },
-        {
-          title: translations[lang].comparison.limited_edition,
-          href: '/catalog/watches?offset=0&type=limited_edition',
-        },
+        { title: translations[lang].comparison.boxes, href: '/catalog/boxes?offset=0&type=boxes' },
       ],
     },
     {
       id: 4,
-      name: translations[lang].main_menu.styles,
+      name: translations[lang].main_menu.care,
       handler: () => setActiveListId(4),
       items: [
-        {
-          title: translations[lang].comparison.sport_watches,
-          href: '/catalog/watches?offset=0&type=sport_watches',
-        },
-        {
-          title: translations[lang].comparison.vintage_watches,
-          href: '/catalog/watches?offset=0&type=vintage_watches',
-        },
+        { title: translations[lang].comparison.basic, href: '/catalog/care?offset=0&type=basic' },
+        { title: translations[lang].comparison.professional, href: '/catalog/care?offset=0&type=professional' },
       ],
     },
   ]
@@ -208,8 +176,9 @@ const CatalogMenu = () => {
                                 className='catalog__accordion__list__item'
                               >
                                 <Link
-                                  href='/catalog'
+                                  href={item.href}
                                   className='nav-menu__accordion__item__list__item__link'
+                                  onClick={handleCloseMenu}
                                 >
                                   {item.title}
                                 </Link>
