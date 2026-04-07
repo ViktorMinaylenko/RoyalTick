@@ -4,15 +4,16 @@ import styles from '@/styles/catalog/index.module.scss'
 import CategorySelect from './CategorySelect'
 import PriceSelect from './PriceSelect'
 import SizesSelect from './SizesSelect'
+import ColorsSelect from './ColorsSelect'
 
 const CatalogFilters = ({
     handleApplyFiltersWithPrice,
     handleApplyFiltersWithSizes,
-    pageName, // Отримуємо назву сторінки для визначення заголовків
+    handleApplyFiltersWithColors,
+    pageName,
 }: ICatalogFiltersProps) => {
     const { lang, translations } = useLang()
 
-    // Визначаємо заголовок залежно від поточної категорії товарів
     const getSizeTitle = () => {
         if (pageName === 'watches') {
             return translations[lang].catalog.case_size
@@ -35,8 +36,14 @@ const CatalogFilters = ({
                     />
                     <SizesSelect
                         handleApplyFiltersWithSizes={handleApplyFiltersWithSizes}
-                        title={getSizeTitle()} // Передаємо динамічний заголовок
+                        title={getSizeTitle()}
                     />
+                    {pageName !== 'straps' && (
+                        <ColorsSelect
+                            handleApplyFiltersWithColors={handleApplyFiltersWithColors}
+                            pageName={pageName}
+                        />
+                    )}
                 </div>
             </div>
         </div>

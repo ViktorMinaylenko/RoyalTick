@@ -8,7 +8,7 @@ import {
     updateSizesOptionBySize,
 } from '@/context/catalog'
 import { useLang } from './useLang'
-import { getCheckedSizesArrayParam, getSearchParamsUrl } from '@/lib/utils/common'
+import { getCheckedArrayParam, getSearchParamsUrl } from '@/lib/utils/common'
 
 
 
@@ -46,7 +46,7 @@ export const useSizeFilter = (
         const sizesParam = urlParams.get('sizes')
 
         if (sizesParam) {
-            const validSizes = getCheckedSizesArrayParam(sizesParam)
+            const validSizes = getCheckedArrayParam(sizesParam)
 
             if (validSizes)
             {

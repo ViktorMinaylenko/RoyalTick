@@ -28,6 +28,7 @@ import { useComparisonAction } from '@/hooks/useComparisonAction'
 const ProductListItem = ({ item, title }: IProductsListItemProps) => {
   const { lang, translations } = useLang()
   const iseMedia800 = useMediaQuery(800)
+  const mainImage = item.images && item.images.length > 0 ? item.images[0] : '/img/no-image.jpg'
   const isTitleForNew = title === translations[lang].main_page.new_title
   const { addToCartSpinner, setAddToCartSpinner, currentCartByAuth } =
     useCartAction()
@@ -71,7 +72,7 @@ const ProductListItem = ({ item, title }: IProductsListItemProps) => {
               subtitleRectClassName={styles.list__item_ad__subtitle__rect}
             />
             <div className={styles.list__item_ad__img}>
-              <Image src={item.images[0]} alt={item.name} width={224} height={275} />
+              <Image src={mainImage} alt={item.name} width={224} height={275} />
             </div>
             <p className={styles.list__item_ad__title}>
               <span>
@@ -80,7 +81,9 @@ const ProductListItem = ({ item, title }: IProductsListItemProps) => {
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   //@ts-ignore
                   translations[lang].main_page[
-                  item.images[0].split('/img/').join('').split('-')[0]
+                  mainImage.includes('/img/')
+                    ? mainImage.split('/img/').join('').split('-')[0]
+                    : ''
                   ]
                 }
               </span>
@@ -138,7 +141,7 @@ const ProductListItem = ({ item, title }: IProductsListItemProps) => {
             href={`/catalog/${item.category}/${item._id}`}
             className={styles.list__item__img}
           >
-            <Image src={item.images[0]} alt={item.name} fill />
+              <Image src={mainImage} alt={item.name} fill />
           </Link>
           <div className={styles.list__item__inner}>
             <h3 className={styles.list__item__title}>

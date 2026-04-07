@@ -42,6 +42,7 @@ const QuickViewModal = () => {
   const isWatch = product.category === 'watches'
   const isStrap = product.category === 'straps'
   const isBox = product.type === 'boxes'
+  const isCare = product.category === 'care'
 
   const hasSizes = product.sizes && Object.keys(product.sizes).length > 0
 
@@ -130,21 +131,46 @@ const QuickViewModal = () => {
             </>
           )}
 
-          {(isStrap || isBox) && (
+          {(isStrap || isBox || isCare) && (
             <div className={styles.modal__right__info__strap}>
+              {/* Переклад Матеріалу */}
               {char.material && (
                 <div className={stylesForProduct.product__composition}>
                   {translations[lang].catalog.material}:{' '}
-                  {(translations[lang].catalog as any)[String(char.material)] ||
-                    char.material}
+                  {/* Шукаємо переклад для конкретного матеріалу, якщо не знайшли — виводимо як є */}
+                  {(translations[lang].catalog as any)[String(char.material).toLowerCase()] || char.material}
                 </div>
               )}
+
+              {/* Переклад Кольору */}
+              {char.color && (
+                <div className={stylesForProduct.product__composition}>
+                  {translations[lang].catalog.color}:{' '}
+                  {(translations[lang].catalog as any)[String(char.color).toLowerCase()] || char.color}
+                </div>
+              )}
+
+              {/* Переклад Аромату (для Care) */}
+              {isCare && char.scent && (
+                <div className={stylesForProduct.product__composition}>
+                  {translations[lang].catalog.scent}:{' '}
+                  {(translations[lang].catalog as any)[String(char.scent).toLowerCase()] || char.scent}
+                </div>
+              )}
+
+              {/* Переклад Особливості (для Care) */}
+              {isCare && char.peculiarity && (
+                <div className={stylesForProduct.product__composition}>
+                  {translations[lang].catalog.peculiarity}:{' '}
+                  {(translations[lang].catalog as any)[String(char.peculiarity).toLowerCase()] || char.peculiarity}
+                </div>
+              )}
+
+              {/* Тип застібки (для Ремінців) */}
               {isStrap && char.claspType && (
                 <div className={stylesForProduct.product__composition}>
                   {translations[lang].catalog.clasp_type}:{' '}
-                  {(translations[lang].catalog as any)[
-                    String(char.claspType)
-                  ] || char.claspType}
+                  {(translations[lang].catalog as any)[String(char.claspType).toLowerCase()] || char.claspType}
                 </div>
               )}
             </div>

@@ -1,6 +1,6 @@
 import clientPromise from "@/lib/mongodb";
 import { getDbAndReqBody } from "@/lib/utils/api-routes";
-import { checkPriceParam, getCheckedSizesArrayParam } from "@/lib/utils/common";
+import { checkPriceParam, getCheckedArrayParam } from "@/lib/utils/common";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -16,7 +16,10 @@ export async function GET(req: Request) {
         const priceToParam = url.searchParams.get('priceTo')
         const isFullyFilteredByPrice = priceFromParam && priceToParam && checkPriceParam(+priceFromParam) && checkPriceParam(+priceToParam)
         const sizesParam = url.searchParams.get('sizes')
-        const sizesArray = getCheckedSizesArrayParam(sizesParam as string)
+        const sizesArray = getCheckedArrayParam(sizesParam as string)
+        const colorsParam = url.searchParams.get('colors')
+        const colorsArray = getCheckedArrayParam(colorsParam as string)
+        const isWatches = categoryParam === 'watches'
         const filter = {
             ...(typeParam && { type: typeParam }),
             ...(isFullyFilteredByPrice && { price: { $gt: +priceFromParam, $lt: +priceToParam } }),
@@ -25,6 +28,12 @@ export async function GET(req: Request) {
                     [`sizes.${sizes.toLowerCase()}`]: true,
                 }))
             }),
+
+            ...(colorsArray && {
+                $or: (colorsArray as string[]).map((color) => ({
+                    [`characteristics.${isWatches ? 'dialColor' : 'color'}`]: color.toLowerCase(),
+                }))
+            })
         }
 
         if (isCatalogParam) {

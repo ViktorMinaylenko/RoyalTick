@@ -52,6 +52,7 @@ export interface ISelectBtnProps {
 export interface ICatalogFiltersProps {
     handleApplyFiltersWithPrice: (arg0: string, arg1: string) => void
     handleApplyFiltersWithSizes: (arg0: string[]) => void
+    handleApplyFiltersWithColors: (arg0: string[]) => void
     pageName: string
 }
 
@@ -70,4 +71,16 @@ export interface ICheckboxSelectItemProps {
         checked: boolean
     }
     mobileClassName?: string
+}
+
+export interface IColorOption {
+    id: number
+    colorCode: string
+    checked: boolean
+    colorText: string
+}
+
+export interface IColorsSelectProps {
+    handleApplyFiltersWithColors: (colors: string[]) => void
+    pageName: string
 }

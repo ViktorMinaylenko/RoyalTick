@@ -29,6 +29,7 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
     handleApplyFiltersWithColors,
     handleApplyFiltersBySort,
   } = useProductFilters(
+    
     resolvedSearchParams,
     pageName,
     pageName === 'catalog'
@@ -157,7 +158,8 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
         }
         spinner={productsSpinner}
       />
-      <CatalogFilters handleApplyFiltersWithPrice={handleApplyFiltersWithPrice} handleApplyFiltersWithSizes={handleApplyFiltersWithSizes} pageName={pageName} />
+      <CatalogFilters handleApplyFiltersWithPrice={handleApplyFiltersWithPrice} handleApplyFiltersWithSizes={handleApplyFiltersWithSizes}
+       handleApplyFiltersWithColors={handleApplyFiltersWithColors} pageName={pageName} />
       {productsSpinner && (
         <motion.ul
           {...basePropsForMotion}
