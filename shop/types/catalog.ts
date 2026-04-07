@@ -47,12 +47,13 @@ export interface ISelectBtnProps {
     dynamicText: string
     defaultText: string
     bgClassName?: string
-}
+}   
 
 export interface ICatalogFiltersProps {
     handleApplyFiltersWithPrice: (arg0: string, arg1: string) => void
     handleApplyFiltersWithSizes: (arg0: string[]) => void
     handleApplyFiltersWithColors: (arg0: string[]) => void
+    handleApplyFiltersBySort: (arg0: string) => void
     pageName: string
 }
 
@@ -83,4 +84,10 @@ export interface IColorOption {
 export interface IColorsSelectProps {
     handleApplyFiltersWithColors: (colors: string[]) => void
     pageName: string
+}
+
+export interface ISelectInfoItem {
+    text: string
+    handleRemoveItem: (arg0: number) => void
+    id: number
 }

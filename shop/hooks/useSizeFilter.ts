@@ -9,6 +9,7 @@ import {
 } from '@/context/catalog'
 import { useLang } from './useLang'
 import { getCheckedArrayParam, getSearchParamsUrl } from '@/lib/utils/common'
+import { strapSizes, watchSizes } from '@/constants/product'
 
 
 
@@ -48,7 +49,7 @@ export const useSizeFilter = (
         if (sizesParam) {
             const validSizes = getCheckedArrayParam(sizesParam)
 
-            if (validSizes)
+            if (validSizes && validSizes.every((size) => watchSizes.some((s) => s.size === size) || strapSizes.some((s) => s.size === size)))
             {
                 applySizes(validSizes)
                 validSizes.forEach((size) => updateSizesOptionBySize(size))

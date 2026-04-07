@@ -1,7 +1,9 @@
 import clientPromise from "@/lib/mongodb";
+import { Sort } from 'mongodb'
 import { getDbAndReqBody } from "@/lib/utils/api-routes";
 import { checkPriceParam, getCheckedArrayParam } from "@/lib/utils/common";
 import { NextResponse } from "next/server";
+import { MyColors, strapSizes, watchSizes } from "@/constants/product";
 
 export async function GET(req: Request) {
     try {
@@ -19,26 +21,47 @@ export async function GET(req: Request) {
         const sizesArray = getCheckedArrayParam(sizesParam as string)
         const colorsParam = url.searchParams.get('colors')
         const colorsArray = getCheckedArrayParam(colorsParam as string)
+        const sortParam = url.searchParams.get('sort') || 'default'
+        const isValidColors = colorsArray && colorsArray.every((color) => MyColors.includes(color))
+        const isValidSizes = sizesArray && sizesArray.every((size) =>
+            watchSizes.some((s) => s.size.toString().toLowerCase() === size.toLowerCase()) ||
+            strapSizes.some((s) => s.size.toString().toLowerCase() === size.toLowerCase())
+        )
         const isWatches = categoryParam === 'watches'
         const filter = {
             ...(typeParam && { type: typeParam }),
             ...(isFullyFilteredByPrice && { price: { $gt: +priceFromParam, $lt: +priceToParam } }),
-            ...(sizesArray && {
+            ...(isValidSizes && {
                 $and: (sizesArray as string[]).map((sizes) => ({
                     [`sizes.${sizes.toLowerCase()}`]: true,
                 }))
             }),
 
-            ...(colorsArray && {
+            ...(isValidColors && {
                 $or: (colorsArray as string[]).map((color) => ({
                     [`characteristics.${isWatches ? 'dialColor' : 'color'}`]: color.toLowerCase(),
                 }))
             })
         }
 
+        const sort ={
+            ...(sortParam.includes('cheap_first') && {
+                price: 1,
+            }),
+            ...(sortParam.includes('expensive_first') && {
+                price: -1,
+            }),
+            ...(sortParam.includes('new') && {
+                isNew: -1,
+            }),
+            ...(sortParam.includes('popular') && {
+                popularity: -1,
+            }),
+        }
+
         if (isCatalogParam) {
             const getFilteredCollection = async (collection: string) => {
-                const goods = await db.collection(collection).find(filter).toArray()
+                const goods = await db.collection(collection).find(filter).sort(sort as Sort).toArray()
 
                 return goods
             }
@@ -76,7 +99,7 @@ export async function GET(req: Request) {
             })
         }
 
-        const currentGoods = await db.collection(categoryParam as string).find(filter).toArray()
+        const currentGoods = await db.collection(categoryParam as string).find(filter).sort(sort as Sort).toArray()
 
         return NextResponse.json({
             count: currentGoods.length,

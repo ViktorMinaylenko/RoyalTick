@@ -35,3 +35,19 @@ export const strapSizes = [
     { id: 3, size: '220 / 22', checked: false },
     { id: 4, size: '240 / 24', checked: false },
 ]
+
+export const MyColors = [
+  'brown',
+  'beige',
+  'cherry',
+  'navy',
+  'bordeaux',
+  'green',
+  'white',
+  'black',
+  'grey',
+  'dark brown',
+  'blue',
+  'silver',
+  'carbon'
+];
