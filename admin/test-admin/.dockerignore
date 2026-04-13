@@ -1,0 +1,33 @@
+# Залежності (їх Docker має встановити сам через npm/yarn install)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Результати попередніх збірок
+.next
+dist
+out
+build
+
+# Файли Docker та Git
+.git
+.gitignore
+Dockerfile
+.dockerignore
+docker-compose.yml
+.gitlab-ci.yml
+
+# Локальні змінні оточення (важливо для безпеки!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Тимчасові файли та кеш
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+*.swp
+*.log
