@@ -14,7 +14,6 @@ const generatePathParts = (pathStr: string) => {
 const Breadcrumbs = ({
   getTextGenerator,
   getDefaultTextGenerator,
-  
 }: IBreadcrumbsProps) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -25,21 +24,22 @@ const Breadcrumbs = ({
       const asPathNestedRoutes = generatePathParts(pathname)
       const pathnameNestedRoutes = generatePathParts(pathname)
 
-      const crumbList = asPathNestedRoutes.map((subpath, idx) => {
-        const param = pathnameNestedRoutes[idx]
-          .replace('[', '')
-          .replace(']', '')
+      return asPathNestedRoutes
+        .map((subpath, idx) => {
+          const param = pathnameNestedRoutes[idx]
+            .replace('[', '')
+            .replace(']', '')
 
-        const href = '/' + asPathNestedRoutes.slice(0, idx + 1).join('/')
+          const href = '/' + asPathNestedRoutes.slice(0, idx + 1).join('/')
 
-        return {
-          href,
-          textGenerator: getTextGenerator(param, searchParams.getAll('')),
-          text: getDefaultTextGenerator(subpath, href),
-        }
-      })
-
-      return [...crumbList]
+          return {
+            href,
+            textGenerator: getTextGenerator(param, searchParams.getAll('')),
+            text: getDefaultTextGenerator(subpath, href),
+          }
+        })
+        // КЛЮЧОВИЙ МОМЕНТ: видаляємо порожні сегменти, щоб не було "Каталог • Каталог"
+        .filter((crumb) => crumb.text !== '')
     },
     [pathname, getTextGenerator, searchParams, getDefaultTextGenerator, lang]
   )
@@ -49,24 +49,20 @@ const Breadcrumbs = ({
       <ul className='list-reset breadcrumbs'>
         <li className='breadcrumbs__item'>
           <Link href='/' className='breadcrumbs__item__link first-crumb'>
-            {translations[lang].breadcrumbs.main}
+            <span>{translations[lang].breadcrumbs.main}</span>
           </Link>
         </li>
-        {breadcrumbs.map((crumb, idx) =>
-          crumb.text ? (
-            <li key={idx} className='breadcrumbs__item'>
-              {/**eslint-disable-next-line @typescript-eslint/ban-ts-comment
-               * @ts-ignore */}
-              <Crumb
-                {...crumb}
-                key={idx}
-                last={idx === breadcrumbs.length - 1}
-              />
-            </li>
-          ) : (
-            ''
-          )
-        )}
+        {breadcrumbs.map((crumb, idx) => (
+          <li key={idx} className='breadcrumbs__item'>
+            {/**eslint-disable-next-line @typescript-eslint/ban-ts-comment
+             * @ts-ignore */}
+            <Crumb
+              {...crumb}
+              key={idx}
+              last={idx === breadcrumbs.length - 1}
+            />
+          </li>
+        ))}
       </ul>
     </div>
   )
