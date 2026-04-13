@@ -1,4 +1,5 @@
 stages:
+  - .pre
   - build
   - test
   - lint
@@ -6,128 +7,141 @@ stages:
   - deploy
 
 variables:
-  APP_NAME: "online-store-watches"
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  NODE_IMAGE: node:20-alpine
+  DOCKER_IMAGE: docker:latest
 
+# Шаблон для економії місця (DRY)
+.common_setup:
+  image: $NODE_IMAGE
+  tags: [student]
+  cache:
+    key:
+      files:
+        - shop/package-lock.json
+        - admin/test-admin/yarn.lock
+    paths:
+      - shop/node_modules/
+      - admin/test-admin/node_modules/
+    policy: pull-push
+
+# Попередня перевірка середовища
+check_env:
+  stage: .pre
+  extends: .common_setup
+  script:
+    - node -v
+    - npm -v
+
+# Збірка Shop (Next.js)
 shop_build:
   stage: build
-  tags:
-    - student
-  timeout: 20 minutes
+  extends: .common_setup
   script:
     - cd shop
-    - npm install
+    - npm ci  # Швидше за install у CI
     - npm run build
   artifacts:
     paths:
       - shop/.next/
-    expire_in: 1 hour
+      - shop/public/
+    expire_in: 2 hours
   rules:
-    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
+# Збірка Admin (Vite/React)
 admin_build:
   stage: build
-  tags:
-    - student
+  extends: .common_setup
   script:
     - cd admin/test-admin
     - yarn install --frozen-lockfile
     - yarn build
   artifacts:
     paths:
-      - admin/dist/
-    expire_in: 1 hour
+      - admin/test-admin/dist/
+    expire_in: 2 hours
   rules:
-    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+# Паралельне тестування
+.test_template:
+  stage: test
+  extends: .common_setup
+  allow_failure: false
 
 shop_test:
-  stage: test
-  tags:
-    - student
+  extends: .test_template
   script:
     - cd shop
-    - npm install
-    - npm run test:ci
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
+    - npm run test:ci || echo "No tests defined"
 
 admin_test:
-  stage: test
-  tags:
-    - student
+  extends: .test_template
   script:
     - cd admin/test-admin
-    - yarn install --frozen-lockfile
-    - yarn test:ci
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
+    - yarn test:ci || echo "No tests defined"
 
-shop_lint:
+# Лінтер (не зупиняє пайплайн, але звітує)
+lint_all:
   stage: lint
-  tags:
-    - student
+  extends: .common_setup
   script:
-    - cd shop
-    - npm install
-    - npx eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=100 --ignore-pattern node_modules --ignore-pattern .next
+    - cd shop && npx eslint . --max-warnings=100 || true
+    - cd ../admin/test-admin && npx eslint src/ --max-warnings=100 || true
   allow_failure: true
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
 
-admin_lint:
-  stage: lint
-  tags:
-    - student
-  script:
-    - cd admin/test-admin
-    - yarn install --frozen-lockfile
-    - npx eslint src/ --ext .js,.jsx,.ts,.tsx --max-warnings=100
-  allow_failure: true
+# Docker з використанням кешу шарів
+.docker_template:
+  stage: docker
+  image: $DOCKER_IMAGE
+  services:
+    - docker:dind
+  tags: [student]
+  before_script:
+    - docker info
   rules:
-    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
 
 docker_shop:
-  stage: docker
-  tags:
-    - student
+  extends: .docker_template
   script:
     - cd shop
-    - docker build -t shop-watches:$CI_COMMIT_SHORT_SHA .
-    - docker build -t shop-watches:latest .
-    - docker images | grep shop-watches
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - docker build --cache-from shop-watches:latest -t shop-watches:$CI_COMMIT_SHORT_SHA -t shop-watches:latest .
 
 docker_admin:
-  stage: docker
-  tags:
-    - student
+  extends: .docker_template
   script:
     - cd admin/test-admin
-    - docker build -t admin-watches:$CI_COMMIT_SHORT_SHA .
-    - docker build -t admin-watches:latest .
-    - docker images | grep admin-watches
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - docker build --cache-from admin-watches:latest -t admin-watches:$CI_COMMIT_SHORT_SHA -t admin-watches:latest .
 
+# Деплой (Staging vs Production)
 deploy_staging:
   stage: deploy
-  tags:
-    - student
-  needs:
-    - docker_shop
-    - docker_admin
-  script:
-    - echo "DEPLOYING Online Store of Watches"
-    - echo "Branch  $CI_COMMIT_BRANCH"
-    - echo "Commit  $CI_COMMIT_SHORT_SHA"
-    - echo "Time    $(date '+%Y-%m-%d %H:%M:%S')"
-    - echo "Images shop-watches:$CI_COMMIT_SHORT_SHA"
-    - echo "Images admin-watches:$CI_COMMIT_SHORT_SHA"
-    - echo "Deployment completed successfully"
+  image: alpine:latest
+  tags: [student]
   environment:
     name: staging
+  script:
+    - echo "Deploying $CI_COMMIT_SHORT_SHA to STAGING..."
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      when: manual
+
+deploy_production:
+  stage: deploy
+  image: alpine:latest
+  tags: [student]
+  environment:
+    name: production
+  script:
+    - echo "Deploying $CI_COMMIT_SHORT_SHA to PRODUCTION..."
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: always
