@@ -12,6 +12,9 @@ import { IProduct } from '@/types/common'
 import { EventCallable } from 'effector'
 import toast from 'react-hot-toast'
 
+export const parseJwt = (token: string) =>
+  JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
+
 export const removeOverflowHiddenFromBody = () => {
   const body = document.querySelector('body') as HTMLBodyElement
   body.classList.remove('overflow-hidden')
