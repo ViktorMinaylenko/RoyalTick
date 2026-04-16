@@ -1,0 +1,57 @@
+name: RoyalTick Professional CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build Shop and Admin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install & Build Shop
+        run: |
+          cd shop
+          npm ci
+          npm run build --if-present
+
+      - name: Install & Build Admin
+        run: |
+          cd admin/test-admin
+          npm install
+          npm run build --if-present
+
+  docker-check:
+    name: Docker Environment Test
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Test Docker Image
+        run: |
+          docker build -t royaltick/shop-test:latest ./shop
+          echo "Docker image built successfully!"
+
+  notify:
+    name: Success Notification
+    needs: [build, docker-check]
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+      - name: Final Status
+        run: echo "RoyalTick CI Pipeline completed successfully. Ready for deployment!"
