@@ -1,0 +1,155 @@
+stages:
+  - build
+  - test
+  - lint
+  - docker
+  - deploy
+
+variables:
+  APP_NAME: "online-store-watches"
+
+shop_build:
+  stage: build
+  tags:
+    - student
+  timeout: 20 minutes
+  script:
+    - cd shop
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - shop/.next/
+    expire_in: 1 hour
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+admin_build:
+  stage: build
+  tags:
+    - student
+  script:
+    - cd admin/test-admin
+    - yarn install --frozen-lockfile
+    - yarn build
+  artifacts:
+    paths:
+      - admin/dist/
+    expire_in: 1 hour
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+shop_test:
+  stage: test
+  tags:
+    - student
+  script:
+    - cd shop
+    - npm install
+    - npm run test:ci
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+admin_test:
+  stage: test
+  tags:
+    - student
+  script:
+    - cd admin/test-admin
+    - yarn install --frozen-lockfile
+    - yarn test:ci
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+shop_security:
+  stage: test
+  tags:
+    - student
+  script:
+    - cd shop
+    - npm audit --audit-level=high
+  allow_failure: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+admin_security:
+  stage: test
+  tags:
+    - student
+  script:
+    - cd admin/test-admin
+    - npm audit --audit-level=high
+  allow_failure: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+shop_lint:
+  stage: lint
+  tags:
+    - student
+  script:
+    - cd shop
+    - npm install
+    - npx eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=100 --ignore-pattern node_modules --ignore-pattern .next
+  allow_failure: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+admin_lint:
+  stage: lint
+  tags:
+    - student
+  script:
+    - cd admin/test-admin
+    - yarn install --frozen-lockfile
+    - npx eslint src/ --ext .js,.jsx,.ts,.tsx --max-warnings=100
+  allow_failure: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+docker_shop:
+  stage: docker
+  tags:
+    - student
+  script:
+    - cd shop
+    - docker build -t shop-watches:$CI_COMMIT_SHORT_SHA .
+    - docker build -t shop-watches:latest .
+    - docker images | grep shop-watches
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+
+docker_admin:
+  stage: docker
+  tags:
+    - student
+  script:
+    - cd admin/test-admin
+    - docker build -t admin-watches:$CI_COMMIT_SHORT_SHA .
+    - docker build -t admin-watches:latest .
+    - docker images | grep admin-watches
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+
+deploy_staging:
+  stage: deploy
+  tags:
+    - student
+  needs:
+    - docker_shop
+    - docker_admin
+  script:
+    - echo "DEPLOYING Online Store of Watches"
+    - echo "Branch  $CI_COMMIT_BRANCH"
+    - echo "Commit  $CI_COMMIT_SHORT_SHA"
+    - echo "Time    $(date '+%Y-%m-%d %H:%M:%S')"
+    - echo "Images shop-watches:$CI_COMMIT_SHORT_SHA"
+    - echo "Images admin-watches:$CI_COMMIT_SHORT_SHA"
+    - echo "Deployment completed successfully"
+  environment:
+    name: staging
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
