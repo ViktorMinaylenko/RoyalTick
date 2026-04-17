@@ -4,11 +4,20 @@ import { getDbAndReqBody } from "@/lib/utils/api-routes";
 import { checkPriceParam, getCheckedArrayParam } from "@/lib/utils/common";
 import { NextResponse } from "next/server";
 import { MyColors, strapSizes, watchSizes } from "@/constants/product";
+import { logger } from "@/lib/logger";
 
 export async function GET(req: Request) {
     try {
         const { db } = await getDbAndReqBody(clientPromise, null)
         const url = new URL(req.url)
+
+        logger.info({
+            category: url.searchParams.get('category'),
+            sort: url.searchParams.get('sort'),
+            priceFrom: url.searchParams.get('priceFrom'),
+            priceTo: url.searchParams.get('priceTo')
+        }, 'Fetching filtered goods');
+
         const limit = url.searchParams.get('limit') || 12
         const offset = url.searchParams.get('offset') || 0
         const isCatalogParam = url.searchParams.get('catalog')
@@ -22,12 +31,14 @@ export async function GET(req: Request) {
         const colorsParam = url.searchParams.get('colors')
         const colorsArray = getCheckedArrayParam(colorsParam as string)
         const sortParam = url.searchParams.get('sort') || 'default'
+
         const isValidColors = colorsArray && colorsArray.every((color) => MyColors.includes(color))
         const isValidSizes = sizesArray && sizesArray.every((size) =>
             watchSizes.some((s) => s.size.toString().toLowerCase() === size.toLowerCase()) ||
             strapSizes.some((s) => s.size.toString().toLowerCase() === size.toLowerCase())
         )
         const isWatches = categoryParam === 'watches'
+
         const filter = {
             ...(typeParam && { type: typeParam }),
             ...(isFullyFilteredByPrice && { price: { $gt: +priceFromParam, $lt: +priceToParam } }),
@@ -36,7 +47,6 @@ export async function GET(req: Request) {
                     [`sizes.${sizes.toLowerCase()}`]: true,
                 }))
             }),
-
             ...(isValidColors && {
                 $or: (colorsArray as string[]).map((color) => ({
                     [`characteristics.${isWatches ? 'dialColor' : 'color'}`]: color.toLowerCase(),
@@ -44,26 +54,16 @@ export async function GET(req: Request) {
             })
         }
 
-        const sort ={
-            ...(sortParam.includes('cheap_first') && {
-                price: 1,
-            }),
-            ...(sortParam.includes('expensive_first') && {
-                price: -1,
-            }),
-            ...(sortParam.includes('new') && {
-                isNew: -1,
-            }),
-            ...(sortParam.includes('popular') && {
-                popularity: -1,
-            }),
+        const sort = {
+            ...(sortParam.includes('cheap_first') && { price: 1 }),
+            ...(sortParam.includes('expensive_first') && { price: -1 }),
+            ...(sortParam.includes('new') && { isNew: -1 }),
+            ...(sortParam.includes('popular') && { popularity: -1 }),
         }
 
         if (isCatalogParam) {
             const getFilteredCollection = async (collection: string) => {
-                const goods = await db.collection(collection).find(filter).sort(sort as Sort).toArray()
-
-                return goods
+                return await db.collection(collection).find(filter).sort(sort as Sort).toArray()
             }
 
             const [watches, straps, boxes, care] = await Promise.allSettled([
@@ -79,11 +79,8 @@ export async function GET(req: Request) {
                 boxes.status !== 'fulfilled' ||
                 care.status !== 'fulfilled'
             ) {
-                return NextResponse.json({
-                    count: 0,
-                    items: [],
-                }
-                )
+                logger.warn('Some collections failed to load in catalog');
+                return NextResponse.json({ count: 0, items: [] })
             }
 
             const allGoods = [
@@ -93,6 +90,7 @@ export async function GET(req: Request) {
                 ...care.value,
             ]
 
+            logger.info({ totalCount: allGoods.length }, 'Catalog request successful');
             return NextResponse.json({
                 count: allGoods.length,
                 items: allGoods.slice(+offset, +limit),
@@ -101,12 +99,14 @@ export async function GET(req: Request) {
 
         const currentGoods = await db.collection(categoryParam as string).find(filter).sort(sort as Sort).toArray()
 
+        logger.info({ category: categoryParam, count: currentGoods.length }, 'Category fetch successful');
         return NextResponse.json({
             count: currentGoods.length,
             items: currentGoods.slice(+offset, +limit),
         })
     } catch (error) {
-        throw new Error((error as Error).message);
+        logger.error(error, 'Error in filter API');
+        return NextResponse.json({ message: (error as Error).message }, { status: 500 });
     }
 }
 
