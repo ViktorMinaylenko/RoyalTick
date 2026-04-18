@@ -92,6 +92,7 @@ admin_test:
   script:
     - cd admin/test-admin
     - yarn install --frozen-lockfile
+    - yarn add @testing-library/dom --dev
     - yarn test:ci
   allow_failure: true
   rules:
