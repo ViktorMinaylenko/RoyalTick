@@ -54,7 +54,9 @@ describe("dataProvider", () => {
 
   it("delete maps accessories to boxes", async () => {
     mockedAxios.get.mockResolvedValue({ data: {} });
-    await dataProvider.delete('goods', { previousData: { id: '1', category: 'accessories' } } as { previousData: { id: string; category: string } });
+    await dataProvider.delete("goods", {
+      previousData: { id: "1", category: "accessories" },
+    } as { previousData: { id: string; category: string } });
     expect(mockedAxios.get).toHaveBeenCalledWith(
       expect.stringContaining("category=boxes"),
     );
