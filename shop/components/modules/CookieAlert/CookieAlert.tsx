@@ -15,7 +15,7 @@ const CookieAlert = ({
       setCookieAlertOpen(false)
     } else {
       toast.error(
-        // eslint-disable-next-line max-len
+         
         'Файл cookie не вдалося встановити! Будь ласка, дозвольте використання файлів cookie для цього сайту в налаштуваннях вашого браузера.'
       )
     }

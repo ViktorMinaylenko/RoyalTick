@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+ 
 import toast from 'react-hot-toast'
 import { ICartItem } from '@/types/cart'
 import { IProduct } from '@/types/common'

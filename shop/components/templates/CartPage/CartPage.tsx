@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-indent */
+ 
 'use client'
 import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 import { useLang } from '@/hooks/useLang'

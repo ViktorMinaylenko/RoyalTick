@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import Link from 'next/link'
 import { useMemo } from 'react'
 import Crumb from './Crumb'
