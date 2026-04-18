@@ -15,7 +15,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          # Ми прибрали рядок cache, щоб не було помилки з lock-файлом
 
       - name: Verify Project Structure
         run: |
