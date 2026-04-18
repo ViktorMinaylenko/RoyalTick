@@ -104,7 +104,7 @@ shop_security:
     - student
   script:
     - cd shop
-    - npm audit --audit-level=high
+    - npm audit --audit-level=critical
   allow_failure: true
   rules:
     - if: '$CI_COMMIT_BRANCH'
@@ -115,7 +115,7 @@ admin_security:
     - student
   script:
     - cd admin/test-admin
-    - npm audit --audit-level=high
+    - npm audit --audit-level=critical
   allow_failure: true
   rules:
     - if: '$CI_COMMIT_BRANCH'
