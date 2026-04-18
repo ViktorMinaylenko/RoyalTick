@@ -147,6 +147,7 @@ admin_lint:
 
 docker_shop:
   stage: docker
+  image: docker:24
   tags:
     - student
   script:
@@ -160,6 +161,7 @@ docker_shop:
 
 docker_admin:
   stage: docker
+  image: docker:24
   tags:
     - student
   script:

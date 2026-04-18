@@ -107,7 +107,7 @@ export default {
     }
 
     const id = params.previousData.id;
-    let category = params.previousData.category;
+    const category = params.previousData.category;
 
     const categoryMap: Record<string, string> = {
       watches: "watches",
