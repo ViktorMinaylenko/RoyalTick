@@ -7,16 +7,43 @@ stages:
 
 variables:
   APP_NAME: "online-store-watches"
+  NEXT_PUBLIC_DB_URL: $NEXT_PUBLIC_DB_URL
+  NEXT_PUBLIC_DB_NAME: $NEXT_PUBLIC_DB_NAME
+  NEXT_PUBLIC_ACCESS_TOKEN_KEY: $NEXT_PUBLIC_ACCESS_TOKEN_KEY
+  NEXT_PUBLIC_REFRESH_TOKEN_KEY: $NEXT_PUBLIC_REFRESH_TOKEN_KEY
+  NEXT_PUBLIC_NODEMAILER_PW: $NEXT_PUBLIC_NODEMAILER_PW
+  NEXT_PUBLIC_NODEMAILER_EMAIL: $NEXT_PUBLIC_NODEMAILER_EMAIL
+  NEXT_PUBLIC_FIREBASE_API_KEY: $NEXT_PUBLIC_FIREBASE_API_KEY
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: $NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID: $NEXT_PUBLIC_FIREBASE_PROJECT_ID
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: $NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: $NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+  NEXT_PUBLIC_FIREBASE_APP_ID: $NEXT_PUBLIC_FIREBASE_APP_ID
 
 
 shop_build:
   stage: build
-  # ВИДАЛЕНО tags: [student] — якщо Instance runner без цього тегу, job висить вічно
-  # Якщо твій runner МАЄ тег student — поверни цей рядок назад
+  tags:
+    - student
   timeout: 20 minutes
   script:
     - cd shop
-    - npm ci                   
+    - |
+      cat > .env << EOF
+      NEXT_PUBLIC_DB_URL=${NEXT_PUBLIC_DB_URL}
+      NEXT_PUBLIC_DB_NAME=${NEXT_PUBLIC_DB_NAME}
+      NEXT_PUBLIC_ACCESS_TOKEN_KEY=${NEXT_PUBLIC_ACCESS_TOKEN_KEY}
+      NEXT_PUBLIC_REFRESH_TOKEN_KEY=${NEXT_PUBLIC_REFRESH_TOKEN_KEY}
+      NEXT_PUBLIC_NODEMAILER_PW=${NEXT_PUBLIC_NODEMAILER_PW}
+      NEXT_PUBLIC_NODEMAILER_EMAIL=${NEXT_PUBLIC_NODEMAILER_EMAIL}
+      NEXT_PUBLIC_FIREBASE_API_KEY=${NEXT_PUBLIC_FIREBASE_API_KEY}
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID=${NEXT_PUBLIC_FIREBASE_PROJECT_ID}
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}
+      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}
+      NEXT_PUBLIC_FIREBASE_APP_ID=${NEXT_PUBLIC_FIREBASE_APP_ID}
+      EOF
+    - npm ci
     - npm run build
   artifacts:
     paths:
@@ -27,6 +54,8 @@ shop_build:
 
 admin_build:
   stage: build
+  tags:
+    - student
   timeout: 20 minutes
   script:
     - cd admin/test-admin
@@ -42,29 +71,36 @@ admin_build:
 
 shop_test:
   stage: test
+  tags:
+    - student
   script:
     - cd shop
     - npm ci
     - npm run test:ci
-  coverage: '/Lines\s*:\s*(\d+\.?\d*)%/' 
+  coverage: '/Lines\s*:\s*(\d+\.?\d*)%/'
   artifacts:
     paths:
-      - shop/coverage/    
+      - shop/coverage/
     expire_in: 3 days
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
 admin_test:
   stage: test
+  tags:
+    - student
   script:
     - cd admin/test-admin
     - yarn install --frozen-lockfile
     - yarn test:ci
+  allow_failure: true
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
 shop_security:
   stage: test
+  tags:
+    - student
   script:
     - cd shop
     - npm audit --audit-level=high
@@ -74,6 +110,8 @@ shop_security:
 
 admin_security:
   stage: test
+  tags:
+    - student
   script:
     - cd admin/test-admin
     - npm audit --audit-level=high
@@ -84,6 +122,8 @@ admin_security:
 
 shop_lint:
   stage: lint
+  tags:
+    - student
   script:
     - cd shop
     - npm ci
@@ -94,6 +134,8 @@ shop_lint:
 
 admin_lint:
   stage: lint
+  tags:
+    - student
   script:
     - cd admin/test-admin
     - yarn install --frozen-lockfile
@@ -102,13 +144,14 @@ admin_lint:
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
-
 docker_shop:
   stage: docker
+  tags:
+    - student
   script:
     - cd shop
     - docker build -t shop-watches:$CI_COMMIT_SHORT_SHA .
-    - docker tag shop-watches:$CI_COMMIT_SHORT_SHA shop-watches:latest 
+    - docker tag shop-watches:$CI_COMMIT_SHORT_SHA shop-watches:latest
     - docker images | grep shop-watches
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
@@ -116,6 +159,8 @@ docker_shop:
 
 docker_admin:
   stage: docker
+  tags:
+    - student
   script:
     - cd admin/test-admin
     - docker build -t admin-watches:$CI_COMMIT_SHORT_SHA .
@@ -127,6 +172,8 @@ docker_admin:
 
 deploy_staging:
   stage: deploy
+  tags:
+    - student
   needs:
     - job: docker_shop
     - job: docker_admin

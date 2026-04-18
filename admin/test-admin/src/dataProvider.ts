@@ -124,7 +124,7 @@ export default {
   },
 
   deleteMany: async (resource, params) => {
-    const url = `${apiUrl}/${resource}/delete-many?ids=${JSON.stringify(params.ids)}`;
+    const url = `${apiUrl}/${resource}/delete-many?ids=${encodeURIComponent(JSON.stringify(params.ids))}`;
 
     await axios.get(url);
 

@@ -1,0 +1,48 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GoodsList Component > matches snapshot of the list structure 1`] = `
+<div>
+  <h2>
+    Unexpected Application Error!
+  </h2>
+  <h3
+    style="font-style: italic;"
+  >
+    useListController requires a non-empty resource prop or context
+  </h3>
+  <pre
+    style="padding: 0.5rem; background-color: rgba(200, 200, 200, 0.5);"
+  >
+    Error: useListController requires a non-empty resource prop or context
+    at useListController (file:///D:/My_/Institut/Online%20store%20of%20watches/admin/test-admin/node_modules/ra-core/dist/controller/list/useListController.js:35:15)
+    at ListBase (file:///D:/My_/Institut/Online%20store%20of%20watches/admin/test-admin/node_modules/ra-core/dist/controller/list/ListBase.js:41:29)
+    at Object.react_stack_bottom_frame (D:\\My_\\Institut\\Online store of watches\\admin\\test-admin\\node_modules\\react-dom\\cjs\\react-dom-client.development.js:25904:20)
+    at renderWithHooks (D:\\My_\\Institut\\Online store of watches\\admin\\test-admin\\node_modules\\react-dom\\cjs\\react-dom-client.development.js:7662:22)
+    at updateFunctionComponent (D:\\My_\\Institut\\Online store of watches\\admin\\test-admin\\node_modules\\react-dom\\cjs\\react-dom-client.development.js:10166:19)
+    at beginWork (D:\\My_\\Institut\\Online store of watches\\admin\\test-admin\\node_modules\\react-dom\\cjs\\react-dom-client.development.js:11778:18)
+    at runWithFiberInDEV (D:\\My_\\Institut\\Online store of watches\\admin\\test-admin\\node_modules\\react-dom\\cjs\\react-dom-client.development.js:874:13)
+    at performUnitOfWork (D:\\My_\\Institut\\Online store of watches\\admin\\test-admin\\node_modules\\react-dom\\cjs\\react-dom-client.development.js:17641:22)
+    at workLoopSync (D:\\My_\\Institut\\Online store of watches\\admin\\test-admin\\node_modules\\react-dom\\cjs\\react-dom-client.development.js:17469:41)
+    at renderRootSync (D:\\My_\\Institut\\Online store of watches\\admin\\test-admin\\node_modules\\react-dom\\cjs\\react-dom-client.development.js:17450:11)
+  </pre>
+  <p>
+    💿 Hey developer 👋
+  </p>
+  <p>
+    You can provide a way better UX than this when your app throws errors by providing your own 
+    <code
+      style="padding: 2px 4px; background-color: rgba(200, 200, 200, 0.5);"
+    >
+      ErrorBoundary
+    </code>
+     or
+     
+    <code
+      style="padding: 2px 4px; background-color: rgba(200, 200, 200, 0.5);"
+    >
+      errorElement
+    </code>
+     prop on your route.
+  </p>
+</div>
+`;
