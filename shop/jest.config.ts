@@ -9,7 +9,6 @@ const config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",
   },
-  // ВИПРАВЛЕНО: шукаємо будь-які файли тестів
   testMatch: [
     "**/__tests__/**/*.test.ts",
     "**/__tests__/**/*.spec.ts"
