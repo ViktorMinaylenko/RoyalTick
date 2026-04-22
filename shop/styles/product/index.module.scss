@@ -260,13 +260,13 @@
       font-size: 16px;
       font-weight: 500;
       border-radius: 50px;
-      background-color: #9466FF;
+      background-color: #4a8c7e;
       padding: 12px 35px;
       transition: background-color .2s ease-in-out;
 
       &:hover {
         transition: background-color .2s ease-in-out;
-        background-color: #70F;
+        background-color: #6aac9e;
       }
     }
 
@@ -341,12 +341,12 @@
         }
 
         &:hover &__text {
-          color: #9466FF;
+          color: #4a8c7e;
           transition: color .2s ease-in-out;
         }
 
         &:hover &__icon {
-          background-color: #9466FF;
+          background-color: #4a8c7e;
           transition: background-color .2s ease-in-out, transform .2s ease-in-out;
         }
       }

@@ -2,8 +2,8 @@
 .header {
   position: relative;
   z-index: 3;
-  background-color: #1D2533;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.20), 0px 0px 8px 0px rgba(0, 0, 0, 0.10);
+  background-color: #0e1111;
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
 .header__container {
@@ -41,17 +41,21 @@
 }
 
 .logo-royal {
-  background: linear-gradient(145deg, #0B3D2E, #1E5E48 40%, #0F2E26);
+  background: linear-gradient(145deg, #0b3d2e, #1e5e48 40%, #0f2e26);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.3);
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.6),
+    0 4px 10px rgba(0, 0, 0, 0.3);
   position: relative;
 }
 
 .logo-tick {
   margin-left: 10px;
-  color: #E8E9EA;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.8), 0 0 6px rgba(255,255,255,0.3);
+  color: #e8e9ea;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 6px rgba(255, 255, 255, 0.3);
   position: relative;
 }
 
@@ -63,15 +67,24 @@
   left: -2px;
   width: 100%;
   height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.15), transparent);
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
   pointer-events: none;
   transform: skewX(-20deg);
   animation: shine 3s infinite linear;
 }
 
 @keyframes shine {
-  0% { transform: translateX(-100%) skewX(-20deg); }
-  100% { transform: translateX(100%) skewX(-20deg); }
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(100%) skewX(-20deg);
+  }
 }
 
 .logo-tick::after {
@@ -83,7 +96,10 @@
   height: 2px;
   background: gold;
   border-radius: 50%;
-  box-shadow: 6px 4px gold, -5px 10px gold, 12px 6px rgba(255,215,0,0.2);
+  box-shadow:
+    6px 4px gold,
+    -5px 10px gold,
+    12px 6px rgba(255, 215, 0, 0.2);
   pointer-events: none;
 }
 
@@ -91,7 +107,7 @@
 .header__burger {
   position: relative;
   z-index: 10;
-  color: #E8E9EA;
+  color: #e8e9ea;
   font-size: 24px;
   font-weight: 500;
   padding-left: 38px !important;
@@ -111,18 +127,18 @@
   transform: translateY(-50%);
   height: 25px;
   width: 25px;
-  background-color: #E8E9EA;
+  background-color: #e8e9ea;
   -webkit-mask: url(/img/burger.svg) no-repeat 50% 50% / contain;
   mask: url(/img/burger.svg) no-repeat 50% 50% / contain;
   transition: background-color 0.2s ease-in-out;
 }
 
 .header__burger:hover {
-  color: #9466FF;
+  color: #4a8c7e;
 }
 
 .header__burger:hover::before {
-  background-color: #9466FF;
+  background-color: #4a8c7e;
 }
 
 /* --- ПРАВІ ПОСИЛАННЯ (ІКОНКИ) --- */
@@ -133,7 +149,6 @@
   margin: 0;
   padding: 0;
   z-index: 10;
-  
 }
 
 .header__link-item:not(:last-child) {
@@ -157,7 +172,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: #E8E9EA;
+  background-color: #e8e9ea;
   transition: background-color 0.2s ease-in-out;
   -webkit-mask-size: contain;
   mask-size: contain;
@@ -166,14 +181,29 @@
 }
 
 /* Шляхи до іконок */
-.header__links__item__btn--search::before { -webkit-mask-image: url(/img/search.svg); mask-image: url(/img/search.svg); }
-.header__links__item__btn--favorites::before { -webkit-mask-image: url(/img/favorites.svg); mask-image: url(/img/favorites.svg); }
-.header__links__item__btn--compare::before { -webkit-mask-image: url(/img/comparison.svg); mask-image: url(/img/comparison.svg); }
-.header__links__item__btn--cart::before { -webkit-mask-image: url(/img/cart.svg); mask-image: url(/img/cart.svg); }
-.header__links__item__btn--profile::before { -webkit-mask-image: url(/img/profile.svg); mask-image: url(/img/profile.svg); }
+.header__links__item__btn--search::before {
+  -webkit-mask-image: url(/img/search.svg);
+  mask-image: url(/img/search.svg);
+}
+.header__links__item__btn--favorites::before {
+  -webkit-mask-image: url(/img/favorites.svg);
+  mask-image: url(/img/favorites.svg);
+}
+.header__links__item__btn--compare::before {
+  -webkit-mask-image: url(/img/comparison.svg);
+  mask-image: url(/img/comparison.svg);
+}
+.header__links__item__btn--cart::before {
+  -webkit-mask-image: url(/img/cart.svg);
+  mask-image: url(/img/cart.svg);
+}
+.header__links__item__btn--profile::before {
+  -webkit-mask-image: url(/img/profile.svg);
+  mask-image: url(/img/profile.svg);
+}
 
 .header__links__item__btn:hover::before {
-  background-color: #9466FF;
+  background-color: #4a8c7e;
 }
 
 /* --- АДАПТИВ --- */
@@ -195,7 +225,7 @@
   }
 
   .header__burger,
-  .header__link-item:nth-child(n+2):nth-child(-n+4) {
+  .header__link-item:nth-child(n + 2):nth-child(-n + 4) {
     display: none; /* Ховаємо зайве на малих екранах */
   }
 

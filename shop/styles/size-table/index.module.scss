@@ -53,7 +53,7 @@
 
     &:hover::before {
       transition: background-color 0.2s ease-in-out;
-      background-color: #9466ff;
+      background-color: #4a8c7e;
     }
   }
 
@@ -78,7 +78,7 @@
       height: 6px;
     }
     &::-webkit-scrollbar-thumb {
-      background: #9466ff;
+      background: #4a8c7e;
       border-radius: 10px;
     }
   }
@@ -107,7 +107,7 @@
   &__subtitle {
     margin-bottom: 15px;
     font-size: 18px;
-    color: #9466ff;
+    color: #4a8c7e;
   }
 
   // Прибираємо фіксовану ширину таблиць для ремінців, щоб вони вписувались в флекс
@@ -120,7 +120,7 @@
 
   &__btn {
     border-radius: 32px;
-    background-color: #9466ff !important;
+    background-color: #4a8c7e !important;
     padding: 12px 24px !important;
     color: #fff;
     font-size: 16px;
@@ -137,7 +137,7 @@
     }
 
     &:hover {
-      background-color: #70f !important;
+      background-color: #6aac9e !important;
       transition: background-color 0.2s ease-in-out;
     }
 
@@ -189,7 +189,7 @@
       transition: background-color 0.2s ease-in-out;
 
       &:hover {
-        background-color: #9466ff !important;
+        background-color: #4a8c7e !important;
         transition: background-color 0.2s ease-in-out;
       }
     }

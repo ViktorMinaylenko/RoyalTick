@@ -40,7 +40,7 @@
 }
 
 .cart-popup__close:hover {
-  background-color: #9466FF !important;
+  background-color: #4a8c7e !important;
   transition: background-color .2s ease-in-out;
 }
 
@@ -69,12 +69,12 @@
 }
 
 .cart-popup__cart-list::-webkit-scrollbar-thumb {
-  background-color: #9466FF;
+  background-color: #4a8c7e;
   border-radius: 3px;
 }
 
 .cart-popup__cart-list::-webkit-scrollbar-thumb:hover {
-  background-color: #70F;
+  background-color: #6aac9e;
 }
 
 .cart-popup__cart-list__empty-cart {
@@ -150,7 +150,7 @@
 }
 
 .cart-list__item__title:hover {
-  color: #9466FF;
+  color: #4a8c7e;
   transition: color .2s ease-in-out;
 }
 
@@ -273,13 +273,13 @@
   font-size: 14px;
   font-weight: 500;
   border-radius: 24px;
-  background-color: #9466FF;
+  background-color: #4a8c7e;
   height: 32px;
   transition: background-color .2s ease-in-out;
 }
 
 .cart-popup__footer__link:hover {
-  background-color: #70F;
+  background-color: #6aac9e;
   transition: background-color .2s ease-in-out;
 }
 

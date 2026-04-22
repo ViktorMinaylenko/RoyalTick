@@ -43,7 +43,7 @@
     }
 
     &:hover::before {
-      background-color: #9466ff;
+      background-color: #4a8c7e;
     }
   }
 
@@ -108,7 +108,7 @@
           background-position: center center;
 
           &:hover {
-            background-color: #9466ff !important;
+            background-color: #4a8c7e !important;
           }
         }
 
@@ -267,7 +267,7 @@
       &__add {
         border: none;
         border-radius: 32px;
-        background-color: #9466ff !important;
+        background-color: #4a8c7e !important;
         padding: 12px 24px !important;
         width: 164px;
         color: #fff;
@@ -279,7 +279,7 @@
         flex-shrink: 0;
 
         &:hover {
-          background-color: #70f !important;
+          background-color: #6aac9e !important;
         }
 
         &:disabled {
@@ -305,13 +305,13 @@
 
       &__link {
         text-decoration: none;
-        color: #9466ff;
+        color: #4a8c7e;
         font-size: 16px;
         font-weight: 500;
         transition: color 0.2s ease-in-out;
 
         &:hover {
-          color: #70f;
+          color: #6aac9e;
         }
       }
     }

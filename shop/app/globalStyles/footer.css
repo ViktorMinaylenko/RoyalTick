@@ -46,7 +46,7 @@
 
 .footer__contacts a:hover,
 .footer__links a:hover {
-  color: #9466ff;
+  color: #4a8c7e;
   transition: color 0.2s ease-in-out;
 }
 
@@ -109,11 +109,11 @@
 
 .footer__socials__item__link:hover::before {
   transition: background-color 0.2s ease-in-out;
-  background-color: #9466ff;
+  background-color: #4a8c7e;
 }
 
 .footer__socials__item__link:hover {
-  border-color: #9466ff;
+  border-color: #4a8c7e;
   transition: border-color 0.2s ease-in-out;
 }
 
@@ -149,7 +149,7 @@
 
 .footer__policy__inner a:hover,
 .footer__mobile a:hover {
-  color: #9466ff;
+  color: #4a8c7e;
   transition: color 0.2s ease-in-out;
 }
 

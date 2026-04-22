@@ -16,7 +16,7 @@
       #16d9a6 0%,
       rgba(22, 217, 166, 0) 100%
     ),
-    #9466ff;
+    #4a8c7e;
 
   @media (max-width: 1460px) {
     height: 680px;
@@ -713,11 +713,11 @@
 
   &:hover span::before {
     transition: background-color 0.2s ease-in-out;
-    background-color: #9466ff;
+    background-color: #4a8c7e;
   }
 
   &:hover {
-    color: #9466ff;
+    color: #4a8c7e;
     transition: color 0.2s ease-in-out;
   }
 }
