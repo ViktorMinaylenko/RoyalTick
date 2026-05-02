@@ -1,25 +1,29 @@
-const nextJest = require("next/jest.js");
+const nextJest = require('next/jest.js')
 
 const createJestConfig = nextJest({
-  dir: "./",
-});
+  dir: './',
+})
 
 const config = {
-  testEnvironment: "jest-environment-jsdom",
+  testEnvironment: 'jest-environment-jsdom',
 
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/$1",
-    "\\.(css|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
+    '^@/(.*)$': '<rootDir>/$1',
+    '\\.(css|scss|sass)$': '<rootDir>/__mocks__/styleMock.js',
   },
 
   testMatch: [
-    "**/__tests__/**/*.test.ts",
-    "**/__tests__/**/*.spec.ts",
-    "**/__tests__/**/*.test.tsx",
-    "**/__tests__/**/*.test.js"
+    '<rootDir>/__tests__/unit/**/*.test.ts',
+    '<rootDir>/__tests__/unit/**/*.spec.ts',
   ],
 
-  transformIgnorePatterns: ["/node_modules/(?!(mongodb|bson)/)"],
-};
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/.next/',
+    '<rootDir>/__tests__/e2e/',
+  ],
 
-module.exports = createJestConfig(config);
+  transformIgnorePatterns: ['/node_modules/(?!(mongodb|bson)/)'],
+}
+
+module.exports = createJestConfig(config)
