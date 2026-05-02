@@ -133,16 +133,13 @@ const QuickViewModal = () => {
 
           {(isStrap || isBox || isCare) && (
             <div className={styles.modal__right__info__strap}>
-              {/* Переклад Матеріалу */}
               {char.material && (
                 <div className={stylesForProduct.product__composition}>
                   {translations[lang].catalog.material}:{' '}
-                  {/* Шукаємо переклад для конкретного матеріалу, якщо не знайшли — виводимо як є */}
                   {(translations[lang].catalog as any)[String(char.material).toLowerCase()] || char.material}
                 </div>
               )}
 
-              {/* Переклад Кольору */}
               {char.color && (
                 <div className={stylesForProduct.product__composition}>
                   {translations[lang].catalog.color}:{' '}
@@ -150,7 +147,6 @@ const QuickViewModal = () => {
                 </div>
               )}
 
-              {/* Переклад Аромату (для Care) */}
               {isCare && char.scent && (
                 <div className={stylesForProduct.product__composition}>
                   {translations[lang].catalog.scent}:{' '}
@@ -158,7 +154,6 @@ const QuickViewModal = () => {
                 </div>
               )}
 
-              {/* Переклад Особливості (для Care) */}
               {isCare && char.peculiarity && (
                 <div className={stylesForProduct.product__composition}>
                   {translations[lang].catalog.peculiarity}:{' '}
@@ -166,7 +161,6 @@ const QuickViewModal = () => {
                 </div>
               )}
 
-              {/* Тип застібки (для Ремінців) */}
               {isStrap && char.claspType && (
                 <div className={stylesForProduct.product__composition}>
                   {translations[lang].catalog.clasp_type}:{' '}
@@ -180,7 +174,6 @@ const QuickViewModal = () => {
             <div className={styles.modal__right__info__size}>
               <div className={styles.modal__right__info__size__inner}>
                 <span className={stylesForProduct.product__size_title}>
-                  {/* ВИПРАВЛЕНО: Використовуємо існуючі ключі перекладу */}
                   {isWatch
                     ? translations[lang].catalog.case_size
                     : translations[lang].catalog.strap_size}

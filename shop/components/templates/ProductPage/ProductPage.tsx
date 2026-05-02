@@ -10,6 +10,7 @@ import { usePageTitle } from '@/hooks/usePageTitle'
 import { useLang } from '@/hooks/useLang'
 import styles from '@/styles/product/index.module.scss'
 import { IProductPageProps } from '@/types/product'
+import ProductPageContent from '@/components/modules/ProductPage/ProductPageContent'
 
 const ProductPage = ({ productId, category }: IProductPageProps) => {
     const product = useUnit($currentProduct)
@@ -53,7 +54,7 @@ const ProductPage = ({ productId, category }: IProductPageProps) => {
                     <FontAwesomeIcon icon={faSpinner} spin size='8x' />
                 </div>
             ) : (
-                product.name
+                <ProductPageContent/>
             )}
         </div>
     )

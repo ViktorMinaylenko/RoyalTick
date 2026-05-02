@@ -4,7 +4,6 @@ import {
 } from "@/lib/utils/cart";
 import { isUserAuth } from "@/lib/utils/common";
 
-// Jest глобальний — vi.mock → jest.mock, vi.fn() → jest.fn()
 jest.mock("@/context/cart", () => ({
     setShouldShowEmpty: jest.fn(),
     setCartFromLS: jest.fn(),

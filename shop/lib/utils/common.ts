@@ -53,8 +53,10 @@ export const shuffle = <T>(array: T[]) => {
   return array
 }
 
-export const formatPrice = (x: number) =>
-  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+export const formatPrice = (x: number | null | undefined): string => {
+  if (!x && x !== 0) return '0'
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+}
 
 export const idGenerator = () => {
   const S4 = () =>
@@ -259,3 +261,6 @@ export const getCheckedArrayParam = (param: string) => {
     return false
   }
 }
+
+export const capitalizeFirstLetter = (str: string) =>
+  str.charAt(0).toUpperCase() + str.slice(1)
