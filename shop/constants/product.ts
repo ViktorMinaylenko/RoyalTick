@@ -37,17 +37,21 @@ export const strapSizes = [
 ]
 
 export const MyColors = [
-  'brown',
-  'beige',
-  'cherry',
-  'navy',
-  'bordeaux',
-  'green',
-  'white',
-  'black',
-  'grey',
-  'dark brown',
-  'blue',
-  'silver',
-  'carbon'
+    'brown',
+    'beige',
+    'cherry',
+    'navy',
+    'bordeaux',
+    'green',
+    'white',
+    'black',
+    'grey',
+    'dark brown',
+    'blue',
+    'silver',
+    'carbon'
 ];
+
+export const allowedCollectionsCategories = [
+    'watches'
+]

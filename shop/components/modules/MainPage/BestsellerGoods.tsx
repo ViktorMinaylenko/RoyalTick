@@ -1,5 +1,5 @@
-import { getBestsellerProductsFx } from '@/api/main-page'
-import { $bestsellerProducts } from '@/context/goods'
+import { getBestsellerProductsFx } from '@/context/goods/index'
+import { $bestsellerProducts } from '@/context/goods/state'
 import { useLang } from '@/hooks/useLang'
 import { useUnit } from 'effector-react'
 import MainPageSection from './MainPageSection'

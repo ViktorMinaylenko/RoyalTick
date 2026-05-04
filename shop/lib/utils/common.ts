@@ -1,5 +1,5 @@
 import { closeAuthPopup, openAuthPopup, setIsAuth } from '@/context/auth'
-import { setCurrentProduct } from '@/context/goods'
+import { setCurrentProduct } from '@/context/goods/index'
 import {
   closeSearchModal,
   closeSizeTable,
@@ -264,3 +264,13 @@ export const getCheckedArrayParam = (param: string) => {
 
 export const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
+
+export const getWatchedProductsFromLS = () => {
+  let watchedProducts: IProduct[] = JSON.parse(localStorage.getItem('watched')as string)
+
+  if(!watchedProducts || !Array.isArray(watchedProducts)) {
+    watchedProducts = []
+  }
+
+  return watchedProducts
+}

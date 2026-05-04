@@ -7,21 +7,23 @@ import ProductAvailable from '@/components/elements/ProductAvailable/ProductAvai
 import { useCartAction } from '@/hooks/useCartAction'
 import { ICartItem } from '@/types/cart'
 import { setIsAddToFavorites } from '@/context/favorites'
-import { useEffect } from 'react'
-import { $currentProduct } from '@/context/goods'
+import { $currentProduct } from '@/context/goods/state'
 import ProductImages from './ProductImages'
-import { addOverflowHiddenToBody, capitalizeFirstLetter, formatPrice } from '@/lib/utils/common'
+import { addOverflowHiddenToBody, capitalizeFirstLetter, formatPrice, getWatchedProductsFromLS } from '@/lib/utils/common'
 import ProductSizesItem from '../ProductListItem/ProductSizesItem'
 import ProductSizeTableBtn from '../ProductListItem/ProductSizeTableBtn'
 import ProductCounter from '../ProductListItem/ProductCounter'
 import AddToCartBtn from '../ProductListItem/AddToCartBtn'
 import ProductInfoAccordion from './ProductInfoAccordion'
+import ProductsByCollection from './ProductsByCollection'
+import { useEffect } from 'react'
+import WatchedProducts from '../WatchedProducts/WatchedProducts'
+import { useWatchedProducts } from '@/hooks/useWatchedProducts'
 
 const ProductPageContent = () => {
     const product = useUnit($currentProduct)
     const { lang, translations } = useLang()
 
-    // Guard: ensure product is loaded and has required data
     if (!product?._id || !product?.price) {
         return null
     }
@@ -43,6 +45,25 @@ const ProductPageContent = () => {
         existingItem,
         count,
     } = useCartAction()
+    const { watchedProducts } = useWatchedProducts(product._id)
+
+    useEffect(() => {
+        const watchedProducts = getWatchedProductsFromLS()
+
+        const isInWatched = watchedProducts.find((item) => item._id === product._id)
+
+        if (isInWatched) {
+            return
+        }
+
+        localStorage.setItem(
+            'watched',
+            JSON.stringify([
+                ...watchedProducts,
+                { category: product.category, _id: product._id },
+            ])
+        )
+    }, [product._id, product.category])
 
 
     const handleProductShare = () => {
@@ -119,7 +140,7 @@ const ProductPageContent = () => {
                             {capitalizeFirstLetter(String(product.characteristics.collection))}
                         </span>
                     )}
-                    {!!Object.keys(product.sizes).length && (
+                    {product.sizes && !!Object.keys(product.sizes).length && (
                         <>
                             {selectedSize && selectedSize !== 'undefined' && (
                                 <span className={styles.product__top__size}>
@@ -204,7 +225,7 @@ const ProductPageContent = () => {
                                         key={key}
                                         className={styles.product__top__description__text}
                                     >
-                                        {capitalizeFirstLetter(key)}: {value}
+                                        {capitalizeFirstLetter(key)}: {value as string}
                                     </li>
                                 ))}
                             </ul>
@@ -212,7 +233,12 @@ const ProductPageContent = () => {
                     </div>
                 </div>
             </div>
-
+            {!!product.characteristics.collection && (
+                <ProductsByCollection collection={String(product.characteristics.collection)} />
+            )}
+            {!!watchedProducts.items?.length && (
+                <WatchedProducts watchedProducts={watchedProducts} />
+            )}
         </>
     )
 }

@@ -1,4 +1,4 @@
-import { $currentProduct } from '@/context/goods'
+import { $currentProduct } from '@/context/goods/state'
 import { useUnit } from 'effector-react'
 import { useState, useEffect, useMemo } from 'react'
 import { isUserAuth } from '@/lib/utils/common'

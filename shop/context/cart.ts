@@ -42,6 +42,7 @@ export const addProductsFromLSToCartFx = createEffect(
       return data
     } catch (error) {
       toast.error((error as Error).message)
+      return { cartItems: [] }
     }
   }
 )

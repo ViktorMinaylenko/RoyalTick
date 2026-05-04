@@ -3,8 +3,9 @@ import { useUnit } from 'effector-react'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { useProductImages } from '@/hooks/useProductImages'
 import styles from '@/styles/product/index.module.scss'
-import { $currentProduct } from '@/context/goods'
+import { $currentProduct } from '@/context/goods/state'
 import ProductImagesItem from './ProductImagesItem'
+import { baseSliderSettings } from '@/constants/slider'
 
 const ProductImages = () => {
     const product = useUnit($currentProduct)

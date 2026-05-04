@@ -16,13 +16,15 @@ import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import { deleteItemFromComparison, setComparisonFromLS, setShouldShowEmptyComparison } from '@/context/comparison'
 import DeleteItemBtn from '@/components/elements/DeleteItemBtn/DeleteItemBtn'
 import { useProductDelete } from '@/hooks/useProductDelete'
-import { loadOneProduct } from '@/context/goods'
+import { useLang } from '@/hooks/useLang'
+import { loadOneProduct } from '@/context/goods/index'
 
 const ComparisonItem = ({ item }: { item: IComparisonItem }) => {
     const currentCartByAuth = useGoodsByAuth($cart, $cartFromLs)
     const [addToCartSpinner, setAddToCartSpinner] = useState(false)
     const [loadProductSpinner, setLoadProductSpinner] = useState(false)
     const {handleDelete, deleteSpinner} = useProductDelete(item._id, deleteItemFromComparison)
+    const { lang } = useLang()
 
     const isProductInCart = useMemo(
         () =>
@@ -72,6 +74,7 @@ const ComparisonItem = ({ item }: { item: IComparisonItem }) => {
         loadOneProduct({
             productId: item.productId,
             category: item.category,
+            lang,
             withShowingSizeTable: true,
             setSpinner: setLoadProductSpinner,
         })

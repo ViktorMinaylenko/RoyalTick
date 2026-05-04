@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useUnit } from 'effector-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { $filtersPopup, setFiltersPopup } from '@/context/catalog'
-import { $products, loadProductsByFilterFx } from '@/context/goods'
 import { useCategoryFilter } from '@/hooks/useCategoryFilter'
 import { useLang } from '@/hooks/useLang'
 import { useMenuAnimation } from '@/hooks/useMenuAnimation'
@@ -17,6 +16,8 @@ import styles from '@/styles/catalog/index.module.scss'
 import PriceFilter from './PriceFilter'
 import SizesFilter from './SizesFilter'
 import ColorsFilter from './ColorsFilter'
+import { loadProductsByFilterFx } from '@/context/goods/index'
+import { $products } from '@/context/goods/state'
 
 const FiltersPopup = ({
     handleApplyFiltersWithPrice,

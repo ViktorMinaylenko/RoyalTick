@@ -1,4 +1,7 @@
 'use client'
+import '@/context/goods/index'
+import '@/context/goods/state'
+import '@/context/goods/init'
 import { useUnit } from 'effector-react'
 import {
   $openQuickViewModal,
@@ -17,6 +20,7 @@ import { useEffect, useState } from 'react'
 import CookieAlert from '../modules/CookieAlert/CookieAlert'
 import { motion } from 'framer-motion'
 import { Next13ProgressBar } from 'next13-progressbar'
+import '@/context/goods/index'
 
 const PagesLayout = ({ children }: { children: React.ReactNode }) => {
   const openQuickViewModal = useUnit($openQuickViewModal)

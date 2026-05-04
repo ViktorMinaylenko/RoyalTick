@@ -26,6 +26,7 @@ export const getCartItemsFx = createEffect(async ({ jwt }: { jwt: string }) => {
     return data
   } catch (error) {
     toast.error((error as Error).message)
+    return []
   }
 })
 
@@ -51,6 +52,7 @@ export const addProductToCartFx = createEffect(
       return data
     } catch (error) {
       toast.error((error as Error).message)
+      return { newCartItem: {} as ICartItem }
     } finally {
       setSpinner(false)
     }
@@ -82,6 +84,7 @@ export const updateCartItemQuantityFx = createEffect(
       return data
     } catch (error) {
       toast.error((error as Error).message)
+      return { count: '0', id: '' }
     } finally {
       setSpinner(false)
     }
@@ -108,6 +111,7 @@ export const removeCartItemFx = createEffect(
       return data
     } catch (error) {
       toast.error((error as Error).message)
+      return { id: '' }
     } finally {
       setSpinner(false)
     }

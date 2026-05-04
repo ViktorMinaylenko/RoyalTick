@@ -15,7 +15,7 @@ import ProductItemActionBtn from '@/components/elements/ProductItemActionBtn/Pro
 import ProductAvailable from '@/components/elements/ProductAvailable/ProductAvailable'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { openQuickViewModal } from '@/context/modals'
-import { setCurrentProduct } from '@/context/goods'
+import { setCurrentProduct } from '@/context/goods/index'
 import { productsWithoutSizes } from '@/constants/product'
 import { useCartAction } from '@/hooks/useCartAction'
 import { addProductToCartBySizeTable } from '@/lib/utils/cart'

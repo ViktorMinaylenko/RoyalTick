@@ -35,6 +35,7 @@ export const addProductsFromLSToFavoritesFx = createEffect(
       return data
     } catch (error) {
       toast.error((error as Error).message)
+      return { cartItems: [] }
     }
   }
 )
@@ -62,6 +63,7 @@ export const addProductToFavoriteFx = createEffect(
       return data
     } catch (error) {
       toast.error((error as Error).message)
+      return { newFavoriteItem: {} as IFavoriteItem }
     } finally {
       setSpinner(false)
     }
@@ -83,6 +85,7 @@ export const getFavoriteItemsFx = createEffect(
       return data
     } catch (error) {
       toast.error((error as Error).message)
+      return []
     }
   }
 )
@@ -107,6 +110,7 @@ export const deleteFavoriteItemFx = createEffect(
       return data
     } catch (error) {
       toast.error((error as Error).message)
+      return { id: '' }
     } finally {
       setSpinner(false)
     }

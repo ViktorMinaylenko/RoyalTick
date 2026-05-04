@@ -4,13 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useUnit } from 'effector-react'
 import { notFound } from 'next/navigation'
 import { useEffect } from 'react'
-import { $currentProduct, loadOneProduct, loadOneProductFx } from '@/context/goods'
 import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 import { usePageTitle } from '@/hooks/usePageTitle'
 import { useLang } from '@/hooks/useLang'
 import styles from '@/styles/product/index.module.scss'
 import { IProductPageProps } from '@/types/product'
 import ProductPageContent from '@/components/modules/ProductPage/ProductPageContent'
+import { $currentProduct } from '@/context/goods/state'
+import { loadOneProduct, loadOneProductFx } from '@/context/goods/index'
 
 const ProductPage = ({ productId, category }: IProductPageProps) => {
     const product = useUnit($currentProduct)
@@ -23,8 +24,9 @@ const ProductPage = ({ productId, category }: IProductPageProps) => {
         loadOneProduct({
             productId,
             category,
+            lang,
         })
-    }, [])
+    }, [lang, category, productId])
 
     useEffect(() => {
         if (breadcrumbs) {

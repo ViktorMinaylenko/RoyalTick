@@ -23,6 +23,7 @@ export const oauthFx = createEffect(
       return data
     } catch (error) {
       toast.error((error as Error).message)
+      return null
     }
   }
 )

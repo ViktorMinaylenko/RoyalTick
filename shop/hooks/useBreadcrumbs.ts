@@ -11,7 +11,6 @@ export const useBreadcrumbs = (page: string) => {
   const { crumbText } = useCrumbText(page)
   const [isMounted, setIsMounted] = useState(false)
 
-  // Стан для DOM-елемента
   const [breadcrumbs, setBreadcrumbs] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
@@ -22,17 +21,13 @@ export const useBreadcrumbs = (page: string) => {
   const getDefaultTextGenerator = useCallback(() => crumbText, [crumbText])
 
   const getTextGenerator = useCallback((param: string) => {
-    // Якщо ми ще на сервері, повертаємо порожній рядок, щоб уникнути Hydration Error
-    // Або повертаємо crumbText, ЯКЩО впевнені, що сервер і клієнт видадуть однакове
     if (!isMounted) return ''
 
     const breadcrumbsTranslations = translations[lang].breadcrumbs as Record<string, string>
 
-    // Шукаємо переклад для сегмента (watches, straps і т.д.)
     const translation = breadcrumbsTranslations[param]
     if (translation) return translation
 
-    // Спеціальна логіка для кореня каталогу
     if (param === 'catalog') return breadcrumbsTranslations.catalog
 
     return crumbText
@@ -46,13 +41,11 @@ export const useBreadcrumbs = (page: string) => {
     const pathParts = pathname.split('/').filter(Boolean)
     const lastPart = pathParts[pathParts.length - 1]
 
-    // Логіка визначення тексту для останньої крихти
     const breadcrumbsTranslations = translations[lang].breadcrumbs as Record<string, string>
     const text = breadcrumbsTranslations[lastPart] || crumbText
 
     setDynamicTitle(text)
 
-    // Маніпуляція DOM
     const lastCrumb = document.querySelector('.last-crumb') as HTMLElement
     if (lastCrumb) {
       lastCrumb.textContent = text

@@ -31,6 +31,7 @@ export async function GET(req: Request) {
         const colorsParam = url.searchParams.get('colors')
         const colorsArray = getCheckedArrayParam(colorsParam as string)
         const sortParam = url.searchParams.get('sort') || 'default'
+        const collectionParam = url.searchParams.get('collection')
 
         const isValidColors = colorsArray && colorsArray.every((color) => MyColors.includes(color))
         const isValidSizes = sizesArray && sizesArray.every((size) =>
@@ -51,6 +52,9 @@ export async function GET(req: Request) {
                 $or: (colorsArray as string[]).map((color) => ({
                     [`characteristics.${isWatches ? 'dialColor' : 'color'}`]: color.toLowerCase(),
                 }))
+            }),
+             ...(collectionParam && {
+                [`characteristics.collection`]: collectionParam,
             })
         }
 

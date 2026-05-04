@@ -26,6 +26,7 @@ export const addItemToComparisonFx = createEffect(
             return data
         } catch (error) {
             toast.error((error as Error).message)
+            return { newComparisonItem: {} as IComparisonItem }
         } finally {
             setSpinner(false)
         }
@@ -51,6 +52,7 @@ export const getComparisonItemsFx = createEffect(
             return data
         } catch (error) {
             toast.error((error as Error).message)
+            return []
         }
     }
 )
@@ -80,6 +82,7 @@ export const addItemsFromLSToComparisonFx = createEffect(
             return data
         } catch (error) {
             toast.error((error as Error).message)
+            return []
         }
     }
 )
@@ -104,6 +107,7 @@ export const deleteComparisonItemFx = createEffect(
             return data
         } catch (error) {
             toast.error((error as Error).message)
+            return { id: '' }
         } finally {
             setSpinner(false)
         }

@@ -21,6 +21,7 @@ import { $cart, $cartFromLs, $shouldShowEmpty } from '@/context/cart'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import { isUserAuth } from '@/lib/utils/common'
 import { loginCheckFx } from '@/context/user'
+import { useEffect } from 'react'
 
 const CartPage = () => {
   const cartSpinner = useUnit(getCartItemsFx.pending)
@@ -32,6 +33,11 @@ const CartPage = () => {
     useState(false)
   const shouldShowEmpty = useUnit($shouldShowEmpty)
   const loginCheckSpinner = useUnit(loginCheckFx.pending)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   return (
     <main>
@@ -49,7 +55,7 @@ const CartPage = () => {
             />
             <div className={styles.cart__inner}>
               <div className={styles.cart__left}>
-                {(isUserAuth()
+                {isMounted && (isUserAuth()
                   ? cartSpinner || loginCheckSpinner
                   : cartSpinner) && (
                   <motion.ul
@@ -65,7 +71,7 @@ const CartPage = () => {
                     ))}
                   </motion.ul>
                 )}
-                {!cartSpinner && (
+                {!isMounted || !cartSpinner && (
                   <motion.ul
                     {...basePropsForMotion}
                     className={`list-reset ${styles.cart__list}`}

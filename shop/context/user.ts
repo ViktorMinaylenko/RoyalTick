@@ -15,13 +15,14 @@ export const loginCheckFx = createEffect(async ({ jwt }: { jwt: string }) => {
       handleJWTError(data.error.name, {
         repeatRequestMethodName: 'loginCheck',
       })
-      return
+      return {} as IUser
     }
 
     setIsAuth(true)
     return data
   } catch (error) {
     toast.error((error as Error).message)
+    return {} as IUser
   }
 })
 

@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { useUnit } from 'effector-react'
-import { loadProductsByFilterFx } from '@/context/goods'
+import { loadProductsByFilterFx } from '@/context/goods/index'
 import { ISelectItemProps } from '@/types/catalog'
 import styles from '@/styles/catalog/index.module.scss'
 
