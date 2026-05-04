@@ -55,3 +55,12 @@ export const MyColors = [
 export const allowedCollectionsCategories = [
     'watches'
 ]
+
+export const allowedCollections = [
+    'classic',
+    'sport',
+    'premium',
+    'line',
+    'urban',
+    'chrono'
+]
