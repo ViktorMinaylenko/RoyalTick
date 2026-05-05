@@ -1,4 +1,4 @@
-import { updateCartItemQuantity } from '@/context/cart'
+import { updateCartItemQuantity } from '@/context/cart/index'
 import { updateCartItemQuantityInLS } from '@/lib/utils/cart'
 import { isUserAuth } from '@/lib/utils/common'
 import { IProductCounterProps } from '@/types/goods'

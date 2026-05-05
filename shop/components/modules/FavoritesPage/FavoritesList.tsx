@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { basePropsForMotion } from '@/constants/motion'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import styles from '@/styles/favorites/index.module.scss'
-import { $favorites, $favoritesFromLS } from '@/context/favorites'
+import { $favorites, $favoritesFromLS } from '@/context/favorites/state'
 import FavoritesListItem from './FavoritesListItem'
 
 const FavoritesList = () => {

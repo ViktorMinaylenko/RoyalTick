@@ -4,7 +4,7 @@ import { idGenerator } from './common'
 import {
   setFavoritesFromLS,
   setShouldShowEmptyFavorites,
-} from '@/context/favorites'
+} from '@/context/favorites/index'
 import { IFavoriteItem } from '@/types/favorites'
 
 export const addFavoriteItemToLS = (

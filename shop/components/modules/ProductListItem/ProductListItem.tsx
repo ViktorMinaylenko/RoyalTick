@@ -21,7 +21,7 @@ import { useCartAction } from '@/hooks/useCartAction'
 import { addProductToCartBySizeTable } from '@/lib/utils/cart'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-import { setIsAddToFavorites } from '@/context/favorites'
+import { setIsAddToFavorites } from '@/context/favorites/index'
 import { useFavoritesAction } from '@/hooks/useFavoritesAction'
 import { useComparisonAction } from '@/hooks/useComparisonAction'
 

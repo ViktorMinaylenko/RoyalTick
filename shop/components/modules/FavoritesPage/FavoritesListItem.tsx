@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { IFavoriteItem } from '@/types/favorites'
-import { $cart, $cartFromLs, addProductToCart } from '@/context/cart'
+import { $cart, $cartFromLs } from '@/context/cart/state'
+import { addProductToCart } from '@/context/cart/index'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import DeleteItemBtn from '@/components/elements/DeleteItemBtn/DeleteItemBtn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -18,7 +19,7 @@ import {
     deleteProductFromFavorites,
   setFavoritesFromLS,
   setShouldShowEmptyFavorites,
-} from '@/context/favorites'
+} from '@/context/favorites/index'
 import AddToCartIcon from '@/components/elements/AddToCartIcon/AddToCartIcon'
 import { useProductDelete } from '@/hooks/useProductDelete'
 

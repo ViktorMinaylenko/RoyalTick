@@ -1,9 +1,15 @@
+'use client'
+
 import { IUser } from '@/types/user'
-import api from '../api/apiInstance'
-import { createDomain, createEffect, sample } from 'effector'
-import { setIsAuth } from './auth'
+import api from '@/api/apiInstance'
+import { createDomain, createEffect } from 'effector'
 import toast from 'react-hot-toast'
 import { handleJWTError } from '@/lib/utils/errors'
+import { setIsAuth } from '../auth'
+
+export const user = createDomain()
+
+export const loginCheck = user.createEvent<{ jwt: string }>()
 
 export const loginCheckFx = createEffect(async ({ jwt }: { jwt: string }) => {
   try {
@@ -34,19 +40,3 @@ export const refreshToken = createEffect(async ({ jwt }: { jwt: string }) => {
   return data
 })
 
-const user = createDomain()
-
-export const loginCheck = user.createEvent<{ jwt: string }>()
-
-export const $user = user
-  .createStore<IUser>({} as IUser)
-  .on(loginCheckFx.done, (_, { result }) => result)
-
-sample({
-  clock: loginCheck,
-  source: $user,
-  fn: (_, { jwt }) => ({
-    jwt,
-  }),
-  target: loginCheckFx,
-})

@@ -1,6 +1,6 @@
 import { useUnit } from 'effector-react'
 import { closeAuthModalWhenSomeModalOpened } from '@/lib/utils/common'
-import { $openQuickViewModal, $showSizeTable } from '@/context/modals'
+import { $openQuickViewModal, $showSizeTable } from '@/context/modals/state'
 
 const AuthPopupClose = () => {
   const openQuickViewModal = useUnit($openQuickViewModal)

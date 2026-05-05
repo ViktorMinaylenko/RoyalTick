@@ -6,7 +6,7 @@ import { useTotalPrice } from '@/hooks/useTotalPrice'
 import { formatPrice, showCountMessage } from '@/lib/utils/common'
 import { countWholeCartItemsAmount } from '@/lib/utils/cart'
 import Link from 'next/link'
-import { $cart, $cartFromLs } from '@/context/cart'
+import { $cart, $cartFromLs } from '@/context/cart/state'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 
 const OrderInfoBlock = ({

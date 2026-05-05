@@ -1,6 +1,6 @@
 import { useUnit } from 'effector-react'
 import { useEffect } from 'react'
-import { loadWatchedProducts } from '@/context/goods'
+import { loadWatchedProducts } from '@/context/goods/index'
 import { $watchedProducts } from '@/context/goods/state'
 import { getWatchedProductsFromLS } from '@/lib/utils/common'
 

@@ -1,7 +1,7 @@
 'use client'
 import { signOut } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
-import { setIsAuth } from '@/context/auth'
+import { setIsAuth } from '@/context/auth/index'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 

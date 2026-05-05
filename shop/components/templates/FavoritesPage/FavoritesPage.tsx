@@ -11,8 +11,8 @@ import {
   $favorites,
   $favoritesFromLS,
   $shouldShowEmptyFavorites,
-  getFavoriteItemsFx,
-} from '@/context/favorites'
+} from '@/context/favorites/state'
+import { getFavoriteItemsFx } from '@/context/favorites/index'
 import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import { useLang } from '@/hooks/useLang'
@@ -20,7 +20,7 @@ import cartSkeletonStyles from '@/styles/cart-skeleton/index.module.scss'
 import styles from '@/styles/favorites/index.module.scss'
 import FavoritesList from '@/components/modules/FavoritesPage/FavoritesList'
 import { isUserAuth } from '@/lib/utils/common'
-import { loginCheckFx } from '@/context/user'
+import { loginCheckFx } from '@/context/user/index'
 
 const FavoritesPage = () => {
   const currentFavoritesByAuth = useGoodsByAuth($favorites, $favoritesFromLS)

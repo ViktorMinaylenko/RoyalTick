@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ICartItem } from '@/types/cart'
 import { deleteProductFromLS, isUserAuth } from '@/lib/utils/common'
-import { deleteProductFromCart, setCartFromLS, setShouldShowEmpty } from '@/context/cart'
+import { deleteProductFromCart, setCartFromLS, setShouldShowEmpty } from '@/context/cart/index'
 import { usePriceAction } from './usePriceAction'
 import { usePriceAnimation } from './usePriceAnimation'
 

@@ -4,8 +4,8 @@ import { usePathname } from 'next/navigation'
 import {
     $comparison,
     $comparisonFromLs,
-    getComparisonItemsFx,
-} from '@/context/comparison'
+} from '@/context/comparison/state'
+import { getComparisonItemsFx } from '@/context/comparison/index'
 import { useGoodsByAuth } from './useGoodsByAuth'
 import { useLang } from './useLang'
 

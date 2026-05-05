@@ -1,5 +1,10 @@
+import { Suspense } from 'react'
 import CollectionProductsPage from '@/components/templates/CollectionProductsPage/CollectionProductsPage'
 
 export default function CollectionProducts() {
-    return <CollectionProductsPage />
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <CollectionProductsPage />
+        </Suspense>
+    )
 }

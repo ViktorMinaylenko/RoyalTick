@@ -4,7 +4,7 @@ import {
 } from "@/lib/utils/cart";
 import { isUserAuth } from "@/lib/utils/common";
 
-jest.mock("@/context/cart", () => ({
+jest.mock("@/context/cart/index", () => ({
     setShouldShowEmpty: jest.fn(),
     setCartFromLS: jest.fn(),
     addProductToCart: jest.fn(),

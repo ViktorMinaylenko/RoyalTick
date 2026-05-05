@@ -7,8 +7,6 @@ import { IProduct } from '@/types/common'
 import { ILoadOneProductFx, ILoadProductsByFilterFx, ILoadWatchedProductsFx } from '@/types/goods'
 import api from '@/api/apiInstance'
 
-export { getNewProductsFx, getBestsellerProductsFx } from '@/api/main-page'
-
 export const goods = createDomain()
 export const MainPageGate = createGate()
 export const setCurrentProduct = goods.createEvent<IProduct>()
@@ -62,3 +60,15 @@ export const loadWatchedProductsFx = createEffect(
         }
     }
 )
+
+export const getNewProductsFx = createEffect(async () => {
+    const { data } = await api.get('/api/goods/new')
+
+    return data
+})
+
+export const getBestsellerProductsFx = createEffect(async () => {
+    const { data } = await api.get('/api/goods/bestsellers')
+
+    return data
+})

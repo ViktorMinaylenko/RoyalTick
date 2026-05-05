@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 import { handlecloseAuthModal } from './common'
-import { setIsAuth } from '@/context/auth'
+import { setIsAuth } from '@/context/auth/index'
 
 export const onAuthSuccess = <T>(message: string, data: T) => {
   localStorage.setItem('auth', JSON.stringify(data))

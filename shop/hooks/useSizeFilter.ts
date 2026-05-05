@@ -3,10 +3,12 @@ import { useEffect } from 'react'
 import {
     setSizesOptions,
     setSizes,
+    updateSizesOptionBySize,
+} from '@/context/catalog/index'
+import {
     $sizes,
     $sizesOptions,
-    updateSizesOptionBySize,
-} from '@/context/catalog'
+} from '@/context/catalog/state'
 import { useLang } from './useLang'
 import { getCheckedArrayParam, getSearchParamsUrl } from '@/lib/utils/common'
 import { strapSizes, watchSizes } from '@/constants/product'

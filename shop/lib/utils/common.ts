@@ -1,12 +1,12 @@
-import { closeAuthPopup, openAuthPopup, setIsAuth } from '@/context/auth'
+import { closeAuthPopup, openAuthPopup, setIsAuth } from '@/context/auth/index'
 import { setCurrentProduct } from '@/context/goods/index'
 import {
   closeSearchModal,
   closeSizeTable,
   showSizeTable,
-} from '@/context/modals'
-import { setSizeTableSizes } from '@/context/sizeTable'
-import { loginCheck } from '@/context/user'
+} from '@/context/modals/index'
+import { setSizeTableSizes } from '@/context/sizeTable/index'
+import { loginCheck } from '@/context/user/index'
 import { ICartItem } from '@/types/cart'
 import { IProduct } from '@/types/common'
 import { EventCallable } from 'effector'

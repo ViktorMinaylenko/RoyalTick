@@ -1,5 +1,10 @@
-import WatchedProductsPage from "@/components/templates/WatchedProductsPage/WatchedProductsPage";
+import { Suspense } from 'react'
+import WatchedProductsPage from "@/components/templates/WatchedProductsPage/WatchedProductsPage"
 
 export default function WatchedProducts() {
-    return <WatchedProductsPage />
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <WatchedProductsPage />
+        </Suspense>
+    )
 }

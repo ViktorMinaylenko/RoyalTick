@@ -1,4 +1,4 @@
-import { $isAuth } from '@/context/auth'
+import { $isAuth } from '@/context/auth/state'
 import { UseGoodsByAuth } from '@/types/common'
 import { useUnit } from 'effector-react'
 

@@ -1,6 +1,7 @@
 'use client'
 
-import { $isCatalogMenuOpen, closeCatalogMenu } from '@/context/modals'
+import { closeCatalogMenu } from '@/context/modals/index'
+import { $isCatalogMenuOpen } from '@/context/modals/state'
 import { useLang } from '@/hooks/useLang'
 import { useMenuAnimation } from '@/hooks/useMenuAnimation'
 import { useStore, useUnit } from 'effector-react'

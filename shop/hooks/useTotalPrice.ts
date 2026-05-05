@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useUnit } from 'effector-react'
-import { $cart, $cartFromLs, $totalPrice, setTotalPrice } from '@/context/cart'
+import { $cart, $cartFromLs, $totalPrice } from '@/context/cart/state'
+import { setTotalPrice } from '@/context/cart/index'
 import { usePriceAnimation } from './usePriceAnimation'
 import { useGoodsByAuth } from './useGoodsByAuth'
 

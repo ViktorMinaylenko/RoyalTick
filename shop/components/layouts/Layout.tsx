@@ -8,7 +8,7 @@ import {
   $searchModal,
   $openQuickViewModal,
   $showSizeTable,
-} from '@/context/modals'
+} from '@/context/modals/state'
 import { useUnit } from 'effector-react'
 import {
   handlecloseAuthModal,
@@ -17,7 +17,7 @@ import {
 import Footer from '../modules/Footer/Footer'
 import QuickViewModal from '../modules/QuickViewModal/QuickViewModal'
 import SizeTable from '../modules/SizeTable/SizeTable'
-import { $openAuthPopup } from '@/context/auth'
+import { $openAuthPopup } from '@/context/auth/state'
 import AuthPopup from '../modules/AuthPopup/AuthPopup'
 import { MutableRefObject, useRef } from 'react'
 

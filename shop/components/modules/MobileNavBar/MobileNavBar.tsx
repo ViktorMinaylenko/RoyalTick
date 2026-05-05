@@ -9,9 +9,9 @@ import {
 import { useLang } from '@/hooks/useLang'
 import { addOverflowHiddenToBody } from '@/lib/utils/common'
 import CatalogMenu from '../Header/CatalogMenu'
-import { $cart, $cartFromLs } from '@/context/cart'
+import { $cart, $cartFromLs } from '@/context/cart/state'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
-import { $favorites, $favoritesFromLS } from '@/context/favorites'
+import { $favorites, $favoritesFromLS } from '@/context/favorites/state'
 
 const MobileNavbar = () => {
   const { lang, translations } = useLang()

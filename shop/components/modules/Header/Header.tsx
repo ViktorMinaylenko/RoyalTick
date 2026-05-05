@@ -1,6 +1,7 @@
 'use client'
 import LogoText from '@/components/elements/Logo/LogoText'
 import { useLang } from '@/hooks/useLang'
+import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import Link from 'next/dist/client/link'
 import Menu from './Menu'
 import { openMenu, openSearchModal } from '@/context/modals'
@@ -12,26 +13,35 @@ import {
 import CartPopup from './CartPopup/CartPopup'
 import HeaderProfile from './HeaderProfile'
 import { useUnit } from 'effector-react'
-import { $isAuth } from '@/context/auth'
+import { $isAuth } from '@/context/auth/state'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from 'react'
-import { loginCheckFx } from '@/context/user'
+import { loginCheckFx } from '@/context/user/index'
 import {
   addProductsFromLSToCart,
   setCartFromLS,
   setShouldShowEmpty,
-} from '@/context/cart'
-import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
+} from '@/context/cart/index'
 import {
   $favorites,
   $favoritesFromLS,
+} from '@/context/favorites/state'
+import {
   addProductsFromLSToFavorites,
   setFavoritesFromLS,
   setShouldShowEmptyFavorites,
-} from '@/context/favorites'
-import { $comparison, $comparisonFromLs, addItemsFromLSToComparison, setComparisonFromLS, setShouldShowEmptyComparison } from '@/context/comparison'
-import { setLang } from '@/context/lang'
+} from '@/context/favorites/index'
+import {
+  $comparison,
+  $comparisonFromLs,
+} from '@/context/comparison/state'
+import {
+  addItemsFromLSToComparison,
+  setComparisonFromLS,
+  setShouldShowEmptyComparison,
+} from '@/context/comparison/index'
+import { setLang } from '@/context/lang/index'
 
 const Header = () => {
   const isAuth = useUnit($isAuth)

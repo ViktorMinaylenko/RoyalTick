@@ -1,8 +1,8 @@
 'use client'
 import { useState } from 'react'
 import { useUnit } from 'effector-react'
-import { $sizeTableSizes } from '@/context/sizeTable'
-import { $openQuickViewModal } from '@/context/modals'
+import { $sizeTableSizes } from '@/context/sizeTable/state'
+import { $openQuickViewModal } from '@/context/modals/state'
 import { useCartAction } from '@/hooks/useCartAction'
 import { useLang } from '@/hooks/useLang'
 import { closeSizeTableByCheck, isUserAuth } from '@/lib/utils/common'
@@ -13,8 +13,8 @@ import {
   $favorites,
   $favoritesFromLS,
   $isAddToFavorites,
-  addProductToFavorites,
-} from '@/context/favorites'
+} from '@/context/favorites/state'
+import { addProductToFavorites } from '@/context/favorites/index'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import { addFavoriteItemToLS } from '@/lib/utils/favorites'
 import toast from 'react-hot-toast'

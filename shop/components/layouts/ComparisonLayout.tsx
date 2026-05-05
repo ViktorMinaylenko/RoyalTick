@@ -4,7 +4,7 @@ import { useLang } from "@/hooks/useLang";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Breadcrumbs from "../modules/Breadcrumbs/Breadcrumbs";
-import { $comparison, $comparisonFromLs, $shouldShowEmptyComparison } from "@/context/comparison";
+import { $comparison, $comparisonFromLs, $shouldShowEmptyComparison } from "@/context/comparison/state";
 import { useGoodsByAuth } from "@/hooks/useGoodsByAuth";
 import HeadingWithCount from "../elements/HeadingWithCount/HeadingWithCount";
 import { useComparisonLinks } from "@/hooks/useComparisonLinks";
@@ -17,7 +17,7 @@ import styles from '@/styles/comparison/index.module.scss'
 import skeletonListsStyles from '@/styles/comparison-list-skeleton/index.module.scss'
 import comparisonSkeleton from '@/styles/comparison-skeleton/index.module.scss'
 import { isUserAuth } from "@/lib/utils/common";
-import { loginCheckFx } from "@/context/user";
+import { loginCheckFx } from "@/context/user/index";
 
 const ComparisonLayout = ({ children }: { children: React.ReactNode }) => {
     const [isMounted, setIsMounted] = useState(false)

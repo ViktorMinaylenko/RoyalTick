@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
 import { useUnit } from 'effector-react'
 import {
-    $colors,
-    $colorsOptions,
     setColors,
     setColorsOptions,
     updateColorsOptionByCode,
-} from '@/context/catalog'
+} from '@/context/catalog/index'
+import {
+    $colors,
+    $colorsOptions,
+} from '@/context/catalog/state'
 import { useLang } from './useLang'
 import { getCheckedArrayParam, getSearchParamsUrl } from '@/lib/utils/common'
 

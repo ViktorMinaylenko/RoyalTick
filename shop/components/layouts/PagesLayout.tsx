@@ -2,10 +2,13 @@
 import '@/context/goods/index'
 import '@/context/goods/state'
 import '@/context/goods/init'
+import '@/context/auth/init'
+import '@/context/cart/init'
+import '@/context/comparison/init'
+import '@/context/favorites/init'
+import '@/context/user/init'
 import { useUnit } from 'effector-react'
 import {
-  $openQuickViewModal,
-  $showSizeTable,
   closeQuickViewModal,
 } from '@/context/modals'
 import Layout from './Layout'
@@ -14,13 +17,14 @@ import {
   handlecloseAuthModal,
   removeOverflowHiddenFromBody,
 } from '@/lib/utils/common'
-import { $openAuthPopup } from '@/context/auth'
 import { Toaster } from 'react-hot-toast'
 import { useEffect, useState } from 'react'
 import CookieAlert from '../modules/CookieAlert/CookieAlert'
 import { motion } from 'framer-motion'
 import { Next13ProgressBar } from 'next13-progressbar'
 import '@/context/goods/index'
+import { $openQuickViewModal, $showSizeTable } from '@/context/modals/state'
+import { $openAuthPopup } from '@/context/auth/state'
 
 const PagesLayout = ({ children }: { children: React.ReactNode }) => {
   const openQuickViewModal = useUnit($openQuickViewModal)

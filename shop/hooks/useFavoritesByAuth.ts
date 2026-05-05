@@ -1,5 +1,5 @@
-import { $isAuth } from '@/context/auth'
-import { $favorites, $favoritesFromLS } from '@/context/favorites'
+import { $isAuth } from '@/context/auth/state'
+import { $favorites, $favoritesFromLS } from '@/context/favorites/state'
 import { useUnit } from 'effector-react'
 
 export const useFavoritesByAuth = () => {

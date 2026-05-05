@@ -2,7 +2,7 @@ import toast from 'react-hot-toast'
 import {
     setComparisonFromLS,
     setShouldShowEmptyComparison,
-} from '@/context/comparison'
+} from '@/context/comparison/index'
 import { IProduct } from '@/types/common'
 import { IComparisonItem } from '@/types/comparison'
 import { idGenerator } from './common'

@@ -19,7 +19,7 @@ import ProductSizeTableBtn from '../ProductListItem/ProductSizeTableBtn'
 import { ICartItem } from '@/types/cart'
 import { useComparisonAction } from '@/hooks/useComparisonAction'
 import { useFavoritesAction } from '@/hooks/useFavoritesAction'
-import { setIsAddToFavorites } from '@/context/favorites'
+import { setIsAddToFavorites } from '@/context/favorites/index'
 
 const QuickViewModal = () => {
   const { lang, translations } = useLang()

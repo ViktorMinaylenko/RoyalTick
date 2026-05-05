@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 import { useState } from 'react'
-import { $comparison, $comparisonFromLs, addItemToComparison } from '@/context/comparison'
+import { $comparison, $comparisonFromLs } from '@/context/comparison/state'
+import { addItemToComparison } from '@/context/comparison/index'
 import { IProduct } from '@/types/common'
 import { useGoodsByAuth } from './useGoodsByAuth'
 import { addComparisonItemToLS } from '@/lib/utils/comparison'
