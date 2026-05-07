@@ -1,6 +1,6 @@
 'use client'
 
-import { modals, openMenu, closeMenu, openCatalogMenu, closeCatalogMenu, openSearchModal, closeSearchModal, openQuickViewModal, closeQuickViewModal, closeSizeTable, showSizeTable } from "."
+import { modals, openMenu, closeMenu, openCatalogMenu, closeCatalogMenu, openSearchModal, closeSearchModal, openQuickViewModal, closeQuickViewModal, closeSizeTable, showSizeTable, closeShareModal, openShareModal } from "."
 
 export const $isMainMenuOpen = modals
     .createStore(false)
@@ -26,3 +26,8 @@ export const $showSizeTable = modals
     .createStore(false)
     .on(closeSizeTable, () => false)
     .on(showSizeTable, () => true)
+
+export const $shareModal = modals
+    .createStore(false)
+    .on(openShareModal, () => true)
+    .on(closeShareModal, () => false)

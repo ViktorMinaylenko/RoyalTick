@@ -8,6 +8,7 @@ import {
   $searchModal,
   $openQuickViewModal,
   $showSizeTable,
+  $shareModal,
 } from '@/context/modals/state'
 import { useUnit } from 'effector-react'
 import {
@@ -20,6 +21,8 @@ import SizeTable from '../modules/SizeTable/SizeTable'
 import { $openAuthPopup } from '@/context/auth/state'
 import AuthPopup from '../modules/AuthPopup/AuthPopup'
 import { MutableRefObject, useRef } from 'react'
+import ShareModal from '../modules/ShareModal/ShareModal'
+import { basePropsForMotion } from '@/constants/motion'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const isMedia800 = useMediaQuery(800)
@@ -27,6 +30,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const openQuickViewModal = useUnit($openQuickViewModal)
   const showSizeTable = useUnit($showSizeTable)
   const openAuthModal = useUnit($openAuthPopup)
+  const openShareModal = useUnit($shareModal)
   const authWrapperRef = useRef<HTMLDivElement>(null)
 
   const handlecloseAuthModalByTarget = (
@@ -76,14 +80,20 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <SizeTable />
           </motion.div>
         )}
+        {openShareModal && (
+          <motion.div
+            {...basePropsForMotion}
+          >
+            <ShareModal />
+          </motion.div>
+        )}
       </AnimatePresence>
       {!isMedia800 && (
         <AnimatePresence>
           {openQuickViewModal && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              {...basePropsForMotion}
+              initial={{ opacity: 0, zIndex: 6 }}
             >
               <QuickViewModal />
             </motion.div>

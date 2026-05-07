@@ -19,6 +19,7 @@ import ProductsByCollection from './ProductsByCollection'
 import { useEffect } from 'react'
 import WatchedProducts from '../WatchedProducts/WatchedProducts'
 import { useWatchedProducts } from '@/hooks/useWatchedProducts'
+import { openShareModal } from '@/context/modals'
 
 const ProductPageContent = () => {
     const product = useUnit($currentProduct)
@@ -68,6 +69,7 @@ const ProductPageContent = () => {
 
     const handleProductShare = () => {
         addOverflowHiddenToBody()
+        openShareModal()
     }
 
     const addToCart = () => {

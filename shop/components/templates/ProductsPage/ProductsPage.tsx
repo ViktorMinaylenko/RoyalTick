@@ -10,9 +10,11 @@ import { basePropsForMotion } from "@/constants/motion"
 import ProductListItem from '@/components/modules/ProductListItem/ProductListItem'
 import { useLang } from '@/hooks/useLang'
 import HeadingWithCount from '@/components/elements/HeadingWithCount/HeadingWithCount'
-import {setCatalogCategoryOptions, setSizesOptions } from '@/context/catalog'
+import { setCatalogCategoryOptions, setSizesOptions } from '@/context/catalog'
 import CatalogFilters from '@/components/modules/CatalogFilters/CatalogFilters'
 import { strapSizes, watchSizes } from '@/constants/product'
+import WatchedProducts from '@/components/modules/WatchedProducts/WatchedProducts'
+import { useWatchedProducts } from '@/hooks/useWatchedProducts'
 
 const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
   const { lang, translations } = useLang()
@@ -29,11 +31,13 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
     handleApplyFiltersWithColors,
     handleApplyFiltersBySort,
   } = useProductFilters(
-    
+
     resolvedSearchParams,
     pageName,
     pageName === 'catalog'
   )
+
+  const { watchedProducts } = useWatchedProducts()
 
   useEffect(() => {
     if (!translations[lang]) return
@@ -159,7 +163,7 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
         spinner={productsSpinner}
       />
       <CatalogFilters handleApplyFiltersWithPrice={handleApplyFiltersWithPrice} handleApplyFiltersWithSizes={handleApplyFiltersWithSizes}
-       handleApplyFiltersWithColors={handleApplyFiltersWithColors} handleApplyFiltersBySort={handleApplyFiltersBySort} pageName={pageName} />
+        handleApplyFiltersWithColors={handleApplyFiltersWithColors} handleApplyFiltersBySort={handleApplyFiltersBySort} pageName={pageName} />
       {productsSpinner && (
         <motion.ul
           {...basePropsForMotion}
@@ -194,6 +198,10 @@ const ProductsPage = ({ searchParams, pageName }: IProductsPage) => {
           <ReactPaginate {...paginationProps} nextLabel={translations[lang].catalog.next_page} previousLabel={translations[lang].catalog.previous_page} onPageChange={handlePageChange} />
         )}
       </div>
+      {!!watchedProducts.items?.length && (
+        <WatchedProducts watchedProducts={watchedProducts} />
+      )
+      }
     </>
   )
 }

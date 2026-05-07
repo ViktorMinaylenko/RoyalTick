@@ -10,11 +10,13 @@ import '@/context/user/init'
 import { useUnit } from 'effector-react'
 import {
   closeQuickViewModal,
+  openShareModal,
 } from '@/context/modals'
 import Layout from './Layout'
 import {
   closeSizeTableByCheck,
   handlecloseAuthModal,
+  handleCloseShareModal,
   removeOverflowHiddenFromBody,
 } from '@/lib/utils/common'
 import { Toaster } from 'react-hot-toast'
@@ -23,7 +25,7 @@ import CookieAlert from '../modules/CookieAlert/CookieAlert'
 import { motion } from 'framer-motion'
 import { Next13ProgressBar } from 'next13-progressbar'
 import '@/context/goods/index'
-import { $openQuickViewModal, $showSizeTable } from '@/context/modals/state'
+import { $openQuickViewModal, $shareModal, $showSizeTable } from '@/context/modals/state'
 import { $openAuthPopup } from '@/context/auth/state'
 
 const PagesLayout = ({ children }: { children: React.ReactNode }) => {
@@ -31,6 +33,7 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
   const [cookieAlertOpen, setCookieAlertOpen] = useState(false)
   const showSizeTable = useUnit($showSizeTable)
   const openAuthModal = useUnit($openAuthPopup)
+    const openShareModal = useUnit($shareModal)
 
   const handleCloseQuickViewModal = () => {
     removeOverflowHiddenFromBody()
@@ -60,9 +63,14 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
           onClick={handleCloseSizeTable}
         />
         <div
+          className={`share-overlay ${openShareModal ? 'overlay-active' : ''}`}
+          onClick={handleCloseShareModal}
+        />
+        <div
           className={`auth-overlay ${openAuthModal ? 'overlay-active' : ''}`}
           onClick={handlecloseAuthModal}
         />
+
         {cookieAlertOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}

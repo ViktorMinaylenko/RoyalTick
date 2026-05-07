@@ -53,7 +53,7 @@ export async function GET(req: Request) {
                     [`characteristics.${isWatches ? 'dialColor' : 'color'}`]: color.toLowerCase(),
                 }))
             }),
-             ...(collectionParam && {
+            ...(collectionParam && {
                 [`characteristics.collection`]: collectionParam,
             })
         }
@@ -67,7 +67,7 @@ export async function GET(req: Request) {
 
         if (isCatalogParam) {
             const getFilteredCollection = async (collection: string) => {
-                return await db.collection(collection).find(filter).sort(sort as Sort).toArray()
+                return await db.collection(collection).find(filter).toArray()
             }
 
             const [watches, straps, boxes, care] = await Promise.allSettled([
@@ -92,7 +92,22 @@ export async function GET(req: Request) {
                 ...straps.value,
                 ...boxes.value,
                 ...care.value,
-            ]
+            ].sort((a, b) => {
+                if (sortParam.includes('cheap_first')) {
+                    return +a.price - +b.price
+                }
+                if (sortParam.includes('expensive_first')) {
+                    return +b.price - +a.price
+                }
+                if (sortParam.includes('new')) {
+                    return Number(b.isNew) - Number(a.isNew)
+                }
+                if (sortParam.includes('popular')) {
+                    return +b.popularity - +a.popularity
+                }
+
+                return 0
+            })
 
             logger.info({ totalCount: allGoods.length }, 'Catalog request successful');
             return NextResponse.json({
