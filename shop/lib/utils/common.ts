@@ -280,3 +280,10 @@ export const handleCloseShareModal = () => {
   removeOverflowHiddenFromBody()
   closeShareModal()
 }
+
+export const addScriptToHead = (src:string) => {
+  const script = document.createElement('script')
+  document.head.appendChild(script)
+
+  script.src = src
+}

@@ -7,6 +7,7 @@ import '@/context/cart/init'
 import '@/context/comparison/init'
 import '@/context/favorites/init'
 import '@/context/user/init'
+import '@/context/order/init'
 import { useUnit } from 'effector-react'
 import {
   closeQuickViewModal,

@@ -8,6 +8,8 @@ import { countWholeCartItemsAmount } from '@/lib/utils/cart'
 import Link from 'next/link'
 import { $cart, $cartFromLs } from '@/context/cart/state'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const OrderInfoBlock = ({
   isCorrectPromotionalCode,
@@ -60,7 +62,13 @@ const OrderInfoBlock = ({
           </span>
         </p>
         {isOrderPage ? (
-          <button />
+          <button className={`btn-reset ${styles.order_block__btn}`} disabled={!isUserAgree || !currentCartByAuth.length || false}>
+            {false ? (
+              <FontAwesomeIcon icon={faSpinner} spin color='#fff' />
+            ) : (
+              translations[lang].order.make_order
+            )}
+          </button>
         ) : (
           <Link
             href='/order'
