@@ -61,3 +61,9 @@ export interface IAddressesListProps {
         arg2?: any
     ) => void
 }
+
+export interface IMakePaymentFx{
+    amount: string
+    description: string
+    jwt: string
+}

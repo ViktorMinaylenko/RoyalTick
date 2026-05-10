@@ -2,8 +2,9 @@
 import { createDomain, createEffect } from "effector";
 import api from '@/api/apiInstance'
 import { toast } from "react-hot-toast";
-import { IGetRoyalTickOfficesByCityFx, IRoyalTickAddressData } from "@/types/order";
+import { IGetRoyalTickOfficesByCityFx, IMakePaymentFx, IRoyalTickAddressData } from "@/types/order";
 import { royalTickStores } from "@/constants/royaltick-stores";
+import { handleJWTError } from "@/lib/utils/errors";
 
 export const order = createDomain()
 export const setPickupTab = order.createEvent<boolean>()
@@ -18,6 +19,7 @@ export const setCourierAddressData = order.createEvent<IRoyalTickAddressData>()
 export const setOnlinePaymentTb = order.createEvent<boolean>()
 export const setCashPaymentTb = order.createEvent<boolean>()
 export const setScrollToRequiredBlock = order.createEvent<boolean>()
+export const makePayment = order.createEvent<IMakePaymentFx>()
 
 export const getRoyalTickOfficesByCityFx = createEffect(
     async ({ city }: { city: string; lang: string }) => {
@@ -28,5 +30,36 @@ export const getRoyalTickOfficesByCityFx = createEffect(
         )
 
         return filtered
+    }
+)
+
+export const makePaymentFx = order.createEffect(
+    async ({ jwt, amount, description}: IMakePaymentFx) => {
+        try {
+            const { data } = await api.post(
+                '/api/payment',
+                { amount, description},
+                {
+                    headers: { Authorization: `Bearer ${jwt}` },
+                }
+            )
+
+            if (data?.error) {
+                handleJWTError(data.error.name, {
+                    repeatRequestMethodName: 'makePaymentFx',
+                    payload: { amount, description },
+                })
+                return
+            }
+
+            // Зберігаємо дані платежу
+            if (data?.result?.confirmationUrl) {
+                window.location.href = data.result.confirmationUrl
+            }
+
+            return data.result
+        } catch (error) {
+            toast.error((error as Error).message)
+        }
     }
 )

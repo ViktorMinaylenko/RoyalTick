@@ -3,7 +3,7 @@ import { IOrderInfoBlock } from '@/types/modules'
 import styles from '@/styles/order-block/index.module.scss'
 import { useLang } from '@/hooks/useLang'
 import { useTotalPrice } from '@/hooks/useTotalPrice'
-import { formatPrice, isUserAuth, showCountMessage } from '@/lib/utils/common'
+import { formatPrice, handleopenAuthModal, isUserAuth, showCountMessage } from '@/lib/utils/common'
 import { countWholeCartItemsAmount } from '@/lib/utils/cart'
 import Link from 'next/link'
 import { $cart, $cartFromLs } from '@/context/cart/state'
@@ -12,7 +12,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { $chosenCourierAddressData, $chosenPickupAddressData, $onlinePaymentTab, $pickupTab, $scrollToRequiredBlock } from '@/context/order/state'
 import { useUnit } from 'effector-react'
-import { setScrollToRequiredBlock } from '@/context/order'
+import { makePayment, setScrollToRequiredBlock } from '@/context/order'
 
 const OrderInfoBlock = ({
   isCorrectPromotionalCode,
@@ -51,18 +51,29 @@ const OrderInfoBlock = ({
       return
     }
 
+    if(!isUserAuth()) {
+      handleopenAuthModal()
+      return
+    }
+
     const auth = JSON.parse(localStorage.getItem('auth') as string)
     let description = ''
 
     if (chosenCourierAddressData.address_line1) {
       // eslint-disable-next-line max-len
-      description = `Адрес достаки товара курьером: ${chosenCourierAddressData.address_line1}, ${chosenCourierAddressData.address_line2}`
+      description = `Адреса доставки товару кур'єром: ${chosenCourierAddressData.address_line1}, ${chosenCourierAddressData.address_line2}`
     }
 
     if (chosenPickupAddressData.address_line1) {
       // eslint-disable-next-line max-len
-      description = `Адрес получения товара: ${chosenPickupAddressData.address_line1}, ${chosenPickupAddressData.address_line2}`
+      description = `Адреса отримання товару: ${chosenPickupAddressData.address_line1}, ${chosenPickupAddressData.address_line2}`
     }
+
+    makePayment({
+      amount: `${priceWithDiscount.replace(' ', '')}`,
+      description,
+      jwt: auth.accessToken,
+    })
   }
 
   return (

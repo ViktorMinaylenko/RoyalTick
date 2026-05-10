@@ -7,6 +7,8 @@ import { loginCheckFx, refreshToken } from '@/context/user/index'
 import { IAddProductsFromLSToCartFx, IAddProductToCartFx, IDeleteCartItemsFx } from '@/types/cart'
 import { IAddItemsFromLSToComparisonFx, IAddItemToComparisonFx, IDeleteComparisonItemsFx } from '@/types/comparison'
 import { IAddProductsFromLSToFavoriteFx, IDeleteFavoriteItemsFx } from '@/types/favorites'
+import { makePaymentFx } from '@/context/order'
+import { IMakePaymentFx } from '@/types/order'
 
 export const handleJWTError = async (
   errorName: string,
@@ -32,6 +34,12 @@ export const handleJWTError = async (
             ...(payload as IAddProductToCartFx),
             jwt: newTokens.accessToken,
           })
+        case 'makePaymentFx':
+          makePaymentFx({
+            ...(payload as IMakePaymentFx),
+            jwt: newTokens.accessToken,
+          })
+          break
         case 'addProductsFromLSToCartFx':
           return addProductsFromLSToCartFx({
             ...(payload as IAddProductsFromLSToCartFx),
