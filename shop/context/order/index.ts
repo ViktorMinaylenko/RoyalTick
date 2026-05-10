@@ -15,6 +15,9 @@ export const getRoyalTickOfficesByCity = order.createEvent<IGetRoyalTickOfficesB
 export const setChosenCourierAddressData = order.createEvent<Partial<IRoyalTickAddressData>>()
 export const setShouldShowCourierAddressData = order.createEvent<boolean>()
 export const setCourierAddressData = order.createEvent<IRoyalTickAddressData>()
+export const setOnlinePaymentTb = order.createEvent<boolean>()
+export const setCashPaymentTb = order.createEvent<boolean>()
+export const setScrollToRequiredBlock = order.createEvent<boolean>()
 
 export const getRoyalTickOfficesByCityFx = createEffect(
     async ({ city }: { city: string; lang: string }) => {

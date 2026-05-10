@@ -47,8 +47,13 @@ const MapModal = () => {
     const [ttMapInstance, setTtMapInstance] = useState<any>()
     const [pickupTab, setPickupTab] = useState(true)
     const [courierTab, setCourierTab] = useState(false)
+    const pickupTabRef = useRef(true)
+    const courierTabRef = useRef(false)
     const { lang, translations } = useLang()
     const shouldLoadMap = useRef(true)
+    const searchMarkersManagerRef = useRef<any>(null)
+    const ttSearchBoxRef = useRef<any>(null)
+    const mapRef = useRef<any>(null)
     const { handleSelectAddress } = useTTMap()
     const userGeolocation = useUnit($userGeolocation)
     const royalTickDataByCity = useUnit($royalTickDataByCity)
@@ -57,6 +62,12 @@ const MapModal = () => {
     const isMedia940 = useMediaQuery(940)
     const shouldShowCourierAddressData = useUnit($shouldShowCourierAddressData)
     const courierAddressData = useUnit($courierAddressData)
+
+    // Синхронізуємо refs зі станом
+    useEffect(() => {
+        pickupTabRef.current = pickupTab
+        courierTabRef.current = courierTab
+    }, [pickupTab, courierTab])
 
     const removeMapMarkers = () => {
         const markers = document.querySelectorAll('.modal-map-marker')
@@ -91,7 +102,20 @@ const MapModal = () => {
         setCourierTab(false)
         removeMapMarkers()
         removeSearchBox()
-        handleLoadMap(pickUpMapRef)
+        
+        // Очищаємо старих listeners перед завантаженням нової карти
+        if (ttSearchBoxRef.current) {
+            ttSearchBoxRef.current.off('tomtom.searchbox.resultselected')
+            ttSearchBoxRef.current.off('tomtom.searchbox.resultscleared')
+            ttSearchBoxRef.current.off('tomtom.searchbox.resultsfound')
+        }
+        // Очищаємо refs ПЕРЕД завантаженням нової карти
+        searchMarkersManagerRef.current = null
+        ttSearchBoxRef.current = null
+        mapRef.current = null
+
+        setTimeout(() => handleLoadMap(pickUpMapRef), 50)
+
     }
 
     const handleSelectCourierTab = async () => {
@@ -104,20 +128,25 @@ const MapModal = () => {
 
         removeMapMarkers()
         removeSearchBox()
-        const map = await handleLoadMap(courierMapRef)
-        setTimeout(removeMapMarkers, 0)
-
-        if (chosenPickupAddressData.address_line1) {
-            setShouldShowCourierAddressData(false)
-            return
+        
+        // Очищаємо старих listeners перед завантаженням нової карти
+        if (ttSearchBoxRef.current) {
+            ttSearchBoxRef.current.off('tomtom.searchbox.resultselected')
+            ttSearchBoxRef.current.off('tomtom.searchbox.resultscleared')
+            ttSearchBoxRef.current.off('tomtom.searchbox.resultsfound')
         }
-
-        if (courierAddressData.lat) {
-            setTimeout(
-                () => drawMarker(courierAddressData.lon, courierAddressData.lat, map),
-                0
-            )
-        }
+        // Очищаємо refs ПЕРЕД завантаженням нової карти
+        searchMarkersManagerRef.current = null
+        ttSearchBoxRef.current = null
+        mapRef.current = null
+        
+        setTimeout(async () => { // ← додай setTimeout
+            const map = await handleLoadMap(courierMapRef)
+            removeMapMarkers()
+            if (!chosenPickupAddressData.address_line1 && courierAddressData.lat) {
+                drawMarker(courierAddressData.lon, courierAddressData.lat, map)
+            }
+        }, 50)
     }
 
     //@ts-ignore
@@ -162,6 +191,10 @@ const MapModal = () => {
     }, [])
 
     const handleLoadMap = async (initialContainer = pickUpMapRef) => {
+        if (!initialContainer.current) {
+            return
+        }
+
         const maxWaitTime = 5000
         const startTime = Date.now()
 
@@ -203,7 +236,10 @@ const MapModal = () => {
         initialContainer.current.append(searchBoxHTML)
 
         //@ts-ignore
-        const searchMarkersManager = new SearchMarkersManager(map)
+        const searchMarkersManager = new SearchMarkersManager(map, {}, ttMaps)
+        searchMarkersManagerRef.current = searchMarkersManager
+        ttSearchBoxRef.current = ttSearchBox
+        mapRef.current = map
 
         const nav = new ttMaps.NavigationControl({})
         map.addControl(nav, 'bottom-right')
@@ -236,21 +272,32 @@ const MapModal = () => {
 
         //@ts-ignore
         ttSearchBox.on('tomtom.searchbox.resultselected', async (e) => {
-            const data = await handleSelectPickupAddress(e.data.text)
-
-            handleResultSelection(e, searchMarkersManager, map)
-            setMarkersByLocationsData(data)
+            // Проверяем, что это еще активный searchMarkersManager
+            if (searchMarkersManagerRef.current && mapRef.current === map) {
+                if (pickupTabRef.current) {
+                    const data = await handleSelectPickupAddress(e.data.text)
+                    handleResultSelection(e, searchMarkersManagerRef.current, map, true)
+                    setMarkersByLocationsData(data)
+                } else {
+                    // Для курєрської доставки використовуємо результат TomTom напряму
+                    handleResultSelection(e, searchMarkersManagerRef.current, map, false)
+                }
+            }
         })
 
         ttSearchBox.on('tomtom.searchbox.resultscleared', () => {
-            handleResultClearing(searchMarkersManager, map, userGeolocation)
-            handleResultClearing(searchMarkersManager, mapInstance, userGeolocation)
+            if (searchMarkersManagerRef.current && mapRef.current === map) {
+                handleResultClearing(searchMarkersManagerRef.current, map, userGeolocation)
+                handleResultClearing(searchMarkersManagerRef.current, mapInstance, userGeolocation)
+            }
         })
 
         //@ts-ignore
-        ttSearchBox.on('tomtom.searchbox.resultsfound', (e) =>
-            handleResultsFound(e, searchMarkersManager, map)
-        )
+        ttSearchBox.on('tomtom.searchbox.resultsfound', (e) => {
+            if (searchMarkersManagerRef.current && mapRef.current === map) {
+                handleResultsFound(e, searchMarkersManagerRef.current, map, pickupTabRef.current)
+            }
+        })
 
         if (!!chosenPickupAddressData.address_line1) {
             const chosenItem = royalTickStores.find(

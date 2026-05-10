@@ -1737,6 +1737,11 @@
   dependencies:
     tslib "^2.4.0"
 
+"@types/autosize@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@types/autosize/-/autosize-4.0.3.tgz#77548c35bca4cc6281593228cde9a50112e1f94c"
+  integrity sha512-o0ZyU3ePp3+KRbhHsY4ogjc+ZQWgVN5h6j8BHW5RII4cFKi6PEKK9QPAcphJVkD0dGpyFnD3VRR0WMvHVjCv9w==
+
 "@types/babel__core@^7.20.5":
   version "7.20.5"
   resolved "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.20.5.tgz"
@@ -2329,6 +2334,11 @@ atomic-sleep@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/atomic-sleep/-/atomic-sleep-1.0.0.tgz"
   integrity sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==
+
+autosize@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/autosize/-/autosize-6.0.1.tgz#64ee78dd7029be959eddd3afbbd33235b957e10f"
+  integrity sha512-f86EjiUKE6Xvczc4ioP1JBlWG7FKrE13qe/DxBCpe8GCipCq2nFw73aO8QEBKHfSbYGDN5eB9jXWKen7tspDqQ==
 
 available-typed-arrays@^1.0.7:
   version "1.0.7"
@@ -5569,10 +5579,10 @@ react-dom@19.2.3:
   dependencies:
     scheduler "^0.27.0"
 
-react-hook-form@^7.71.1:
-  version "7.71.1"
-  resolved "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.71.1.tgz"
-  integrity sha512-9SUJKCGKo8HUSsCO+y0CtqkqI5nNuaDqTxyqPsZPqIwudpj4rCrAz/jZV+jn57bx5gtZKOh3neQu94DXMc+w5w==
+react-hook-form@^7.75.0:
+  version "7.75.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.75.0.tgz#4364affb4af39e45eeb7e3c6e10f6579cdcca7a2"
+  integrity sha512-Ovv94H+0p3sJ7B9B5QxPuCP1u8V/cHuVGyH55cSwodYDtoJwK+fqk3vjfIgSX59I2U/bU4z0nRJ9HMLpNiWEmw==
 
 react-hot-toast@^2.6.0:
   version "2.6.0"

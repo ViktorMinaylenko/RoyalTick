@@ -22,7 +22,7 @@ export const handleSelectPickupAddress = async (text: string) => {
 }
 
 //@ts-ignore
-export const handleResultsFound = (event, searchMarkersManager, map) => {
+export const handleResultsFound = (event, searchMarkersManager, map, isPickupTab = true) => {
     const results = event.data.results?.fuzzySearch?.results
 
     if (!results || results.length === 0) {
@@ -31,7 +31,11 @@ export const handleResultsFound = (event, searchMarkersManager, map) => {
     }
 
     searchMarkersManager.draw(results)
-    fitToViewport(results, map)
+    
+    // Для pickup режиму показуємо viewport, для courier не переміщаємо карту (користувач клікне на потрібний результат)
+    if (isPickupTab) {
+        fitToViewport(results, map)
+    }
 }
 
 //@ts-ignore
@@ -102,31 +106,46 @@ export const handleResultClearing = (
 }
 
 //@ts-ignore
-export const handleResultSelection = async (event: any, searchMarkersManager: any, map: any) => {
+export const handleResultSelection = async (event: any, searchMarkersManager: any, map: any, isPickupTab: boolean = true) => {
     const result = event.data.result
     const text = event.data.text
-
-    // Знаходимо магазин RoyalTick по тексту
-    const royalTickData = await handleSelectPickupAddress(text)
 
     if (result.type === 'category' || result.type === 'brand') {
         return
     }
 
-    // Якщо знайшли магазин — переміщаємо карту туди
-    if (royalTickData && royalTickData.length > 0) {
-        const store = royalTickData[0]
-        map.setCenter([store.lon, store.lat]).zoomTo(13)
-        return
+    // У режимі pickup шукаємо Royal Tick магазини
+    if (isPickupTab) {
+        const royalTickData = await handleSelectPickupAddress(text)
+        // Якщо знайшли магазин — переміщаємо карту туди
+        if (royalTickData && royalTickData.length > 0) {
+            const store = royalTickData[0]
+            map.setCenter([store.lon, store.lat]).zoomTo(13)
+            return
+        }
     }
 
-    // Якщо магазину немає — показуємо TomTom результат
+    // У режимі courier — показуємо точну позицію результату з максимальним zoom
     searchMarkersManager.draw([result])
+    
+    if (!isPickupTab) {
+        // Витягаємо координати з результату
+        const lng = result.position?.lng || result.position?.lon
+        const lat = result.position?.lat
+        
+        if (lng !== undefined && lat !== undefined) {
+            // Для курєрської доставки переміщаємось на точні координати з максимальним zoom
+            map.setCenter([lng, lat]).zoomTo(16)
+            return
+        }
+    }
+
+    // Fallback: використовуємо viewport
     fitToViewport(result, map)
-}
+  }
 
 //@ts-ignore
-export function SearchMarkersManager(map, options) {
+export function SearchMarkersManager(map, options, ttMaps) {
     //@ts-ignore
     this.map = map
     //@ts-ignore
@@ -135,6 +154,46 @@ export function SearchMarkersManager(map, options) {
     this._poiList = undefined
     //@ts-ignore
     this.markers = {}
+    //@ts-ignore
+    this.ttMaps = ttMaps
+}
+
+//@ts-ignore
+SearchMarkersManager.prototype.draw = function (poiList) {
+    this._poiList = poiList
+    this.clear()
+    //@ts-ignore
+    this._poiList.forEach((poi) => {
+        const markerId = poi.id
+        
+        const element = document.createElement('div')
+        element.style.background = 'white'
+        element.style.width = '10px'
+        element.style.height = '10px'
+        element.style.borderRadius = '50%'
+        element.style.border = '3px solid black'
+        
+        //@ts-ignore
+        const marker = new this.ttMaps.Marker({ element })
+        //@ts-ignore
+        marker.setLngLat([poi.position.lng, poi.position.lat])
+        //@ts-ignore
+        marker.addTo(this.map)
+        //@ts-ignore
+        this.markers[markerId] = marker
+    })
+}
+
+//@ts-ignore
+SearchMarkersManager.prototype.clear = function () {
+    for (const markerId in this.markers) {
+        const marker = this.markers[markerId]
+        if (marker && marker.remove) {
+            marker.remove()
+        }
+    }
+    this.markers = {}
+    this._lastClickedMarker = null
 }
 
 //@ts-ignore
@@ -183,38 +242,5 @@ export function initSearchMarker(ttMaps) {
     SearchMarker.prototype.remove = function () {
         this.marker.remove()
         this._map = null
-    }
-
-    //@ts-ignore
-    SearchMarkersManager.prototype.draw = function (poiList) {
-        this._poiList = poiList
-        this.clear()
-        //@ts-ignore
-        this._poiList.forEach(function (poi) {
-            const markerId = poi.id
-            const poiOpts = {
-                name: poi.poi ? poi.poi.name : undefined,
-                address: poi.address ? poi.address.freeformAddress : '',
-                distance: poi.dist,
-                classification: poi.poi ? poi.poi.classifications[0].code : undefined,
-                position: poi.position,
-                entryPoints: poi.entryPoints,
-            }
-            //@ts-ignore
-            const marker = new SearchMarker(poiOpts, this._options)
-            //@ts-ignore
-            marker.addTo(this.map)
-            //@ts-ignore
-            this.markers[markerId] = marker
-        }, this)
-    }
-
-    SearchMarkersManager.prototype.clear = function () {
-        for (const markerId in this.markers) {
-            const marker = this.markers[markerId]
-            marker.remove()
-        }
-        this.markers = {}
-        this._lastClickedMarker = null
     }
 }

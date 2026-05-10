@@ -3,13 +3,16 @@ import { IOrderInfoBlock } from '@/types/modules'
 import styles from '@/styles/order-block/index.module.scss'
 import { useLang } from '@/hooks/useLang'
 import { useTotalPrice } from '@/hooks/useTotalPrice'
-import { formatPrice, showCountMessage } from '@/lib/utils/common'
+import { formatPrice, isUserAuth, showCountMessage } from '@/lib/utils/common'
 import { countWholeCartItemsAmount } from '@/lib/utils/cart'
 import Link from 'next/link'
 import { $cart, $cartFromLs } from '@/context/cart/state'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { $chosenCourierAddressData, $chosenPickupAddressData, $onlinePaymentTab, $pickupTab, $scrollToRequiredBlock } from '@/context/order/state'
+import { useUnit } from 'effector-react'
+import { setScrollToRequiredBlock } from '@/context/order'
 
 const OrderInfoBlock = ({
   isCorrectPromotionalCode,
@@ -17,6 +20,11 @@ const OrderInfoBlock = ({
 }: IOrderInfoBlock) => {
   const { lang, translations } = useLang()
   const currentCartByAuth = useGoodsByAuth($cart, $cartFromLs)
+  const onlinePaymentTab = useUnit($onlinePaymentTab)
+  const pickupTab = useUnit($pickupTab)
+  const chosenCourierAddressData = useUnit($chosenCourierAddressData)
+  const chosenPickupAddressData = useUnit($chosenPickupAddressData)
+  const scrollToRequiredBlock = useUnit($scrollToRequiredBlock)
   const [isUserAgree, setIsUserAgree] = useState(false)
   const { animatedPrice } = useTotalPrice()
   const checkboxRef = useRef<HTMLInputElement>(null) as MutableRefObject<HTMLInputElement>
@@ -31,6 +39,29 @@ const OrderInfoBlock = ({
       e.preventDefault()
       setIsUserAgree(!checkboxRef.current.checked)
       checkboxRef.current.checked = !checkboxRef.current.checked
+    }
+  }
+
+  const handleMakePayment = async () => {
+    if (
+      !chosenCourierAddressData.address_line1 &&
+      !chosenPickupAddressData.address_line1
+    ) {
+      setScrollToRequiredBlock(!scrollToRequiredBlock)
+      return
+    }
+
+    const auth = JSON.parse(localStorage.getItem('auth') as string)
+    let description = ''
+
+    if (chosenCourierAddressData.address_line1) {
+      // eslint-disable-next-line max-len
+      description = `Адрес достаки товара курьером: ${chosenCourierAddressData.address_line1}, ${chosenCourierAddressData.address_line2}`
+    }
+
+    if (chosenPickupAddressData.address_line1) {
+      // eslint-disable-next-line max-len
+      description = `Адрес получения товара: ${chosenPickupAddressData.address_line1}, ${chosenPickupAddressData.address_line2}`
     }
   }
 
@@ -54,7 +85,26 @@ const OrderInfoBlock = ({
             {priceWithDiscount} ₴
           </span>
         </p>
-        {isOrderPage && <></>}
+        {isOrderPage && (
+          <>
+            <p className={styles.order_block__info}>
+              {translations[lang].order.delivery}:{' '}
+              <span className={styles.order_block__info__text}>
+                {pickupTab
+                  ? translations[lang].order.pickup_free
+                  : translations[lang].order.courier_delivery}
+              </span>
+            </p>
+            <p className={styles.order_block__info}>
+              {translations[lang].order.payment}:{' '}
+              <span className={styles.order_block__info__text}>
+                {onlinePaymentTab
+                  ? translations[lang].order.online_payment
+                  : translations[lang].order.upon_receipt}
+              </span>
+            </p>
+          </>
+        )}
         <p className={styles.order_block__total}>
           <span>{translations[lang].order.total}:</span>
           <span className={styles.order_block__total__price}>
@@ -62,7 +112,8 @@ const OrderInfoBlock = ({
           </span>
         </p>
         {isOrderPage ? (
-          <button className={`btn-reset ${styles.order_block__btn}`} disabled={!isUserAgree || !currentCartByAuth.length || false}>
+          <button className={`btn-reset ${styles.order_block__btn}`} disabled={!isUserAgree || !currentCartByAuth.length || false}
+            onClick={handleMakePayment}>
             {false ? (
               <FontAwesomeIcon icon={faSpinner} spin color='#fff' />
             ) : (

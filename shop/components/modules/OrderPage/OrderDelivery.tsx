@@ -47,25 +47,32 @@ const OrderDelivery = () => {
 
         setPickupTab(true)
         setCourierTab(false)
+        cleanupMap()
 
         if (chosenPickupAddressData.address_line1) {
-            handleLoadMap(
+            setTimeout(() => handleLoadMap(
                 chosenPickupAddressData.city,
-                {
-                    lat: chosenPickupAddressData.lat as number,
-                    lng: chosenPickupAddressData.lon as number,
-                },
+                { lat: chosenPickupAddressData.lat as number, lng: chosenPickupAddressData.lon as number },
                 true
-            )
+            ), 50)
             return
         }
 
         if (userGeolocation?.features) {
-            handleLoadMap(userGeolocation?.features[0].properties.city)
+            setTimeout(() => handleLoadMap(userGeolocation.features[0].properties.city), 50)
             return
         }
 
-        handleLoadMap()
+        setTimeout(() => handleLoadMap(), 50)
+    }
+
+    const cleanupMap = () => {
+        // Видаляємо старий searchbox
+        const oldSearchBox = labelRef.current?.querySelector('.delivery-search-input')
+        oldSearchBox?.remove()
+
+        // Видаляємо маркери
+        document.querySelectorAll('.map-marker').forEach(m => m.remove())
     }
 
     const handleCourierTab = () => {
@@ -75,6 +82,16 @@ const OrderDelivery = () => {
 
         setPickupTab(false)
         setCourierTab(true)
+        cleanupMap()
+
+        
+
+        if (userGeolocation?.features) {
+            handleLoadMap(userGeolocation?.features[0].properties.city)
+            return
+        }
+
+        handleLoadMap()
     }
 
     const handleOpenMapModal = () => {
@@ -101,7 +118,7 @@ const OrderDelivery = () => {
             addScriptToHead(
                 'https://api.tomtom.com/maps-sdk-for-web/cdn/plugins/SearchBox/3.1.3-public-preview.0/SearchBox-web.js'
             )
-            handleLoadMap()
+            setTimeout(() => handleLoadMap(), 50)
         }
     }, [shouldLoadMap])
 
@@ -139,6 +156,11 @@ const OrderDelivery = () => {
         },
         withMarker = false
     ) => {
+        // Перевіряємо, що контейнер існує
+        if (!mapRef.current) {
+            return
+        }
+
         const maxWaitTime = 5000
         const startTime = Date.now()
 
@@ -190,14 +212,14 @@ const OrderDelivery = () => {
         initialSearchValue && ttSearchBox.setValue(initialSearchValue)
 
         //@ts-ignore
-        const searchMarkersManager = new SearchMarkersManager(map)
+        const searchMarkersManager = new SearchMarkersManager(map, {}, ttMaps)
         //@ts-ignore
         ttSearchBox.on('tomtom.searchbox.resultsfound', (e) =>
-            handleResultsFound(e, searchMarkersManager, map)
+            handleResultsFound(e, searchMarkersManager, map, true)
         )
         //@ts-ignore
         ttSearchBox.on('tomtom.searchbox.resultselected', (e) => {
-            handleResultSelection(e, searchMarkersManager, map)
+            handleResultSelection(e, searchMarkersManager, map, true)
             setShouldShowCourierAddressData(false)
         })
         ttSearchBox.on('tomtom.searchbox.resultscleared', () =>
@@ -253,12 +275,12 @@ const OrderDelivery = () => {
                     </motion.div>
                 )}
                 {courierTab && (
-                    <motion.div {...basePropsForMotion}>
+                    <motion.div {...basePropsForMotion} style={{ minHeight: '100px', display: 'block' }}>
                         {!shouldShowCourierAddressData && (
-                            <div className={styles.order__list__item__delivery__courier}>
-                                <span>{translations[lang].order.where_deliver_order}</span>
-                                <span>{translations[lang].order.enter_address_on_map}</span>
-                                <button className='btn-reset' onClick={handleOpenMapModal}>
+                            <div className={styles.order__list__item__delivery__courier} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <span style={{ display: 'block' }}>{translations[lang].order.where_deliver_order}</span>
+                                <span style={{ display: 'block' }}>{translations[lang].order.enter_address_on_map}</span>
+                                <button className='btn-reset' onClick={handleOpenMapModal} style={{ display: 'block', padding: '8px 16px', marginTop: '10px' }}>
                                     {translations[lang].order.map}
                                 </button>
                             </div>

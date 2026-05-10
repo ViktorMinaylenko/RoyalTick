@@ -1,6 +1,6 @@
 'use state'
 import { IRoyalTickAddressData } from "@/types/order";
-import { order, getRoyalTickOfficesByCityFx, setPickupTab, setCourierTab, setMapInstance, setShouldLoadRoyalTickData, setChosenPickupAddressData, setChosenCourierAddressData, setShouldShowCourierAddressData, setCourierAddressData } from ".";
+import { order, getRoyalTickOfficesByCityFx, setPickupTab, setCourierTab, setMapInstance, setShouldLoadRoyalTickData, setChosenPickupAddressData, setChosenCourierAddressData, setShouldShowCourierAddressData, setCourierAddressData, setOnlinePaymentTb, setCashPaymentTb, setScrollToRequiredBlock } from ".";
 
 export const $royalTickDataByCity = order.createStore<IRoyalTickAddressData[]>([]).on(getRoyalTickOfficesByCityFx.done, (_, { result }) => result)
 
@@ -21,3 +21,7 @@ export const $shouldShowCourierAddressData = order.createStore<boolean>(false)
 
 export const $courierAddressData = order.createStore<IRoyalTickAddressData>({} as IRoyalTickAddressData)
     .on(setCourierAddressData, (_, value) => value)
+
+export const $onlinePaymentTab = order.createStore<boolean>(true).on(setOnlinePaymentTb, (_, value) => value)
+export const $cashPaymentTab = order.createStore<boolean>(false).on(setCashPaymentTb, (_, value) => value)
+export const $scrollToRequiredBlock = order.createStore<boolean>(false).on(setScrollToRequiredBlock, (_, value) => value)
