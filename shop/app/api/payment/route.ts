@@ -14,49 +14,65 @@ export async function POST(req: Request) {
             return NextResponse.json(validatedTokenResult)
         }
 
-        const publicKey = process.env.NEXT_PUBLIC_LIQPAY_PUBLIC_KEY
-        const privateKey = process.env.LIQPAY_PRIVATE_KEY
+        const merchantAccount = process.env.WAYFORPAY_MERCHANT_ACCOUNT
+        const merchantSecretKey = process.env.WAYFORPAY_MERCHANT_SECRET_KEY
 
-        if (!publicKey || !privateKey) {
+        if (!merchantAccount || !merchantSecretKey) {
             return NextResponse.json({ message: 'API keys are missing' }, { status: 500 })
         }
 
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-        const isSandbox = process.env.NEXT_PUBLIC_LIQPAY_SANDBOX === 'true'
+        const orderReference = `order_${Date.now()}`
+        const orderDate = Math.floor(Date.now() / 1000)
+        const amount = reqBody.amount
+        const currency = 'UAH'
+        const productName = ['Замовлення RoyalTick']
+        const productPrice = [amount]
+        const productCount = [1]
 
-        const paymentParams = {
-            public_key: publicKey,
-            version: 3,
-            action: 'pay',
-            amount: reqBody.amount,
-            currency: 'UAH',
-            description: reqBody.description || 'Оплата замовлення в RoyalTick',
-            order_id: `order_${Date.now()}`,
-            result_url: `${baseUrl}/payment-success`,
-            server_url: `${baseUrl}/api/payment/callback`,
-            sandbox: isSandbox ? 1 : 0,
+        const amountString = amount.toString();
+
+        const signatureString = [
+            merchantAccount,
+            'www.market.ua',
+            orderReference,
+            orderDate,
+            amountString,
+            currency,
+            productName[0], // Перший товар
+            productCount[0], // Кількість
+            productPrice[0].toString() // Ціна товару
+        ].join(';');
+
+        const merchantSignature = crypto
+            .createHmac('md5', merchantSecretKey)
+            .update(signatureString)
+            .digest('hex');
+
+        const paymentData = {
+            merchantAccount,
+            merchantDomainName: 'www.market.ua',
+            orderReference,
+            orderDate,
+            amount,
+            currency,
+            orderTimeout: 49000,
+            productName,
+            productPrice,
+            productCount,
+            clientFirstName: reqBody.orderDetails?.name_label || '',
+            clientLastName: reqBody.orderDetails?.surname_label || '',
+            clientEmail: reqBody.orderDetails?.email_label || '',
+            clientPhone: reqBody.orderDetails?.phone_label || '',
+            returnUrl: `${baseUrl}/api/success-callback`,
+            serviceUrl: `${baseUrl}/api/success-callback`,
+            merchantSignature,
+            language: 'UA',
         }
 
-        const data = Buffer.from(JSON.stringify(paymentParams)).toString('base64')
-
-        const signature = crypto
-            .createHash('sha1')
-            .update(privateKey + data + privateKey)
-            .digest('base64')
-
-        const confirmationUrl = `https://www.liqpay.ua/api/3/checkout?data=${encodeURIComponent(data)}&signature=${encodeURIComponent(signature)}`
-
-        console.log('Payment params:', { order_id: paymentParams.order_id, amount: paymentParams.amount, isSandbox })
-        console.log('Confirmation URL:', confirmationUrl)
-
-        return NextResponse.json({
-            result: {
-                data,
-                signature,
-                confirmationUrl,
-            }
-        }, { status: 200 })
+        return NextResponse.json({ result: paymentData }, { status: 200 })
     } catch (error) {
+        console.error('Payment route error:', error)
         return NextResponse.json({ message: (error as Error).message }, { status: 500 })
     }
 }

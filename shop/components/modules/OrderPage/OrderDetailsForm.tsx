@@ -11,6 +11,9 @@ import {
 import NameErrorMessage from '@/components/elements/NameErrorMessage/NameErrorMessage'
 import { IInputs } from '@/types/authPopup'
 import { useUnit } from 'effector-react'
+import { $orderDetailsValues } from '@/context/order/state'
+import { setOrderDetailsValues } from '@/context/order'
+import { IOrderDetailsValues } from '@/types/order'
 
 
 const OrderDetailsForm = () => {
@@ -21,7 +24,8 @@ const OrderDetailsForm = () => {
         trigger,
         watch,
         formState: { errors, isValid },
-    } = useForm()
+    } = useForm<IOrderDetailsValues>()
+    const orderDetailsValues = useUnit($orderDetailsValues)
     const inputs = watch()
 
     const nameRegister = register(
@@ -68,6 +72,11 @@ const OrderDetailsForm = () => {
                 value,
             },
         })
+        setOrderDetailsValues({
+            ...inputs,
+            isValid,
+            name_label: value,
+        })
         trigger(nameRegister.name)
     }
 
@@ -78,6 +87,11 @@ const OrderDetailsForm = () => {
                 name: surnameRegister.name,
                 value,
             },
+        })
+        setOrderDetailsValues({
+            ...inputs,
+            isValid,
+            surname_label: value,
         })
         trigger(surnameRegister.name)
     }
@@ -90,7 +104,11 @@ const OrderDetailsForm = () => {
                 value,
             },
         })
-
+        setOrderDetailsValues({
+            ...inputs,
+            isValid,
+            phone_label: value,
+        })
         trigger(phoneRegister.name)
     }
 
@@ -102,7 +120,11 @@ const OrderDetailsForm = () => {
                 value,
             },
         })
-
+        setOrderDetailsValues({
+            ...inputs,
+            isValid,
+            email_label: value,
+        })
         trigger(emailRegister.name)
     }
 
@@ -114,7 +136,11 @@ const OrderDetailsForm = () => {
                 value,
             },
         })
-
+        setOrderDetailsValues({
+            ...inputs,
+            isValid,
+            message_label: value,
+        })
         setMessageLength(e.target.value.length)
         trigger(messageRegister.name)
     }
@@ -130,7 +156,10 @@ const OrderDetailsForm = () => {
     }, [])
 
     useEffect(() => {
-
+        setOrderDetailsValues({
+            ...orderDetailsValues,
+            isValid,
+        })
     }, [isValid])
 
     return (

@@ -12,19 +12,20 @@ import '@tomtom-international/web-sdk-maps/dist/maps.css'
 import '@tomtom-international/web-sdk-plugin-searchbox/dist/SearchBox.css'
 import { basePropsForMotion } from '@/constants/motion'
 import styles from '@/styles/order/index.module.scss'
-import { $chosenCourierAddressData, $chosenPickupAddressData, $courierTab, $pickupTab, $shouldShowCourierAddressData } from '@/context/order/state'
+import { $chosenCourierAddressData, $chosenNovaPoshtaAddressData, $chosenPickupAddressData, $courierTab, $novaPoshtaTab, $pickupTab, $shouldShowCourierAddressData } from '@/context/order/state'
 import OrderTitle from './OrderTitle'
 import TabControls from './TabControls'
-import { setCourierTab, setMapInstance, setPickupTab, setShouldShowCourierAddressData } from '@/context/order'
+import { getNovaPoshtaOfficesByCityFx, setCourierTab, setMapInstance, setNovaPoshtaTab, setPickupTab, setShouldLoadNovaPoshtaData, setShouldShowCourierAddressData } from '@/context/order'
 import { getGeolocationFx, setUserGeolocation } from '@/context/user'
 import { $userGeolocation } from '@/context/user/state'
 import { useTTMap } from '@/hooks/useTTMap'
 import { addOverflowHiddenToBody, addScriptToHead } from '@/lib/utils/common'
-import { IAddressBBox } from '@/types/order'
+import { IAddressBBox, IRoyalTickAddressData } from '@/types/order'
 import AddressesList from './AddressesList'
 import { handleResultClearing, handleResultSelection, handleResultsFound, handleSelectPickupAddress, initSearchMarker, SearchMarkersManager } from '@/lib/utils/map'
-import { openMapModal } from '@/context/modals'
+import { openMapModal, openNovaPoshtaMapModal } from '@/context/modals'
 import CourierAddressInfo from './CourierAddressInfo'
+import NovaPoshtaAddressesList from './NovaPoshtaAddressesList'
 
 const OrderDelivery = () => {
     const { lang, translations } = useLang()
@@ -40,6 +41,124 @@ const OrderDelivery = () => {
     const labelRef = useRef<HTMLLabelElement>(null!)
     const ttSearchBoxRef = useRef<any>(null)
 
+
+    const novaPoshtaTab = useUnit($novaPoshtaTab)
+    const chosenNovaPoshtaAddressData = useUnit($chosenNovaPoshtaAddressData)
+    const novaPoshtaMapRef = useRef<HTMLDivElement>(null!)
+    const novaPoshtaLabelRef = useRef<HTMLLabelElement>(null!)
+    const novaPoshtaMapInstanceRef = useRef<any>(null)
+    const novaPoshtaDebounceRef = useRef<NodeJS.Timeout | null>(null)
+    const novaPoshtaSearchBoxRef = useRef<any>(null)
+
+    const handleLoadNovaPoshtaSearchBox = async () => {
+        if (!novaPoshtaLabelRef.current) return
+
+        // прибираємо старий searchbox якщо є
+        const old = novaPoshtaLabelRef.current.querySelector('.np-search-input')
+        old?.remove()
+
+        const maxWaitTime = 5000
+        const startTime = Date.now()
+        while (!window.tt && Date.now() - startTime < maxWaitTime) {
+            await new Promise(resolve => setTimeout(resolve, 100))
+        }
+        if (!window.tt) return
+
+        //@ts-ignore
+        const ttSearchBox = new window.tt.plugins.SearchBox(window.tt.services, {
+            searchOptions: {
+                key: process.env.NEXT_PUBLIC_TOMTOM_API_KEY as string,
+                language: 'uk-UA',
+            },
+        })
+
+        novaPoshtaSearchBoxRef.current = ttSearchBox
+
+        const searchBoxHTML = ttSearchBox.getSearchBoxHTML()
+        searchBoxHTML.classList.add('np-search-input')
+        novaPoshtaLabelRef.current.append(searchBoxHTML)
+
+        //@ts-ignore
+        ttSearchBox.on('tomtom.searchbox.resultselected', async (e: any) => {
+            const text = e.data.text
+            setShouldLoadNovaPoshtaData(true)
+            const result = await getNovaPoshtaOfficesByCityFx({ city: text.split(',')[0] })
+            if (result && novaPoshtaMapRef.current) {
+                setTimeout(() => handleLoadNovaPoshtaMap(result), 50)
+            }
+        })
+    }
+
+    const handleLoadNovaPoshtaMap = async (warehouses: IRoyalTickAddressData[]) => {
+        if (!novaPoshtaMapRef.current) return
+
+        const maxWaitTime = 5000
+        const startTime = Date.now()
+        while (!window.tt && Date.now() - startTime < maxWaitTime) {
+            await new Promise(resolve => setTimeout(resolve, 100))
+        }
+        if (!window.tt) return
+
+        const ttMaps = await import(`@tomtom-international/web-sdk-maps`)
+
+        if (novaPoshtaMapInstanceRef.current) {
+            // очищаємо старі маркери
+            document.querySelectorAll('.map-marker').forEach(m => m.remove())
+
+            warehouses.forEach((item) => {
+                const element = document.createElement('div')
+                element.classList.add('map-marker') // ← той самий клас що в самовивозі
+                new ttMaps.Marker({ element })
+                    .setLngLat([item.lon, item.lat])
+                    .addTo(novaPoshtaMapInstanceRef.current)
+            })
+
+            if (warehouses.length > 0) {
+                novaPoshtaMapInstanceRef.current.setCenter([warehouses[0].lon, warehouses[0].lat]).zoomTo(12)
+            }
+            return
+        }
+
+        const map = ttMaps.map({
+            key: process.env.NEXT_PUBLIC_TOMTOM_API_KEY as string,
+            container: novaPoshtaMapRef.current,
+            center: { lat: 50.4501, lng: 30.5234 },
+            zoom: 10,
+        })
+
+        novaPoshtaMapInstanceRef.current = map
+
+        warehouses.forEach((item) => {
+            const element = document.createElement('div')
+            element.classList.add('map-marker')
+            new ttMaps.Marker({ element })
+                .setLngLat([item.lon, item.lat])
+                .addTo(map)
+        })
+
+        if (warehouses.length > 0) {
+            map.setCenter([warehouses[0].lon, warehouses[0].lat]).zoomTo(12)
+        }
+    }
+
+    const handleNovaPoshtaTab = () => {
+        if (novaPoshtaTab) return
+        setPickupTab(false)
+        setCourierTab(false)
+        setNovaPoshtaTab(true)
+        cleanupMap()
+
+        novaPoshtaMapInstanceRef.current = null
+
+        const old = novaPoshtaLabelRef.current?.querySelector('.np-search-input')
+        old?.remove()
+
+        setTimeout(() => {
+            handleLoadNovaPoshtaSearchBox()
+            handleLoadNovaPoshtaMap([])
+        }, 50)
+    }
+
     const handlePickupTab = () => {
         if (pickupTab) {
             return
@@ -47,6 +166,8 @@ const OrderDelivery = () => {
 
         setPickupTab(true)
         setCourierTab(false)
+        setNovaPoshtaTab(false)
+        novaPoshtaMapInstanceRef.current = null
         cleanupMap()
 
         if (chosenPickupAddressData.address_line1) {
@@ -82,6 +203,8 @@ const OrderDelivery = () => {
 
         setPickupTab(false)
         setCourierTab(true)
+        setNovaPoshtaTab(false)
+        novaPoshtaMapInstanceRef.current = null
         cleanupMap()
 
         
@@ -239,6 +362,7 @@ const OrderDelivery = () => {
         }
     }
 
+
     return (
         <>
             <OrderTitle orderNumber='2' text={translations[lang].order.delivery} />
@@ -246,10 +370,13 @@ const OrderDelivery = () => {
                 <TabControls
                     handleTab1={handlePickupTab}
                     handleTab2={handleCourierTab}
+                    handleTab3={handleNovaPoshtaTab}
                     tab1Active={pickupTab}
                     tab2Active={courierTab}
+                    tab3Active={novaPoshtaTab}
                     tab1Text={translations[lang].order.pickup_free}
                     tab2Text={translations[lang].order.courier_delivery}
+                    tab3Text='Нова Пошта'
                 />
                 {pickupTab && (
                     <motion.div
@@ -290,6 +417,37 @@ const OrderDelivery = () => {
                                 // eslint-disable-next-line indent
                                 <CourierAddressInfo />
                             )}
+                    </motion.div>
+                )}
+                {novaPoshtaTab && (
+                    <motion.div
+                        className={styles.order__list__item__delivery__pickup}
+                        {...basePropsForMotion}
+                    >
+                        <div className={styles.order__list__item__delivery__inner}>
+                            <label
+                                className={styles.order__list__item__delivery__label}
+                                ref={novaPoshtaLabelRef}
+                            >
+                                
+                                <span>{translations[lang].order.search_title}</span>
+                            </label>
+                            <NovaPoshtaAddressesList
+                                listClassName={styles.order__list__item__delivery__list}
+                                onSelectAddress={(item) => {
+                                    if (novaPoshtaMapInstanceRef.current) {
+                                        import(`@tomtom-international/web-sdk-maps`).then((ttMaps) => {
+                                            novaPoshtaMapInstanceRef.current.setCenter([item.lon, item.lat]).zoomTo(17)
+                                        })
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div
+                            className={styles.order__list__item__delivery__map}
+                            ref={novaPoshtaMapRef}
+                            onClick={() => { openNovaPoshtaMapModal(); addOverflowHiddenToBody() }}
+                        />
                     </motion.div>
                 )}
             </div>

@@ -10,7 +10,7 @@ import { $cart, $cartFromLs } from '@/context/cart/state'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { $chosenCourierAddressData, $chosenPickupAddressData, $onlinePaymentTab, $pickupTab, $scrollToRequiredBlock } from '@/context/order/state'
+import { $chosenCourierAddressData, $chosenNovaPoshtaAddressData, $chosenPickupAddressData, $novaPoshtaTab, $onlinePaymentTab, $orderDetailsValues, $pickupTab, $scrollToRequiredBlock } from '@/context/order/state'
 import { useUnit } from 'effector-react'
 import { makePayment, setScrollToRequiredBlock } from '@/context/order'
 
@@ -31,6 +31,11 @@ const OrderInfoBlock = ({
   const priceWithDiscount = isCorrectPromotionalCode
     ? formatPrice(Math.round(animatedPrice - animatedPrice * 0.3))
     : formatPrice(animatedPrice)
+  const orderDetailsValues = useUnit($orderDetailsValues)
+
+
+  const novaPoshtaTab = useUnit($novaPoshtaTab)
+  const chosenNovaPoshtaAddressData = useUnit($chosenNovaPoshtaAddressData)
 
   const handleAgreementChange = () => setIsUserAgree(!isUserAgree)
 
@@ -45,8 +50,19 @@ const OrderInfoBlock = ({
   const handleMakePayment = async () => {
     if (
       !chosenCourierAddressData.address_line1 &&
-      !chosenPickupAddressData.address_line1
+      !chosenPickupAddressData.address_line1 &&
+      !chosenNovaPoshtaAddressData.address_line1
     ) {
+      setScrollToRequiredBlock(!scrollToRequiredBlock)
+      return
+    }
+
+    const hasRequiredFields =
+      orderDetailsValues.name_label &&
+      orderDetailsValues.surname_label &&
+      orderDetailsValues.phone_label
+
+    if (!hasRequiredFields) {
       setScrollToRequiredBlock(!scrollToRequiredBlock)
       return
     }
@@ -69,10 +85,22 @@ const OrderInfoBlock = ({
       description = `Адреса отримання товару: ${chosenPickupAddressData.address_line1}, ${chosenPickupAddressData.address_line2}`
     }
 
+    if (chosenNovaPoshtaAddressData.address_line1) {
+      // eslint-disable-next-line max-len
+      description = `Доставка на відділення Нової Пошти: ${chosenNovaPoshtaAddressData.address_line1}, ${chosenNovaPoshtaAddressData.address_line2}`
+    }
+
     makePayment({
       amount: `${priceWithDiscount.replace(' ', '')}`,
       description,
       jwt: auth.accessToken,
+      orderDetails: orderDetailsValues,  // ← додай
+      cartItems: currentCartByAuth.map(item => ({  // ← додай
+        name: item.name,
+        size: item.size,
+        count: item.count,
+        price: item.price,
+      })),
     })
   }
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { ICartItem } from "@/types/cart"
-import { cart, addProductsFromLSToCartFx, setCartFromLS, setTotalPrice, setShouldShowEmpty, addProductToCartFx, getCartItemsFx, removeCartItemFx, updateCartItemQuantityFx } from "."
+import { cart, addProductsFromLSToCartFx, setCartFromLS, setTotalPrice, setShouldShowEmpty, addProductToCartFx, getCartItemsFx, removeCartItemFx, updateCartItemQuantityFx, deleteAllFromCartFx } from "."
 
 export const $cart = cart
     .createStore<ICartItem[]>([])
@@ -30,6 +30,7 @@ export const $cart = cart
     .on(removeCartItemFx.done, (cart, { result }) =>
         cart.filter((item) => item._id !== result.id)
     )
+    .on(deleteAllFromCartFx.done, () => [])
 
 export const $cartFromLs = cart
     .createStore<ICartItem[]>([])

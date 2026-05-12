@@ -1,6 +1,6 @@
 'use state'
-import { IRoyalTickAddressData } from "@/types/order";
-import { order, getRoyalTickOfficesByCityFx, setPickupTab, setCourierTab, setMapInstance, setShouldLoadRoyalTickData, setChosenPickupAddressData, setChosenCourierAddressData, setShouldShowCourierAddressData, setCourierAddressData, setOnlinePaymentTb, setCashPaymentTb, setScrollToRequiredBlock } from ".";
+import { IOrderDetailsValues, IRoyalTickAddressData } from "@/types/order";
+import { order, getRoyalTickOfficesByCityFx, setPickupTab, setCourierTab, setMapInstance, setShouldLoadRoyalTickData, setChosenPickupAddressData, setChosenCourierAddressData, setShouldShowCourierAddressData, setCourierAddressData, setOnlinePaymentTb, setCashPaymentTb, setScrollToRequiredBlock, setNovaPoshtaTab, setShouldLoadNovaPoshtaData, getNovaPoshtaOfficesByCityFx, setChosenNovaPoshtaAddressData, setOrderDetailsValues } from ".";
 
 export const $royalTickDataByCity = order.createStore<IRoyalTickAddressData[]>([]).on(getRoyalTickOfficesByCityFx.done, (_, { result }) => result)
 
@@ -25,3 +25,18 @@ export const $courierAddressData = order.createStore<IRoyalTickAddressData>({} a
 export const $onlinePaymentTab = order.createStore<boolean>(true).on(setOnlinePaymentTb, (_, value) => value)
 export const $cashPaymentTab = order.createStore<boolean>(false).on(setCashPaymentTb, (_, value) => value)
 export const $scrollToRequiredBlock = order.createStore<boolean>(false).on(setScrollToRequiredBlock, (_, value) => value)
+
+
+export const $novaPoshtaTab = order.createStore<boolean>(false)
+    .on(setNovaPoshtaTab, (_, value) => value)
+
+export const $shouldLoadNovaPoshtaData = order.createStore<boolean>(false)
+    .on(setShouldLoadNovaPoshtaData, (_, value) => value)
+
+export const $novaPoshtaDataByCity = order.createStore<IRoyalTickAddressData[]>([])
+    .on(getNovaPoshtaOfficesByCityFx.done, (_, { result }) => result)
+
+export const $chosenNovaPoshtaAddressData = order.createStore<Partial<IRoyalTickAddressData>>({})
+    .on(setChosenNovaPoshtaAddressData, (_, value) => value)
+
+export const $orderDetailsValues = order.createStore<IOrderDetailsValues>({} as IOrderDetailsValues).on(setOrderDetailsValues, (_, value) => value)

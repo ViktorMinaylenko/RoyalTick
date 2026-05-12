@@ -374,6 +374,14 @@
       "delivery_will_be": "Delivery will be sent to this address",
       "enter_address_on_map_or_search": "Enter the address on the map or find it using search",
       "comments_order": "Order comments"
+    },
+    "payment_success": {
+      "thanks": "Thanks",
+      "thanks_text": "Thank you for the order!",
+      "order_info": "Your order 1-info for the amount of 2-info has been paid and accepted for assembly",
+      "order_description": "You can find out more about the status of your order by email or in your <a href=\"/profile\">personal account</a> in the store",
+      "continue_shopping": "Continue shopping",
+      "go_main": "Go to Main page"
     }
   },
   "ua": {
@@ -750,6 +758,14 @@
       "delivery_will_be": "Доставка буде за цією адресою",
       "enter_address_on_map_or_search": "Вкажіть адресу на мапі або знайдіть через пошук",
       "comments_order": "Коментарі до замовлення"
+    },
+    "payment_success": {
+      "thanks": "Дякуємо",
+      "thanks_text": "Дякуємо за ваше замовлення!",
+      "order_info": "Ваше замовлення 1-info на суму 2-info оплачено та прийнято на комплектацію",
+      "order_description": "Дізнатися більше про статус замовлення можна за допомогою електронної пошти або в <a href=\"/profile\">особистому кабінеті</a> магазину",
+      "continue_shopping": "Продовжити покупки",
+      "go_main": "На головну"
     }
   }
 }

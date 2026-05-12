@@ -1,5 +1,5 @@
 import { sample } from "effector";
-import { getRoyalTickOfficesByCity, getRoyalTickOfficesByCityFx, makePayment, makePaymentFx } from ".";
+import { getNovaPoshtaOfficesByCity, getNovaPoshtaOfficesByCityFx, getRoyalTickOfficesByCity, getRoyalTickOfficesByCityFx, makePayment, makePaymentFx } from ".";
 
 sample({
     clock: getRoyalTickOfficesByCity,
@@ -12,4 +12,10 @@ sample({
     clock: makePayment,
     fn: (data) => data,
     target: makePaymentFx,
+})
+
+sample({
+    clock: getNovaPoshtaOfficesByCity,
+    fn: (data) => data,
+    target: getNovaPoshtaOfficesByCityFx,
 })

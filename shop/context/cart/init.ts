@@ -1,6 +1,6 @@
 
 import { sample } from "effector"
-import { fetchCart, addProductToCart, addProductsFromLSToCart, addProductsFromLSToCartFx, updateCartItemQuantity, deleteProductFromCart, addProductToCartFx, getCartItemsFx, removeCartItemFx, updateCartItemQuantityFx } from "."
+import { fetchCart, addProductToCart, addProductsFromLSToCart, addProductsFromLSToCartFx, updateCartItemQuantity, deleteProductFromCart, addProductToCartFx, getCartItemsFx, removeCartItemFx, updateCartItemQuantityFx, deleteAllFromCart, deleteAllFromCartFx } from "."
 import { $cart } from "./state"
 
 sample({
@@ -36,4 +36,11 @@ sample({
     source: $cart,
     fn: (_, data) => data,
     target: removeCartItemFx,
+})
+
+sample({
+    clock: deleteAllFromCart,
+    source: {},
+    fn: (_, data) => data,
+    target: deleteAllFromCartFx,
 })

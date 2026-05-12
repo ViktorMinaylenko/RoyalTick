@@ -2,6 +2,7 @@
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 import OrderInfoBlock from '@/components/modules/OrderInfoBlock/OrderInfoBlock'
 import MapModal from '@/components/modules/OrderPage/MapModal'
+import NovaPoshtaMapModal from '@/components/modules/OrderPage/NovaPoshtaMapModal'
 import OrderCartItem from '@/components/modules/OrderPage/OrderCartItem'
 import OrderDelivery from '@/components/modules/OrderPage/OrderDelivery'
 import OrderDetailsForm from '@/components/modules/OrderPage/OrderDetailsForm'
@@ -9,17 +10,18 @@ import OrderPayment from '@/components/modules/OrderPage/OrderPayment'
 import OrderTitle from '@/components/modules/OrderPage/OrderTitle'
 import { basePropsForMotion } from '@/constants/motion'
 import { $cart, $cartFromLs } from '@/context/cart/state'
-import { $mapModal } from '@/context/modals/state'
-import { $scrollToRequiredBlock } from '@/context/order/state'
+import { $mapModal, $novaPoshtaMapModal } from '@/context/modals/state'
+import { checkPaymentFx } from '@/context/order'
+import { $chosenCourierAddressData, $chosenNovaPoshtaAddressData, $chosenPickupAddressData, $orderDetailsValues, $scrollToRequiredBlock } from '@/context/order/state'
 import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import { useLang } from '@/hooks/useLang'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { handleDeleteAllFromCart } from '@/lib/utils/cart'
 import { isUserAuth } from '@/lib/utils/common'
 import styles from '@/styles/order/index.module.scss'
 import { useUnit } from 'effector-react'
 import { AnimatePresence, motion } from 'framer-motion'
-import router from 'next/dist/shared/lib/router/router'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
@@ -34,6 +36,12 @@ const OrderPage = () => {
     const [isFirstRender, setIsFirstRender] = useState(true)
     const scrollToRequiredBlock = useUnit($scrollToRequiredBlock)
     const deliveryBlockRef = useRef<HTMLLIElement>(null!)
+    const detailsBlockRef = useRef<HTMLLIElement>(null!)
+    const novaPoshtaMapModal = useUnit($novaPoshtaMapModal)
+    const orderDetailsValues = useUnit($orderDetailsValues)
+    const chosenCourierAddressData = useUnit($chosenCourierAddressData)
+    const chosenPickupAddressData = useUnit($chosenPickupAddressData)
+    const chosenNovaPoshtaAddressData = useUnit($chosenNovaPoshtaAddressData)
 
     const scrollToBlock = (selector: HTMLLIElement) =>
         window.scrollTo({
@@ -55,16 +63,37 @@ const OrderPage = () => {
             return
         }
 
-        scrollToBlock(deliveryBlockRef.current)
-        toast.error('Потрібно вказати адресу!')
+        if (!orderDetailsValues.isValid) {
+            scrollToBlock(detailsBlockRef.current)
+            return
+        }
+
+        if (
+            !chosenCourierAddressData.address_line1 &&
+            !chosenPickupAddressData.address_line1 &&
+            !chosenNovaPoshtaAddressData.address_line1
+        ) {
+            scrollToBlock(deliveryBlockRef.current)
+            toast.error('Потрібно вказати адресу!')
+        }
 
     }, [scrollToRequiredBlock])
 
     const clearCartByPayment = async () => {
-        const paymentId = JSON.parse(localStorage.getItem('paymentId') as string)
+        const orderReference = JSON.parse(localStorage.getItem('orderReference') as string)
 
-        if (!isUserAuth() || !paymentId) {
+        if (!isUserAuth() || !orderReference) {
             return
+        }
+
+        const auth = JSON.parse(localStorage.getItem('auth') as string)
+        const data = await checkPaymentFx({ orderReference })
+
+        if (data) {
+            if (data.transactionStatus === 'Approved' || data.status === 'Approved') {
+                handleDeleteAllFromCart(auth.accessToken)
+                localStorage.removeItem('orderReference')
+            }
         }
     }
 
@@ -115,7 +144,7 @@ const OrderPage = () => {
                                     <OrderTitle orderNumber='3' text={translations[lang].order.payment} />
                                     <OrderPayment />
                                 </li>
-                                <li className={styles.order__list__item}>
+                                <li className={styles.order__list__item} ref={detailsBlockRef}>
                                     <OrderTitle orderNumber='4' text={translations[lang].order.recipient_details} />
                                     <div className={styles.order__list__item__details}>
                                         <p className={styles.order__list__item__details__title}>
@@ -138,6 +167,13 @@ const OrderPage = () => {
                 {mapModal && (
                     <motion.div className={styles.map_modal} {...basePropsForMotion}>
                         <MapModal />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+            <AnimatePresence>
+                {novaPoshtaMapModal && (
+                    <motion.div className={styles.map_modal} {...basePropsForMotion}>
+                        <NovaPoshtaMapModal />
                     </motion.div>
                 )}
             </AnimatePresence>

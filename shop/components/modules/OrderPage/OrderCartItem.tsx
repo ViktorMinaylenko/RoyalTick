@@ -48,7 +48,7 @@ const OrderCartItem = ({ item, position, isMobile }: OrderCartItemProps) => {
                     </div>
                 </li>
             ) : (
-                <tr className={styles.order__list__item__table__row}>
+                <tr>
                     <td className={styles.order__list__item__table__name}>
                         <span>{position}.</span>
                         <Image src={item.image} alt={item.name} width={109} height={109} />

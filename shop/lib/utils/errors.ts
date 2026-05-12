@@ -1,4 +1,4 @@
-import { addProductToCartFx, removeCartItemFx, getCartItemsFx } from '@/context/cart/index'
+import { addProductToCartFx, removeCartItemFx, getCartItemsFx, deleteAllFromCartFx } from '@/context/cart/index'
 import { JWTError } from '@/constants/jwt'
 import { addProductsFromLSToCartFx } from '@/context/cart/index'
 import { addItemsFromLSToComparisonFx, addItemToComparisonFx, deleteComparisonItemFx, getComparisonItemsFx } from '@/context/comparison/index'
@@ -69,6 +69,11 @@ export const handleJWTError = async (
             ...(payload as IDeleteFavoriteItemsFx),
             jwt: newTokens.accessToken,
           })
+        case 'deleteAllFromCartFx':
+          deleteAllFromCartFx({
+            jwt: newTokens.accessToken,
+          })
+          break
         case 'addItemToComparisonFx':
           return addItemToComparisonFx({
             ...(payload as IAddItemToComparisonFx),
