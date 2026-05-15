@@ -27,6 +27,7 @@
     "autosize": "^6.0.1",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.10.0",
     "dotenv": "^17.2.3",
     "effector": "^23.4.4",
     "effector-react": "^23.3.0",

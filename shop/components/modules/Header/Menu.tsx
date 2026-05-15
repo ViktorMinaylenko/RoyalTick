@@ -15,6 +15,7 @@ import Accordion from '../Accordion/Accordion'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import BuyersListItems from './BuyersListItems'
 import ContactsListItems from './ContactsListItems'
+import Link from 'next/link'
 
 const Menu = () => {
   const [activelistId, setActiveListId] = useState(0)
@@ -223,6 +224,25 @@ const Menu = () => {
               <Accordion title={translations[lang].main_menu.contacts} titleClass='btn-reset nav-menu__list__item__btn'>
                 <ul className='list-reset nav-menu__accordion__item__list'><ContactsListItems /></ul>
               </Accordion>
+            )}
+          </li>
+          <li className='nav-menu__list__item'>
+            {!isMedia640 ? (
+              <Link
+                href='/auction'
+                className='btn-reset nav-menu__list__item__btn'
+                onClick={handleCloseMenu}
+              >
+                {translations[lang].main_menu.auction}
+              </Link>
+            ) : (
+              <Link
+                href='/auction'
+                className='btn-reset nav-menu__list__item__btn'
+                onClick={handleCloseMenu}
+              >
+                {translations[lang].main_menu.auction}
+              </Link>
             )}
           </li>
         </ul>

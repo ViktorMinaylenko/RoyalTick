@@ -1,0 +1,75 @@
+import { NextResponse } from 'next/server'
+import { corsHeaders } from '@/constants/corsHeaders'
+import clientPromise from '@/lib/mongodb'
+import { getDbAndReqBody, isValidAccessToken, parseJwt, findUserByEmail } from '@/lib/utils/api-routes'
+import { ObjectId } from 'mongodb'
+
+export async function POST(
+    req: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        const { id } = await params
+
+        const token = req.headers.get('authorization')?.split(' ')[1]
+        const validatedTokenResult = await isValidAccessToken(token)
+
+        if (validatedTokenResult.status !== 200) {
+            return NextResponse.json(validatedTokenResult, corsHeaders)
+        }
+
+        const { db, reqBody } = await getDbAndReqBody(clientPromise, req)
+        const { bidAmount } = reqBody
+
+        const lot = await db.collection('lots').findOne({ _id: new ObjectId(id) })
+
+        if (!lot) {
+            return NextResponse.json({ message: 'Лот не знайдено', status: 404 }, corsHeaders)
+        }
+
+        if (lot.status !== 'active') {
+            return NextResponse.json({ message: 'Аукціон завершено', status: 400 }, corsHeaders)
+        }
+
+        if (new Date() > new Date(lot.endDate)) {
+            return NextResponse.json({ message: 'Час аукціону вийшов', status: 400 }, corsHeaders)
+        }
+
+        const user = await findUserByEmail(db, parseJwt(token as string).email)
+
+        if (String(lot.userId) === String(user?._id)) {
+            return NextResponse.json({ message: 'Не можна ставити ставку на власний лот', status: 403 }, corsHeaders)
+        }
+
+        const minBid = lot.currentPrice + lot.bidStep
+        if (bidAmount < minBid) {
+            return NextResponse.json(
+                { message: `Мінімальна ставка: ${minBid} ₴`, status: 400 },
+                corsHeaders
+            )
+        }
+
+        const newBid = {
+            userId: user?._id,
+            userName: user?.name,
+            amount: bidAmount,
+            createdAt: new Date(),
+        }
+
+        await db.collection('lots').updateOne(
+            { _id: new ObjectId(id) },
+            {
+                $set: { currentPrice: bidAmount },
+                $push: { bids: newBid } as any,
+            }
+        )
+
+        const updatedLot = await db.collection('lots').findOne({ _id: new ObjectId(id) })
+
+        return NextResponse.json({ status: 200, lot: updatedLot }, corsHeaders)
+    } catch (error) {
+        return NextResponse.json({ message: (error as Error).message, status: 500 }, corsHeaders)
+    }
+}
+
+export const dynamic = 'force-dynamic'

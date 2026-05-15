@@ -64,3 +64,10 @@ export const allowedCollections = [
     'urban',
     'chrono'
 ]
+
+export const auctionSubcategories: Record<string, string[]> = {
+    watches: ['classic', 'sport', 'premium', 'line'],
+    straps: ['leather_strap', 'metal_bracelet', 'nato_strap', 'rubber_strap', 'mesh_bracelet'],
+    boxes: ['boxes'],
+    care: ['basic', 'professional'],
+}
