@@ -287,3 +287,28 @@ export const addScriptToHead = (src:string) => {
 
   script.src = src
 }
+
+export const isValidAvatarImage = (image: File) => {
+  const allowedExtension = /^image\/(png|jpe?g|gif|bmp|webp)$/
+
+  if (!image) {
+    return false
+  }
+
+  const imageType = image.type
+
+  if (!allowedExtension.test(imageType)) {
+    toast.error(
+      `Недоступний формат ${imageType.split('/')[1]
+      }! Допускається тільки jpeg, jpg, png, gif, bmp и webp`
+    )
+    return false
+  }
+
+  if (Math.round(image.size / 1024) > 2000) {
+    toast.error('Вага картинки не повинна перевищувати 2 МБ!')
+    return false
+  }
+
+  return true
+}

@@ -15,7 +15,7 @@ export const nameValidationRules = (
 ) => ({
   ...(requireMessage && { required: requireMessage }),
   pattern: {
-    value: /^[а-яА-Яa-zA-ZёЁ]*$/,
+    value: /^[а-яА-ЯіІїЇєЄґҐa-zA-Z\s]*$/,
     message,
   },
   minLength: 2,

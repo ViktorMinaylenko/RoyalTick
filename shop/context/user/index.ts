@@ -1,6 +1,6 @@
 'use client'
 
-import { IUser, IUserGeolocation } from '@/types/user'
+import { ILoginCheckFx, IUser, IUserGeolocation } from '@/types/user'
 import api from '@/api/apiInstance'
 import { createDomain, createEffect } from 'effector'
 import toast from 'react-hot-toast'
@@ -10,16 +10,19 @@ import { IGetGeolocationFx } from '@/types/common'
 
 export const user = createDomain()
 
-export const loginCheck = user.createEvent<{ jwt: string }>()
+export const loginCheck = user.createEvent<ILoginCheckFx>()
 export const setUserGeolocation = user.createEvent<IUserGeolocation>()
+export const updateUsername = user.createEvent<string>()
+export const updateUserImage = user.createEvent<string>()
+export const updateUserEmail = user.createEvent<string>()
 
-export const loginCheckFx = createEffect(async ({ jwt }: { jwt: string }) => {
+export const loginCheckFx = createEffect(async ({ jwt}: ILoginCheckFx) => {
   try {
     const { data } = await api.get('/api/users/login-check', {
       headers: { Authorization: `Bearer ${jwt}` },
     })
 
-    if (data?.error) {
+    if (data?.error) { 
       handleJWTError(data.error.name, {
         repeatRequestMethodName: 'loginCheck',
       })

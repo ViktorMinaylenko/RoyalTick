@@ -26,5 +26,5 @@ export const useUserAvatar = () => {
     setSrc('')
   }, [user.image])
 
-  return { src, alt: user.name }
+  return { src, alt: user.name || 'User avatar' }
 }
