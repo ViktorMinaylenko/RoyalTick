@@ -5,7 +5,7 @@ import { user, loginCheckFx, setUserGeolocation, updateUsername, updateUserImage
 
 export const $user = user
   .createStore<IUser>({} as IUser)
-  .on(loginCheckFx.done, (_, { result }) => result)
+  .on(loginCheckFx.done, (state, { result }) => result || state)
   .on(updateUsername, (state, name) => ({ ...state, name: name }))
   .on(updateUserImage, (state, image) => ({ ...state, image: image }))
   .on(updateUserEmail, (state, email) => ({ ...state, email }))

@@ -92,6 +92,8 @@ export const createUserAndGenerateTokens = async (
     image: reqBody.image || '',
     role: 'user',
     authSource: reqBody.isOAuth ? 'google' : 'credentials',
+    balance: 0,
+    rating: 0,
   }
 
   const result = await db.collection('users').insertOne(newUser)

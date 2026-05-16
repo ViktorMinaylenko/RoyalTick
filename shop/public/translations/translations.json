@@ -500,6 +500,19 @@
       "tab_photos": "Photos",
       "yes": "Yes",
       "no": "No"
+    },
+    "profile": {
+      "balance": "Balance",
+      "rating": "Rating",
+      "lots_count": "Lots count",
+      "my_lots": "My lots",
+      "no_lots": "You have no lots yet",
+      "lot_active": "Active",
+      "lot_ended": "Ended",
+      "topup_btn": "Top up",
+      "topup_min_error": "Minimum top-up amount is 10 ₴",
+      "welcome": "Welcome",
+      "overview": "Overview"
     }
   },
   "ua": {
@@ -1002,6 +1015,19 @@
       "tab_photos": "Фотографії",
       "yes": "Так",
       "no": "Ні"
+    },
+    "profile": {
+      "balance": "Баланс",
+      "rating": "Рейтинг",
+      "lots_count": "Кількість лотів",
+      "my_lots": "Мої лоти",
+      "no_lots": "У вас ще немає лотів",
+      "lot_active": "Активний",
+      "lot_ended": "Завершено",
+      "topup_btn": "Поповнити",
+      "topup_min_error": "Мінімальна сума поповнення 10 ₴",
+      "welcome": "Вітаємо",
+      "overview": "Огляд"
     }
   }
 }

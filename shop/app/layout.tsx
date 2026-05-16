@@ -20,6 +20,7 @@ import './globalStyles/cookie-popup.css'
 import './globalStyles/breadcrumbs.css'
 import './globalStyles/map.css'
 
+
 export const metadata: Metadata = {
   title: 'RoyalTick',
   description: 'RoyalTick is a store specializing in watches and accessories',

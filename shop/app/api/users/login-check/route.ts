@@ -36,6 +36,8 @@ export async function GET(req: Request) {
       email: user.email,
       image: user.image,
       role: user.role,
+      balance: user.balance ?? 0,
+      rating: user.rating ?? 0,
     })
   } catch (error) {
     return NextResponse.json({

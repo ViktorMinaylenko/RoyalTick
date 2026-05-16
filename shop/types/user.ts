@@ -5,6 +5,8 @@ export interface IUser{
     email: string
     image: string
     role: string
+    balance: number
+    rating: number
 }
 
 export interface IUserGeolocation{
