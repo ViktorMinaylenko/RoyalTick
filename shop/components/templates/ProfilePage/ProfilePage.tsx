@@ -20,16 +20,10 @@ import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { useSearchParams } from 'next/navigation'
 import { loginCheck } from '@/context/user'
+import { IReview } from '@/types/review'
+import { IUserLot } from '@/types/lots'
 
-interface IUserLot {
-    _id: string
-    title: string
-    mainPhotoUrl: string
-    currentPrice: number
-    endDate: string
-    status: string
-    bids: unknown[]
-}
+const EMOJIS = ['😠', '😕', '😐', '🙂', '😄']
 
 const ProfilePage = () => {
     const { lang, translations } = useLang()
@@ -43,6 +37,7 @@ const ProfilePage = () => {
     const [lotsSpinner, setLotsSpinner] = useState(false)
     const [topupAmount, setTopupAmount] = useState('')
     const [topupSpinner, setTopupSpinner] = useState(false)
+    const [reviewsTab, setReviewsTab] = useState<'seller' | 'buyer'>('seller')
     const searchParams = useSearchParams()
 
     useEffect(() => {
@@ -90,6 +85,12 @@ const ProfilePage = () => {
         Array.from({ length: 5 }, (_, i) => (
             <span key={i} className={i < Math.floor(rating) ? styles.profile__star_full : styles.profile__star_empty}>★</span>
         ))
+
+    const formatReviewDate = (dateStr: string) =>
+        new Date(dateStr).toLocaleDateString(
+            lang === 'ua' ? 'uk-UA' : 'en-US',
+            { day: '2-digit', month: '2-digit', year: 'numeric' }
+        )
 
     const handleTopup = async () => {
         const amount = Number(topupAmount)
@@ -141,6 +142,10 @@ const ProfilePage = () => {
         }
     }
 
+    const currentReviews: IReview[] = reviewsTab === 'seller'
+        ? (user?.sellerReviews ?? [])
+        : (user?.buyerReviews ?? [])
+
     return (
         <main>
             <Breadcrumbs
@@ -152,7 +157,6 @@ const ProfilePage = () => {
 
                     <aside className={styles.profile__sidebar}>
                         <div className={styles.profile__sidebar_card}>
-
                             <div className={styles.profile__avatar_block}>
                                 <ProfileAvatar />
                                 <div className={styles.profile__sidebar_name}>{user.name}</div>
@@ -173,6 +177,10 @@ const ProfilePage = () => {
                                 <Link href='/auction' className={styles.profile__nav_item}>
                                     <span className={styles.profile__nav_item__icon}>🔨</span>
                                     {t.main_menu?.auction}
+                                </Link>
+                                <Link href='/chats' className={styles.profile__nav_item}>
+                                    <span className={styles.profile__nav_item__icon}>💬</span>
+                                    {t.breadcrumbs?.chats}
                                 </Link>
                                 <Link href='/favorites' className={styles.profile__nav_item}>
                                     <span className={styles.profile__nav_item__icon}>♡</span>
@@ -205,13 +213,14 @@ const ProfilePage = () => {
 
                     <div className={styles.profile__main}>
 
+                        {/* Banner */}
                         <div className={styles.profile__banner}>
                             <div className={styles.profile__banner_left}>
                                 <p className={styles.profile__banner_greeting}>{t.profile?.welcome || 'Вітаємо'}</p>
                                 <h2 className={styles.profile__banner_name}>{user.name}</h2>
                                 <div className={styles.profile__stars}>
-                                    {renderStars(user?.rating ?? 0)}
-                                    <span className={styles.profile__rating_num}>{(user?.rating ?? 0).toFixed(1)}</span>
+                                    {renderStars(user?.sellerRating ?? 0)}
+                                    <span className={styles.profile__rating_num}>{(user?.sellerRating ?? 0).toFixed(1)}</span>
                                 </div>
                             </div>
                             <div className={styles.profile__banner_right}>
@@ -240,6 +249,7 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
+                        {/* Stats */}
                         <div className={styles.profile__stats}>
                             <div className={styles.profile__stat_card}>
                                 <span className={styles.profile__stat_icon}>🔨</span>
@@ -248,8 +258,17 @@ const ProfilePage = () => {
                             </div>
                             <div className={styles.profile__stat_card}>
                                 <span className={styles.profile__stat_icon}>⭐</span>
-                                <span className={styles.profile__stat_value}>{(user?.rating ?? 0).toFixed(1)}</span>
-                                <span className={styles.profile__stat_label}>{t.profile?.rating}</span>
+                                <span className={styles.profile__stat_value}>{(user?.sellerRating ?? 0).toFixed(1)}</span>
+                                <span className={styles.profile__stat_label}>
+                                    {t.profile?.seller_rating} ({user?.sellerRatingsCount ?? 0})
+                                </span>
+                            </div>
+                            <div className={styles.profile__stat_card}>
+                                <span className={styles.profile__stat_icon}>🛒</span>
+                                <span className={styles.profile__stat_value}>{(user?.buyerRating ?? 0).toFixed(1)}</span>
+                                <span className={styles.profile__stat_label}>
+                                    {t.profile?.buyer_rating} ({user?.buyerRatingsCount ?? 0})
+                                </span>
                             </div>
                             <div className={styles.profile__stat_card}>
                                 <span className={styles.profile__stat_icon}>💰</span>
@@ -258,6 +277,7 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
+                        {/* My Lots */}
                         <div className={styles.profile__lots}>
                             <div className={styles.profile__lots__header}>
                                 <h2 className={styles.profile__lots__title}>{t.profile?.my_lots}</h2>
@@ -296,6 +316,55 @@ const ProfilePage = () => {
                                                     </span>
                                                 </div>
                                             </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+
+                        {/* Reviews */}
+                        <div className={styles.profile__reviews}>
+                            <div className={styles.profile__reviews_header}>
+                                <h2 className={styles.profile__reviews_title}>
+                                    {t.profile?.reviews || 'Відгуки'}
+                                </h2>
+                                <div className={styles.profile__reviews_toggle}>
+                                    <button
+                                        className={`btn-reset ${styles.profile__reviews_toggle_btn} ${reviewsTab === 'seller' ? styles.profile__reviews_toggle_btn_active : ''}`}
+                                        onClick={() => setReviewsTab('seller')}
+                                    >
+                                        {t.profile?.as_seller || 'Як продавець'} ({(user?.sellerReviews ?? []).length})
+                                    </button>
+                                    <button
+                                        className={`btn-reset ${styles.profile__reviews_toggle_btn} ${reviewsTab === 'buyer' ? styles.profile__reviews_toggle_btn_active : ''}`}
+                                        onClick={() => setReviewsTab('buyer')}
+                                    >
+                                        {t.profile?.as_buyer || 'Як покупець'} ({(user?.buyerReviews ?? []).length})
+                                    </button>
+                                </div>
+                            </div>
+
+                            {!currentReviews.length ? (
+                                <div className={styles.profile__reviews_empty}>
+                                    {t.profile?.no_reviews || 'Відгуків поки немає'}
+                                </div>
+                            ) : (
+                                <ul className={`list-reset ${styles.profile__reviews_list}`}>
+                                    {[...currentReviews].reverse().map((review, i) => (
+                                        <li key={i} className={styles.profile__review_item}>
+                                            <span className={styles.profile__review_emoji}>
+                                                {EMOJIS[(review.rating ?? 1) - 1]}
+                                            </span>
+                                            <div className={styles.profile__review_body}>
+                                                <span className={styles.profile__review_from}>{review.fromUserName}</span>
+                                                <span className={styles.profile__review_lot}>{review.lotTitle}</span>
+                                                {review.comment && (
+                                                    <p className={styles.profile__review_comment}>{review.comment}</p>
+                                                )}
+                                            </div>
+                                            <span className={styles.profile__review_date}>
+                                                {formatReviewDate(review.createdAt)}
+                                            </span>
                                         </li>
                                     ))}
                                 </ul>

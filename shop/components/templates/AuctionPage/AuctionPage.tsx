@@ -42,6 +42,11 @@ const AuctionPage = () => {
     }
 
     useEffect(() => {
+        fetch('/api/auction/lots/finalize', { method: 'POST' }).catch(console.error)
+        fetchLots(0)
+    }, [])
+
+    useEffect(() => {
         fetchLots(0)
     }, [])
 

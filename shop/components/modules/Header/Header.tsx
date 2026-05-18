@@ -12,6 +12,7 @@ import {
 } from '@/lib/utils/common'
 import CartPopup from './CartPopup/CartPopup'
 import HeaderProfile from './HeaderProfile'
+import ChatIcon from './ChatIcon'
 import { useUnit } from 'effector-react'
 import { $isAuth } from '@/context/auth/state'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -160,6 +161,11 @@ const Header = () => {
           <LogoText />
         </div>
         <ul className='header__links list-reset'>
+          {isAuth && (
+            <li className='header__link-item'>
+              <ChatIcon />
+            </li>
+          )}
           <li className='header__link-item'>
             <button
               className='btn-reset header__links__item__btn header__links__item__btn--search'

@@ -1,6 +1,131 @@
 .profile {
   padding: 48px 0 80px;
 
+  &__reviews {
+    margin-top: 32px;
+    width: 100%;
+    padding-bottom: 40px;
+  }
+
+  &__reviews_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  &__reviews_title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #e8e9ea;
+    margin: 0;
+    letter-spacing: -0.3px;
+  }
+
+  &__reviews_toggle {
+    display: flex;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  &__reviews_toggle_btn {
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(232, 233, 234, 0.4);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    transition: all 0.15s;
+
+    &:hover {
+      color: #e8e9ea;
+    }
+
+    &_active {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e8e9ea;
+    }
+  }
+
+  &__reviews_empty {
+    text-align: center;
+    color: rgba(232, 233, 234, 0.2);
+    padding: 40px 0;
+    font-size: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  &__reviews_list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  &__review_item {
+    background: #1a2128;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    align-items: start;
+    transition: background 0.15s;
+
+    &:hover {
+      background: #1e2730;
+    }
+  }
+
+  &__review_emoji {
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  &__review_body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__review_from {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(82, 183, 136, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__review_lot {
+    font-size: 11px;
+    color: rgba(232, 233, 234, 0.3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__review_comment {
+    font-size: 13px;
+    color: rgba(232, 233, 234, 0.7);
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+
+  &__review_date {
+    font-size: 11px;
+    color: rgba(232, 233, 234, 0.2);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
   &__container {
     display: grid;
     grid-template-columns: 260px 1fr;
@@ -48,7 +173,8 @@
     overflow: hidden;
 
     // next/image override
-    img, span {
+    img,
+    span {
       width: 72px !important;
       height: 72px !important;
       min-width: unset !important;
@@ -79,7 +205,9 @@
         mask: url(/img/edit.svg) no-repeat center;
       }
 
-      &:hover { opacity: 1; }
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 
@@ -97,7 +225,9 @@
     margin-bottom: 10px;
     transition: border-color 0.2s;
 
-    &:hover { border-color: rgba(255, 255, 255, 0.3); }
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
 
     input {
       opacity: 0;
@@ -211,7 +341,9 @@
       transition: opacity 0.2s;
       flex-shrink: 0;
 
-      &:hover { opacity: 0.6; }
+      &:hover {
+        opacity: 0.6;
+      }
 
       &::before {
         content: '';
@@ -239,8 +371,12 @@
         cursor: pointer;
         transition: all 0.15s;
 
-        &:hover { background: rgba(82, 183, 136, 0.12); }
-        &:not(:last-child) { margin-right: 4px; }
+        &:hover {
+          background: rgba(82, 183, 136, 0.12);
+        }
+        &:not(:last-child) {
+          margin-right: 4px;
+        }
       }
     }
 
@@ -263,7 +399,9 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       padding: 3px 0;
 
-      &:focus { border-color: rgba(82, 183, 136, 0.5); }
+      &:focus {
+        border-color: rgba(82, 183, 136, 0.5);
+      }
     }
 
     &__actions {
@@ -287,10 +425,16 @@
         mask: url(/img/save-icon.svg) no-repeat center;
       }
 
-      &:disabled { opacity: 0.3; }
+      &:disabled {
+        opacity: 0.3;
+      }
     }
 
-    &__save_spinner { &::before { content: none; } }
+    &__save_spinner {
+      &::before {
+        content: none;
+      }
+    }
 
     &__close {
       width: 16px;
@@ -301,7 +445,9 @@
       opacity: 0.25;
       cursor: pointer;
 
-      &:hover { opacity: 0.5; }
+      &:hover {
+        opacity: 0.5;
+      }
     }
   }
 
@@ -444,8 +590,12 @@
       min-width: 0;
       transition: border-color 0.2s;
 
-      &:focus { border-color: rgba(82, 183, 136, 0.4); }
-      &::placeholder { color: rgba(255, 255, 255, 0.15); }
+      &:focus {
+        border-color: rgba(82, 183, 136, 0.4);
+      }
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.15);
+      }
     }
 
     &__btn {
@@ -468,16 +618,24 @@
         border-color: rgba(82, 183, 136, 0.35);
       }
 
-      &:disabled { opacity: 0.3; cursor: not-allowed; }
+      &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
     }
   }
 
   &__stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 
-    @media (max-width: 640px) { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__stat_card {
@@ -485,8 +643,12 @@
     border-right: 1px solid rgba(255, 255, 255, 0.06);
     transition: background 0.15s;
 
-    &:last-child { border-right: none; }
-    &:hover { background: rgba(255, 255, 255, 0.015); }
+    &:last-child {
+      border-right: none;
+    }
+    &:hover {
+      background: rgba(255, 255, 255, 0.015);
+    }
   }
 
   &__stat_icon {
@@ -520,7 +682,9 @@
     flex-direction: column;
     gap: 16px;
 
-    @media (max-width: 640px) { padding: 20px; }
+    @media (max-width: 640px) {
+      padding: 20px;
+    }
 
     &__header {
       display: flex;
@@ -558,15 +722,21 @@
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.05);
 
-      @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); }
-      @media (max-width: 480px)  { grid-template-columns: 1fr; }
+      @media (max-width: 1100px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+      }
     }
 
     &__item {
       background: #1a2128;
       transition: background 0.15s;
 
-      &:hover { background: #1e2730; }
+      &:hover {
+        background: #1e2730;
+      }
 
       &__link {
         display: flex;

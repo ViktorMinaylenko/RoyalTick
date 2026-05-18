@@ -232,4 +232,35 @@
   .header__link-item:not(:last-child) {
     margin-right: 18px;
   }
+
+  .header__links__item__btn--chat {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e8e9ea;
+    width: 24px;
+    height: 24px;
+  }
+
+  .header__links__item__btn--chat .not-empty {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #7b2ff7;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+  }
+  .header__links__item__btn--chat::before {
+    -webkit-mask-image: url(/img/chat.svg);
+    mask-image: url(/img/chat.svg);
+  }
 }

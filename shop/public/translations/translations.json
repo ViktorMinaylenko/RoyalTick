@@ -109,7 +109,9 @@
       "boxes": "Boxes",
       "care": "Care Kits",
       "auction": "Auction",
-      "create_lot": "Create Lot"
+      "create_lot": "Create Lot",
+      "chats": "Chats",
+      "chat": "Chat"
     },
     "footer": {
       "copyright": "©RoyalTick All rights reserved",
@@ -499,7 +501,14 @@
       "tab_description": "Description",
       "tab_photos": "Photos",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "reserved": "Lot is reserved — awaiting deal confirmation",
+      "buy_now_modal_title": "Purchase confirmation",
+      "buy_now_modal_text": "You are about to purchase this lot at a fixed price. After confirmation, the lot will be removed from auction.",
+      "buy_now_modal_warning": "By clicking «Confirm» you take an obligation to purchase the item. Refusal will lower your rating.",
+      "buy_now_modal_confirm_text": "I understand this is an obligation and agree to the platform rules",
+      "buy_now_modal_cancel": "Cancel",
+      "buy_now_modal_confirm": "Confirm purchase"
     },
     "profile": {
       "balance": "Balance",
@@ -512,7 +521,42 @@
       "topup_btn": "Top up",
       "topup_min_error": "Minimum top-up amount is 10 ₴",
       "welcome": "Welcome",
-      "overview": "Overview"
+      "overview": "Overview",
+      "seller_rating": "Seller rating",
+      "buyer_rating": "Buyer rating",
+      "reviews": "Reviews",
+      "as_seller": "As seller",
+      "as_buyer": "As buyer",
+      "no_reviews": "No reviews yet"
+    },
+    "chats": {
+      "title": "My chats",
+      "empty": "You have no chats yet",
+      "empty_hint": "Chats will appear when you win or sell a lot",
+      "lot": "Lot",
+      "winner": "Winner",
+      "owner": "Seller",
+      "you": "You",
+      "input_placeholder": "Write a message...",
+      "send": "Send",
+      "no_messages": "No messages",
+      "unread": "unread",
+      "deal": {
+        "you_completed": "You confirmed completion",
+        "you_pending": "You haven't confirmed yet",
+        "other_completed": "Other party confirmed",
+        "other_pending": "Other party hasn't confirmed",
+        "complete_btn": "Complete deal",
+        "hint": "Click «Complete deal» when item is received. Both parties must confirm.",
+        "completed": "Deal successfully completed",
+        "rate_buyer": "Rate buyer",
+        "rate_seller": "Rate seller",
+        "rating_hint": "Your rating affects the user's reputation. Be honest.",
+        "comment_placeholder": "Leave a comment (optional, up to 300 chars)...",
+        "skip_rating": "Skip",
+        "submit_rating": "Submit rating",
+        "already_rated": "You have already rated"
+      }
     }
   },
   "ua": {
@@ -625,7 +669,9 @@
       "boxes": "Коробочки",
       "care": "Набори для догляду",
       "auction": "Аукціон",
-      "create_lot": "Створити лот"
+      "create_lot": "Створити лот",
+      "chats": "Чати",
+      "chat": "Чат"
     },
     "footer": {
       "copyright": "© RoyalTick. Усі права захищені",
@@ -1014,7 +1060,14 @@
       "tab_description": "Опис",
       "tab_photos": "Фотографії",
       "yes": "Так",
-      "no": "Ні"
+      "no": "Ні",
+      "reserved": "Лот в резерві — очікує підтвердження угоди",
+      "buy_now_modal_title": "Підтвердження покупки",
+      "buy_now_modal_text": "Ви збираєтесь купити лот за фіксованою ціною. Після підтвердження лот буде знятий з аукціону.",
+      "buy_now_modal_warning": "Натискаючи «Підтвердити» ви берете на себе зобов'язання придбати товар. Відмова призведе до зниження вашого рейтингу.",
+      "buy_now_modal_confirm_text": "Я розумію що це зобов'язання і погоджуюсь з правилами майданчика",
+      "buy_now_modal_cancel": "Скасувати",
+      "buy_now_modal_confirm": "Підтвердити покупку"
     },
     "profile": {
       "balance": "Баланс",
@@ -1027,7 +1080,42 @@
       "topup_btn": "Поповнити",
       "topup_min_error": "Мінімальна сума поповнення 10 ₴",
       "welcome": "Вітаємо",
-      "overview": "Огляд"
+      "overview": "Огляд",
+      "seller_rating": "Рейтинг продавця",
+      "buyer_rating": "Рейтинг покупця",
+      "reviews": "Відгуки",
+      "as_seller": "Як продавець",
+      "as_buyer": "Як покупець",
+      "no_reviews": "Відгуків поки немає"
+    },
+    "chats": {
+      "title": "Мої чати",
+      "empty": "У вас ще немає чатів",
+      "empty_hint": "Чати з'являться коли ви виграєте або продасте лот",
+      "lot": "Лот",
+      "winner": "Переможець",
+      "owner": "Продавець",
+      "you": "Ви",
+      "input_placeholder": "Написати повідомлення...",
+      "send": "Надіслати",
+      "no_messages": "Немає повідомлень",
+      "unread": "непрочитане",
+      "deal": {
+        "you_completed": "Ви підтвердили завершення",
+        "you_pending": "Ви ще не підтвердили",
+        "other_completed": "Інша сторона підтвердила",
+        "other_pending": "Інша сторона ще не підтвердила",
+        "complete_btn": "Завершити угоду",
+        "hint": "Натисніть «Завершити угоду» коли товар отримано. Потрібне підтвердження обох сторін.",
+        "completed": "Угода успішно завершена",
+        "rate_buyer": "Оцінити покупця",
+        "rate_seller": "Оцінити продавця",
+        "rating_hint": "Ваша оцінка впливає на рейтинг користувача. Будьте чесні.",
+        "comment_placeholder": "Залишити коментар (необов'язково, до 300 символів)...",
+        "skip_rating": "Пропустити",
+        "submit_rating": "Надіслати оцінку",
+        "already_rated": "Ви вже залишили оцінку"
+      }
     }
   }
 }

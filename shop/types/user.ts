@@ -1,4 +1,6 @@
-export interface IUser{
+import { IReview } from "./review"
+
+export interface IUser {
     _id: string
     name: string
     password: string
@@ -6,7 +8,12 @@ export interface IUser{
     image: string
     role: string
     balance: number
-    rating: number
+    sellerRating: number
+    sellerRatingsCount: number
+    buyerRating: number
+    buyerRatingsCount: number
+    sellerReviews: IReview[]
+    buyerReviews: IReview[]
 }
 
 export interface IUserGeolocation{

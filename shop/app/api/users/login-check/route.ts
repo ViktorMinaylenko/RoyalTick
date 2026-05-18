@@ -37,7 +37,12 @@ export async function GET(req: Request) {
       image: user.image,
       role: user.role,
       balance: user.balance ?? 0,
-      rating: user.rating ?? 0,
+      sellerRating: user.sellerRating ?? 0,
+      sellerRatingsCount: user.sellerRatingsCount ?? 0,
+      buyerRating: user.buyerRating ?? 0,
+      buyerRatingsCount: user.buyerRatingsCount ?? 0,
+      sellerReviews: user.sellerReviews ?? [],
+      buyerReviews: user.buyerReviews ?? [],
     })
   } catch (error) {
     return NextResponse.json({

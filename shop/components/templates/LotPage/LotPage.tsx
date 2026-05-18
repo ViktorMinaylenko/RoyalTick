@@ -8,46 +8,10 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import styles from '@/styles/auction/index.module.scss'
 import { handleopenAuthModal } from '@/lib/utils/common'
-
-interface IBid {
-    userId: string
-    userName: string
-    amount: number
-    createdAt: string
-}
-
-interface ILot {
-    _id: string
-    title: string
-    description: string
-    category: string
-    subcategory: string
-    condition: string
-    saleType: string
-    startPrice: number
-    currentPrice: number
-    bidStep: number
-    reservePrice: number | null
-    buyNowPrice: number | null
-    startDate: string
-    endDate: string
-    autoExtend: boolean
-    location: string
-    deliveryMethods: string[]
-    deliveryPayer: string
-    returnsAllowed: boolean
-    guarantees: string
-    buyerComment: string
-    mainPhotoUrl: string
-    additionalPhotoUrls: string[]
-    videoUrl: string
-    userId: string
-    userName: string
-    userEmail: string
-    createdAt: string
-    status: string
-    bids: IBid[]
-}
+import { ILot } from '@/types/lots'
+import { AnimatePresence, motion } from 'framer-motion'
+import { $user } from '@/context/user/state'
+import { useUnit } from 'effector-react'
 
 const useCountdown = (endDate: string) => {
     const [timeLeft, setTimeLeft] = useState('')
@@ -76,6 +40,7 @@ const LotPage = () => {
     const { getDefaultTextGenerator, getTextGenerator } = useBreadcrumbs('auction')
     const params = useParams()
     const router = useRouter()
+    const user = useUnit($user) as any  // 👈 додано
 
     const [lot, setLot] = useState<ILot | null>(null)
     const [spinner, setSpinner] = useState(true)
@@ -83,17 +48,11 @@ const LotPage = () => {
     const [bidAmount, setBidAmount] = useState(0)
     const [bidSpinner, setBidSpinner] = useState(false)
     const [activeTab, setActiveTab] = useState<'description' | 'photos'>('description')
-    const [currentUserId, setCurrentUserId] = useState('')
+    const [showBuyNowModal, setShowBuyNowModal] = useState(false)
+    const [buyNowConfirmed, setBuyNowConfirmed] = useState(false)
+    const [buyNowSpinner, setBuyNowSpinner] = useState(false)
     const timeLeft = useCountdown(lot?.endDate || '')
 
-    useEffect(() => {
-        const auth = localStorage.getItem('auth')
-        if (auth) {
-            const parsed = JSON.parse(auth)
-            // userId зберігаємо з auth
-            setCurrentUserId(parsed.userId || '')
-        }
-    }, [])
 
     useEffect(() => {
         const fetchLot = async () => {
@@ -104,6 +63,14 @@ const LotPage = () => {
                     setLot(data.lot)
                     setActiveImg(data.lot.mainPhotoUrl)
                     setBidAmount(data.lot.currentPrice + data.lot.bidStep)
+
+                    const isExpired = new Date() > new Date(data.lot.endDate)
+                    if (isExpired && data.lot.status === 'active') {
+                        await fetch('/api/auction/lots/finalize', { method: 'POST' })
+                        const refreshed = await fetch(`/api/auction/lots/${params.id}`)
+                        const refreshedData = await refreshed.json()
+                        if (refreshedData.status === 200) setLot(refreshedData.lot)
+                    }
                 } else {
                     router.push('/auction')
                 }
@@ -116,7 +83,7 @@ const LotPage = () => {
         if (params.id) fetchLot()
     }, [params.id])
 
-    const isOwner = lot && currentUserId && String(lot.userId) === String(currentUserId)
+    const isOwner = lot && user?._id && String(lot.userId) === String(user._id)
     const isExpired = lot && new Date() > new Date(lot.endDate)
     const canBid = !isOwner && !isExpired && isUserAuth()
 
@@ -159,6 +126,33 @@ const LotPage = () => {
         }
     }
 
+    const handleBuyNow = async () => {
+        if (!lot) return
+        setBuyNowSpinner(true)
+        const auth = JSON.parse(localStorage.getItem('auth') as string)
+
+        try {
+            const res = await fetch('/api/chats', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${auth.accessToken}`,
+                },
+                body: JSON.stringify({ lotId: lot._id }),
+            })
+            const data = await res.json()
+            if (data.status === 201 || data.status === 200) {
+                setShowBuyNowModal(false)
+                router.push(`/chats/${data.chat._id}`)
+            }
+        } catch (error) {
+            console.error(error)
+            toast.error(t.error_generic)
+        } finally {
+            setBuyNowSpinner(false)
+        }
+    }
+
     const allImages = lot ? [lot.mainPhotoUrl, ...lot.additionalPhotoUrls].filter(Boolean) : []
 
     const formatDate = (dateStr: string) =>
@@ -190,7 +184,6 @@ const LotPage = () => {
             <section className={styles.lot_page}>
                 <div className='container'>
 
-                    {/* ── HEADER ── */}
                     <h1 className={styles.lot_page__title}>{lot.title}</h1>
 
                     <div className={styles.lot_page__meta}>
@@ -212,10 +205,8 @@ const LotPage = () => {
                         </div>
                     </div>
 
-                    {/* ── BODY ── */}
                     <div className={styles.lot_page__body}>
 
-                        {/* ── GALLERY ── */}
                         <div className={styles.lot_page__gallery}>
                             <div className={styles.lot_page__gallery__main}>
                                 <img src={activeImg || '/img/no-image.jpg'} alt={lot.title} />
@@ -235,10 +226,8 @@ const LotPage = () => {
                             )}
                         </div>
 
-                        {/* ── SIDEBAR ── */}
                         <div className={styles.lot_page__sidebar}>
 
-                            {/* Час */}
                             <div className={styles.lot_page__timing}>
                                 <div>
                                     <p className={styles.lot_page__timing__label}>{t.end_date}</p>
@@ -252,7 +241,12 @@ const LotPage = () => {
                                 </div>
                             </div>
 
-                            {/* Ціна */}
+                            {lot.status === 'reserved' && (
+                                <div className={styles.lot_page__reserved}>
+                                    🔒 {t.reserved}
+                                </div>
+                            )}
+
                             <div className={styles.lot_page__price_block}>
                                 <span className={styles.lot_page__price_label}>
                                     {t.current_price} ({lot.bids.length} {t.bids_word})
@@ -262,8 +256,7 @@ const LotPage = () => {
                                 </span>
                             </div>
 
-                            {/* Ставка */}
-                            {!isExpired && (
+                            {!isExpired && lot.status !== 'reserved' && (
                                 <div className={styles.lot_page__bid}>
                                     <p className={styles.lot_page__bid__label}>{t.make_bid}</p>
                                     <div className={styles.lot_page__bid__input_row}>
@@ -308,15 +301,22 @@ const LotPage = () => {
                                 </div>
                             )}
 
-                            {lot.buyNowPrice && !isExpired && !isOwner && (
-                                <button className={`btn-reset ${styles.lot_page__buy_now}`}>
+                            {lot.buyNowPrice && !isExpired && !isOwner && lot.status !== 'reserved' && (
+                                <button
+                                    className={`btn-reset ${styles.lot_page__buy_now}`}
+                                    onClick={() => {
+                                        if (!isUserAuth()) { handleopenAuthModal(); return }
+                                        if (isOwner) { toast.error(t.bid_own_lot_error); return }
+                                        setBuyNowConfirmed(false)
+                                        setShowBuyNowModal(true)
+                                    }}
+                                >
                                     {t.buy_now} — {formatPrice(lot.buyNowPrice)} ₴
                                 </button>
                             )}
                         </div>
                     </div>
 
-                    {/* ── TABS ── */}
                     <div className={styles.lot_page__tabs}>
                         <button
                             className={`btn-reset ${styles.lot_page__tab} ${activeTab === 'description' ? styles.lot_page__tab_active : ''}`}
@@ -328,7 +328,6 @@ const LotPage = () => {
                         >{t.tab_photos} {allImages.length}</button>
                     </div>
 
-                    {/* ── DESCRIPTION TAB ── */}
                     {activeTab === 'description' && (
                         <div className={styles.lot_page__description}>
                             <table className={styles.lot_page__desc_table}>
@@ -376,7 +375,6 @@ const LotPage = () => {
                         </div>
                     )}
 
-                    {/* ── PHOTOS TAB ── */}
                     {activeTab === 'photos' && (
                         <div className={styles.lot_page__photos_grid}>
                             {allImages.map((img, i) => (
@@ -389,6 +387,68 @@ const LotPage = () => {
 
                 </div>
             </section>
+
+            <AnimatePresence>
+                {showBuyNowModal && (
+                    <motion.div
+                        className={styles.buy_now_modal}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget) setShowBuyNowModal(false)
+                        }}
+                    >
+                        <motion.div
+                            className={styles.buy_now_modal__inner}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                        >
+                            <button
+                                className={`btn-reset ${styles.buy_now_modal__close}`}
+                                onClick={() => setShowBuyNowModal(false)}
+                            />
+                            <span className={styles.buy_now_modal__icon}>🔨</span>
+                            <h2 className={styles.buy_now_modal__title}>
+                                {t.buy_now_modal_title}
+                            </h2>
+                            <span className={styles.buy_now_modal__price}>
+                                {formatPrice(lot.buyNowPrice!)} ₴
+                            </span>
+                            <p className={styles.buy_now_modal__text}>
+                                {t.buy_now_modal_text}
+                            </p>
+                            <div className={styles.buy_now_modal__warning}>
+                                ⚠️ {t.buy_now_modal_warning}
+                            </div>
+                            <label className={styles.buy_now_modal__checkbox}>
+                                <input
+                                    type='checkbox'
+                                    checked={buyNowConfirmed}
+                                    onChange={(e) => setBuyNowConfirmed(e.target.checked)}
+                                />
+                                <span>{t.buy_now_modal_confirm_text}</span>
+                            </label>
+                            <div className={styles.buy_now_modal__buttons}>
+                                <button
+                                    className={`btn-reset ${styles.buy_now_modal__cancel}`}
+                                    onClick={() => setShowBuyNowModal(false)}
+                                >
+                                    {t.buy_now_modal_cancel}
+                                </button>
+                                <button
+                                    className={`btn-reset ${styles.buy_now_modal__confirm}`}
+                                    onClick={handleBuyNow}
+                                    disabled={!buyNowConfirmed || buyNowSpinner}
+                                >
+                                    {buyNowSpinner ? '...' : t.buy_now_modal_confirm}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </main>
     )
 }
