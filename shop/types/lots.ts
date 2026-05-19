@@ -38,6 +38,14 @@ export interface ILot {
     bids: IBid[]
 }
 
+export interface IProfileLotsSliderProps {
+    title: string
+    lots: IUserLot[]
+    spinner: boolean
+    allLink: string
+    emptyText: string
+}
+
 
 export interface IMessage {
     _id: string

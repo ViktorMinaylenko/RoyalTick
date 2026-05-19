@@ -99,6 +99,8 @@ export const createUserAndGenerateTokens = async (
     buyerRatingsCount: 0,
     sellerReviews: [],
     buyerReviews: [],
+    followers: [],
+    following: [],
   }
 
   const result = await db.collection('users').insertOne(newUser)

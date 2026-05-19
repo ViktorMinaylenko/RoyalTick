@@ -43,6 +43,10 @@ export async function GET(req: Request) {
       buyerRatingsCount: user.buyerRatingsCount ?? 0,
       sellerReviews: user.sellerReviews ?? [],
       buyerReviews: user.buyerReviews ?? [],
+      followers: user.followers ?? [],
+      following: user.following ?? [],
+      followersCount: (user.followers ?? []).length,
+      followingCount: (user.following ?? []).length,
     })
   } catch (error) {
     return NextResponse.json({

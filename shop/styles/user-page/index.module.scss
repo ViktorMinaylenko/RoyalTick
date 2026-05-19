@@ -1,0 +1,325 @@
+.user_page {
+  padding: 48px 0 80px;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 32px;
+    background: #1a2128;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    margin-bottom: 32px;
+    position: relative;
+
+    @media (max-width: 640px) {
+      flex-direction: column;
+    }
+  }
+
+  &__avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #161d20;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__badge {
+    font-size: 9px;
+    font-weight: 800;
+    color: rgba(82, 183, 136, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  &__name {
+    font-size: 28px;
+    font-weight: 800;
+    color: #e8e9ea;
+    margin: 0;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  &__stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__stat_value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e8e9ea;
+  }
+
+  &__stat_label {
+    font-size: 10px;
+    color: rgba(232, 233, 234, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  &__follow_btn {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    background: rgba(123, 47, 247, 0.15);
+    border: 1px solid rgba(123, 47, 247, 0.3);
+    color: #a78bfa;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+
+    &:hover:not(:disabled) {
+      background: rgba(123, 47, 247, 0.25);
+      border-color: rgba(123, 47, 247, 0.5);
+    }
+
+    &_active {
+      background: rgba(82, 183, 136, 0.1);
+      border-color: rgba(82, 183, 136, 0.3);
+      color: rgba(82, 183, 136, 0.8);
+
+      &:hover:not(:disabled) {
+        background: rgba(248, 113, 113, 0.1);
+        border-color: rgba(248, 113, 113, 0.3);
+        color: #f87171;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 640px) {
+      position: static;
+      align-self: flex-start;
+    }
+  }
+
+  &__lots {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__lots_title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #e8e9ea;
+    margin: 0;
+    letter-spacing: -0.3px;
+  }
+
+  &__lots_scroll {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+
+    &::-webkit-scrollbar {
+      height: 3px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+    }
+  }
+
+  &__lots_slide {
+    flex: 0 0 180px;
+  }
+
+  &__lot_link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background: #1a2128;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    overflow: hidden;
+    transition:
+      transform 0.2s,
+      border-color 0.2s;
+
+    &:hover {
+      transform: translateY(-3px);
+      border-color: rgba(123, 47, 247, 0.3);
+    }
+  }
+
+  &__lot_img {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #161d20;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.85);
+      transition:
+        transform 0.3s,
+        filter 0.3s;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+      filter: saturate(1);
+    }
+  }
+
+  &__lot_info {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  &__lot_title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #e8e9ea;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+  }
+
+  &__lot_price {
+    font-size: 13px;
+    font-weight: 700;
+    color: #a78bfa;
+  }
+
+  &__lot_bids {
+    font-size: 10px;
+    color: rgba(232, 233, 234, 0.25);
+    text-transform: uppercase;
+  }
+
+  &__stat_count {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(232, 233, 234, 0.35);
+  }
+
+  &__reviews {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__reviews_title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #e8e9ea;
+    margin: 0;
+    letter-spacing: -0.3px;
+  }
+
+  &__reviews_list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  &__review_item {
+    background: #1a2128;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    align-items: start;
+    transition: background 0.15s;
+
+    &:hover {
+      background: #1e2730;
+    }
+  }
+
+  &__review_emoji {
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  &__review_body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__review_from {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(82, 183, 136, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: color 0.15s;
+
+    &:hover {
+      color: #52b788;
+    }
+  }
+
+  &__review_lot {
+    font-size: 11px;
+    color: rgba(232, 233, 234, 0.3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__review_comment {
+    font-size: 13px;
+    color: rgba(232, 233, 234, 0.7);
+    line-height: 1.5;
+    margin: 4px 0 0;
+  }
+
+  &__review_date {
+    font-size: 11px;
+    color: rgba(232, 233, 234, 0.2);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}

@@ -181,7 +181,21 @@ const ChatPage = () => {
                                     </Link>
                                 </span>
                                 <span className={styles.chat__header_sub}>
-                                    {t.winner}: {chat.winnerName} · {t.owner}: {chat.ownerName}
+                                    {t.winner}:{' '}
+                                    <Link
+                                        href={String(chat.winnerId) === String(user?._id) ? '/profile' : `/user/${chat.winnerId}`}
+                                        style={{ color: 'inherit' }}
+                                    >
+                                        {chat.winnerName}
+                                    </Link>
+                                    {' · '}
+                                    {t.owner}:{' '}
+                                    <Link
+                                        href={String(chat.ownerId) === String(user?._id) ? '/profile' : `/user/${chat.ownerId}`}
+                                        style={{ color: 'inherit' }}
+                                    >
+                                        {chat.ownerName}
+                                    </Link>
                                 </span>
                             </div>
                         </div>
@@ -190,11 +204,19 @@ const ChatPage = () => {
                             {!chat.messages.length && (
                                 <div className={styles.chat__empty_messages}>{t.no_messages}</div>
                             )}
-                            {chat.messages.map((msg) => {
+                            {chat.messages.map((msg: any) => {
+                                if (msg.isSystem) {
+                                    return (
+                                        <div key={String(msg._id)} className={styles.chat__message_system}>
+                                            {msg.text}
+                                        </div>
+                                    )
+                                }
+
                                 const isMine = String(msg.senderId) === String(user?._id)
                                 return (
                                     <div
-                                        key={msg._id}
+                                        key={String(msg._id)}
                                         className={`${styles.chat__message} ${isMine ? styles.chat__message_mine : styles.chat__message_other}`}
                                     >
                                         {!isMine && (

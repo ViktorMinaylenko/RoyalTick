@@ -22,6 +22,7 @@ import { useSearchParams } from 'next/navigation'
 import { loginCheck } from '@/context/user'
 import { IReview } from '@/types/review'
 import { IUserLot } from '@/types/lots'
+import ProfileLotsSlider from '@/components/modules/ProfilePage/ProfileLotsSlider'
 
 const EMOJIS = ['😠', '😕', '😐', '🙂', '😄']
 
@@ -33,11 +34,14 @@ const ProfilePage = () => {
     usePageTitle('profile', user?.name || '')
     const deleteUserSpinner = useUnit(deleteUserFx.pending)
     const handleLogout = useUserLogout()
-    const [userLots, setUserLots] = useState<IUserLot[]>([])
     const [lotsSpinner, setLotsSpinner] = useState(false)
     const [topupAmount, setTopupAmount] = useState('')
     const [topupSpinner, setTopupSpinner] = useState(false)
     const [reviewsTab, setReviewsTab] = useState<'seller' | 'buyer'>('seller')
+    const [activeLots, setActiveLots] = useState<IUserLot[]>([])
+    const [reservedLots, setReservedLots] = useState<IUserLot[]>([])
+    const [completedLots, setCompletedLots] = useState<IUserLot[]>([])
+    const [bidLots, setBidLots] = useState<IUserLot[]>([])
     const searchParams = useSearchParams()
 
     useEffect(() => {
@@ -54,24 +58,36 @@ const ProfilePage = () => {
     }, [searchParams])
 
     useEffect(() => {
-        const fetchUserLots = async () => {
+        const fetchAllLots = async () => {
             const auth = localStorage.getItem('auth')
             if (!auth) return
             setLotsSpinner(true)
+            const { accessToken } = JSON.parse(auth)
+            const headers = { Authorization: `Bearer ${accessToken}` }
             try {
-                const { accessToken } = JSON.parse(auth)
-                const res = await fetch('/api/auction/lots/user', {
-                    headers: { Authorization: `Bearer ${accessToken}` },
-                })
-                const data = await res.json()
-                if (data.status === 200) setUserLots(data.lots)
+                const [activeRes, reservedRes, completedRes, bidsRes] = await Promise.all([
+                    fetch('/api/auction/lots/user?status=active', { headers }),
+                    fetch('/api/auction/lots/user?status=reserved', { headers }),
+                    fetch('/api/auction/lots/user?status=completed', { headers }),
+                    fetch('/api/auction/lots/user/bids', { headers }),
+                ])
+                const [activeData, reservedData, completedData, bidsData] = await Promise.all([
+                    activeRes.json(),
+                    reservedRes.json(),
+                    completedRes.json(),
+                    bidsRes.json(),
+                ])
+                if (activeData.status === 200) setActiveLots(activeData.lots)
+                if (reservedData.status === 200) setReservedLots(reservedData.lots)
+                if (completedData.status === 200) setCompletedLots(completedData.lots)
+                if (bidsData.status === 200) setBidLots(bidsData.lots)
             } catch (error) {
                 console.error(error)
             } finally {
                 setLotsSpinner(false)
             }
         }
-        fetchUserLots()
+        fetchAllLots()
     }, [])
 
     if (!user?._id) return null
@@ -252,8 +268,15 @@ const ProfilePage = () => {
                         {/* Stats */}
                         <div className={styles.profile__stats}>
                             <div className={styles.profile__stat_card}>
+                                <span className={styles.profile__stat_icon}>👥</span>
+                                <span className={styles.profile__stat_value}>{user?.followersCount ?? 0}</span>
+                                <span className={styles.profile__stat_label}>
+                                    {t.profile?.followers || 'Підписники'}
+                                </span>
+                            </div>
+                            <div className={styles.profile__stat_card}>
                                 <span className={styles.profile__stat_icon}>🔨</span>
-                                <span className={styles.profile__stat_value}>{userLots.length}</span>
+                                <span className={styles.profile__stat_value}>{activeLots.length}</span>
                                 <span className={styles.profile__stat_label}>{t.profile?.lots_count}</span>
                             </div>
                             <div className={styles.profile__stat_card}>
@@ -279,47 +302,37 @@ const ProfilePage = () => {
 
                         {/* My Lots */}
                         <div className={styles.profile__lots}>
-                            <div className={styles.profile__lots__header}>
-                                <h2 className={styles.profile__lots__title}>{t.profile?.my_lots}</h2>
-                                <Link href='/auction' style={{ fontSize: 13, color: '#52b788' }}>
-                                    {t.common?.all_link} →
-                                </Link>
-                            </div>
+                            <ProfileLotsSlider
+                                title={t.profile?.active_lots || 'Активні лоти'}
+                                lots={activeLots}
+                                spinner={lotsSpinner}
+                                allLink='/profile/lots/active'
+                                emptyText={t.profile?.no_active_lots || 'Немає активних лотів'}
+                            />
 
-                            {lotsSpinner && (
-                                <div className={styles.profile__lots__spinner}>
-                                    <FontAwesomeIcon icon={faSpinner} spin size='2x' color='#52b788' />
-                                </div>
-                            )}
+                            <ProfileLotsSlider
+                                title={t.profile?.reserved_lots || 'Резерв'}
+                                lots={reservedLots}
+                                spinner={lotsSpinner}
+                                allLink='/profile/lots/reserved'
+                                emptyText={t.profile?.no_reserved_lots || 'Немає лотів в резерві'}
+                            />
 
-                            {!lotsSpinner && !userLots.length && (
-                                <p className={styles.profile__lots__empty}>{t.profile?.no_lots}</p>
-                            )}
+                            <ProfileLotsSlider
+                                title={t.profile?.completed_lots || 'Завершені лоти'}
+                                lots={completedLots}
+                                spinner={lotsSpinner}
+                                allLink='/profile/lots/completed'
+                                emptyText={t.profile?.no_completed_lots || 'Немає завершених лотів'}
+                            />
 
-                            {!lotsSpinner && !!userLots.length && (
-                                <ul className={`list-reset ${styles.profile__lots__list}`}>
-                                    {userLots.map((lot) => (
-                                        <li key={lot._id} className={styles.profile__lots__item}>
-                                            <Link href={`/auction/${lot._id}`} className={styles.profile__lots__item__link}>
-                                                <div className={styles.profile__lots__item__img}>
-                                                    <img src={lot.mainPhotoUrl || '/img/no-image.jpg'} alt={lot.title} />
-                                                    <span className={`${styles.profile__lots__item__status} ${lot.status === 'active' ? styles.profile__lots__item__status_active : styles.profile__lots__item__status_ended}`}>
-                                                        {lot.status === 'active' ? t.profile?.lot_active : t.profile?.lot_ended}
-                                                    </span>
-                                                </div>
-                                                <div className={styles.profile__lots__item__info}>
-                                                    <h3 className={styles.profile__lots__item__title}>{lot.title}</h3>
-                                                    <span className={styles.profile__lots__item__price}>{formatPrice(lot.currentPrice)} ₴</span>
-                                                    <span className={styles.profile__lots__item__bids}>{t.auction?.bids_count}: {lot.bids.length}</span>
-                                                    <span className={styles.profile__lots__item__end}>
-                                                        {t.auction?.end_date}: {new Date(lot.endDate).toLocaleDateString(lang === 'ua' ? 'uk-UA' : 'en-US')}
-                                                    </span>
-                                                </div>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
+                            <ProfileLotsSlider
+                                title={t.profile?.bid_lots || 'Участь у торгах'}
+                                lots={bidLots}
+                                spinner={lotsSpinner}
+                                allLink='/profile/lots/bids'
+                                emptyText={t.profile?.no_bid_lots || 'Ви ще не брали участі в торгах'}
+                            />
                         </div>
 
                         {/* Reviews */}
@@ -356,7 +369,13 @@ const ProfilePage = () => {
                                                 {EMOJIS[(review.rating ?? 1) - 1]}
                                             </span>
                                             <div className={styles.profile__review_body}>
-                                                <span className={styles.profile__review_from}>{review.fromUserName}</span>
+                                                <Link
+                                                    href={`/user/${review.fromUserId}`}
+                                                    className={styles.profile__review_from}
+                                                    style={{ textDecoration: 'none' }}
+                                                >
+                                                    {review.fromUserName}
+                                                </Link>
                                                 <span className={styles.profile__review_lot}>{review.lotTitle}</span>
                                                 {review.comment && (
                                                     <p className={styles.profile__review_comment}>{review.comment}</p>

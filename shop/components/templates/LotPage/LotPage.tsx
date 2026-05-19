@@ -12,6 +12,7 @@ import { ILot } from '@/types/lots'
 import { AnimatePresence, motion } from 'framer-motion'
 import { $user } from '@/context/user/state'
 import { useUnit } from 'effector-react'
+import Link from 'next/link'
 
 const useCountdown = (endDate: string) => {
     const [timeLeft, setTimeLeft] = useState('')
@@ -51,6 +52,10 @@ const LotPage = () => {
     const [showBuyNowModal, setShowBuyNowModal] = useState(false)
     const [buyNowConfirmed, setBuyNowConfirmed] = useState(false)
     const [buyNowSpinner, setBuyNowSpinner] = useState(false)
+    const [sellerLots, setSellerLots] = useState<any[]>([])
+    const [comments, setComments] = useState<any[]>([])
+    const [commentText, setCommentText] = useState('')
+    const [commentSpinner, setCommentSpinner] = useState(false)
     const timeLeft = useCountdown(lot?.endDate || '')
 
 
@@ -81,6 +86,38 @@ const LotPage = () => {
             }
         }
         if (params.id) fetchLot()
+    }, [params.id])
+
+
+    useEffect(() => {
+        if (!lot?.userId) return
+        console.log('Fetching seller lots for userId:', lot.userId)
+
+        const fetchSellerLots = async () => {
+            try {
+                const res = await fetch(`/api/auction/lots?userId=${lot.userId}&limit=10`)
+                const data = await res.json()
+                console.log('Seller lots response:', data)
+                if (data.status === 200) {
+                    setSellerLots(data.lots.filter((l: any) => l._id !== lot._id))
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        fetchSellerLots()
+    }, [lot?.userId])
+
+
+    useEffect(() => {
+        if (!params.id) return
+        const fetchComments = async () => {
+            const res = await fetch(`/api/auction/lots/${params.id}/comments`)
+            const data = await res.json()
+            if (data.status === 200) setComments(data.comments)
+        }
+        fetchComments()
     }, [params.id])
 
     const isOwner = lot && user?._id && String(lot.userId) === String(user._id)
@@ -123,6 +160,31 @@ const LotPage = () => {
             toast.error(t.error_generic)
         } finally {
             setBidSpinner(false)
+        }
+    }
+
+    const handleComment = async () => {
+        if (!commentText.trim()) return
+        const auth = JSON.parse(localStorage.getItem('auth') as string)
+        setCommentSpinner(true)
+        try {
+            const res = await fetch(`/api/auction/lots/${params.id}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${auth.accessToken}`,
+                },
+                body: JSON.stringify({ text: commentText }),
+            })
+            const data = await res.json()
+            if (data.status === 200) {
+                setComments(data.comments)
+                setCommentText('')
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setCommentSpinner(false)
         }
     }
 
@@ -201,7 +263,9 @@ const LotPage = () => {
                         </div>
                         <div className={styles.lot_page__meta__item}>
                             <span className={styles.lot_page__meta__label}>{t.seller}:</span>
-                            <strong>{lot.userName}</strong>
+                            <Link href={`/user/${lot.userId}`} style={{ color: 'inherit', textDecoration: 'none', fontWeight: 700 }}>
+                                {lot.userName}
+                            </Link>
                         </div>
                     </div>
 
@@ -384,7 +448,94 @@ const LotPage = () => {
                             ))}
                         </div>
                     )}
+                    {sellerLots.length > 0 && (
+                        <div className={styles.lot_page__seller_lots}>
+                            <h2 className={styles.lot_page__seller_lots__title}>
+                                {t.seller_lots_title} {lot.userName}
+                            </h2>
+                            <div className={styles.lot_page__seller_lots__scroll}>
+                                {sellerLots.map((sellerLot) => (
+                                    <div key={sellerLot._id} className={styles.lot_page__seller_lots__slide}>
+                                        <a href={`/auction/${sellerLot._id}`} className={styles.lot_page__seller_lots__link}>
+                                            <div className={styles.lot_page__seller_lots__img}>
+                                                <img src={sellerLot.mainPhotoUrl || '/img/no-image.jpg'} alt={sellerLot.title} />
+                                            </div>
+                                            <div className={styles.lot_page__seller_lots__info}>
+                                                <h3 className={styles.lot_page__seller_lots__name}>{sellerLot.title}</h3>
+                                                <span className={styles.lot_page__seller_lots__price}>
+                                                    {formatPrice(sellerLot.currentPrice)} ₴
+                                                </span>
+                                                <span className={styles.lot_page__seller_lots__bids}>
+                                                    {t.bids_count}: {sellerLot.bids.length}
+                                                </span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    <div className={styles.lot_page__comments}>
+                        <div className={styles.lot_page__comments__header}>
+                            <h2>{t.comments_title || 'Коментарі'}</h2>
+                            <span>{comments.length}</span>
+                        </div>
 
+                        {isUserAuth() ? (
+                            <div className={styles.lot_page__comments__form}>
+                                <textarea
+                                    className={styles.lot_page__comments__textarea}
+                                    placeholder={t.comment_placeholder || 'Написати коментар...'}
+                                    value={commentText}
+                                    onChange={(e) => setCommentText(e.target.value)}
+                                />
+                                <button
+                                    className={`btn-reset ${styles.lot_page__comments__submit}`}
+                                    onClick={handleComment}
+                                    disabled={commentSpinner || !commentText.trim()}
+                                >
+                                    {commentSpinner ? '...' : t.comment_submit || 'Надіслати'}
+                                </button>
+                            </div>
+                        ) : (
+                            <p className={styles.lot_page__comments__login_hint}>
+                                <a onClick={handleopenAuthModal}>{t.comment_login_hint || 'Увійдіть'}</a>
+                                {' '}{t.comment_login_hint_text || 'щоб залишити коментар'}
+                            </p>
+                        )}
+
+                        <div className={styles.lot_page__comments__list}>
+                            {[...comments].reverse().map((comment: any) => (
+                                <div key={String(comment._id)} className={styles.lot_page__comments__item}>
+                                    <div className={styles.lot_page__comments__meta}>
+                                        {comment.role === 'seller' && (
+                                            <span className={`${styles.lot_page__comments__badge} ${styles.lot_page__comments__badge_seller}`}>
+                                                {t.comment_role_seller || 'Продавець'}
+                                            </span>
+                                        )}
+                                        {comment.role === 'buyer' && (
+                                            <span className={`${styles.lot_page__comments__badge} ${styles.lot_page__comments__badge_buyer}`}>
+                                                {t.comment_role_buyer || 'Покупець'}
+                                            </span>
+                                        )}
+                                        <Link
+                                            href={String(comment.userId) === String(user?._id) ? '/profile' : `/user/${comment.userId}`}
+                                            className={styles.lot_page__comments__username}
+                                        >
+                                            {comment.userName}
+                                        </Link>
+                                        <span className={styles.lot_page__comments__date}>
+                                            {new Date(comment.createdAt).toLocaleString(lang === 'ua' ? 'uk-UA' : 'en-US', {
+                                                day: '2-digit', month: '2-digit', year: 'numeric',
+                                                hour: '2-digit', minute: '2-digit',
+                                            })}
+                                        </span>
+                                    </div>
+                                    <p className={styles.lot_page__comments__text}>{comment.text}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </section>
 

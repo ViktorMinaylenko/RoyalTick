@@ -8,6 +8,7 @@ import {
     findUserByEmail,
 } from '@/lib/utils/api-routes'
 import { v2 as cloudinary } from 'cloudinary'
+import { ObjectId } from 'mongodb'
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -15,7 +16,6 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-// Допоміжна функція — завантажує File на Cloudinary і повертає URL
 const uploadToCloudinary = async (file: File, folder: string): Promise<string> => {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
@@ -37,15 +37,25 @@ export async function GET(req: Request) {
         const url = new URL(req.url)
         const offset = Number(url.searchParams.get('offset')) || 0
         const limit = Number(url.searchParams.get('limit')) || 12
+        const userId = url.searchParams.get('userId')
+
+        const filter: any = { status: 'active' }
+        if (userId) {
+            try {
+                filter.userId = new ObjectId(userId)
+            } catch {
+                filter.userId = userId
+            }
+        }
 
         const [lots, count] = await Promise.all([
             db.collection('lots')
-                .find({ status: 'active' })
+                .find(filter)
                 .sort({ createdAt: -1 })
                 .skip(offset)
                 .limit(limit)
                 .toArray(),
-            db.collection('lots').countDocuments({ status: 'active' }),
+            db.collection('lots').countDocuments(filter),
         ])
 
         return NextResponse.json({ status: 200, lots, count }, corsHeaders)
@@ -80,14 +90,12 @@ export async function POST(req: Request) {
             )
         }
 
-        // Завантажуємо головне фото
         const mainPhotoFile = formData.get('mainPhoto') as File | null
         let mainPhotoUrl = ''
         if (mainPhotoFile && mainPhotoFile.size > 0) {
             mainPhotoUrl = await uploadToCloudinary(mainPhotoFile, 'royaltick/auction')
         }
 
-        // Завантажуємо додаткові фото
         const additionalPhotoUrls: string[] = []
         for (let i = 0; i < 4; i++) {
             const file = formData.get(`additionalPhoto_${i}`) as File | null
@@ -123,10 +131,8 @@ export async function POST(req: Request) {
             buyerComment: formData.get('buyerComment') as string,
             moderatorNote: formData.get('moderatorNote') as string,
             videoUrl: formData.get('videoUrl') as string,
-            // Фото
             mainPhotoUrl,
             additionalPhotoUrls,
-            // Користувач
             userId: user?._id,
             userName: user?.name,
             userEmail: user?.email,

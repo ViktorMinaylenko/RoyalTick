@@ -14,17 +14,11 @@ export async function GET(req: Request) {
         const { db } = await getDbAndReqBody(clientPromise, null)
         const user = await findUserByEmail(db, parseJwt(token as string).email)
 
-        const url = new URL(req.url)
-        const status = url.searchParams.get('status')
-
-        const filter: any = { userId: user?._id }
-        if (status) filter.status = status
-
-        const lots = await db
-            .collection('lots')
-            .find(filter)
-            .sort({ createdAt: -1 })
-            .toArray()
+        const lots = await db.collection('lots').find({
+            status: 'active',
+            'bids.userId': user?._id,
+            userId: { $ne: user?._id },
+        }).sort({ createdAt: -1 }).toArray()
 
         return NextResponse.json({ status: 200, lots }, corsHeaders)
     } catch (error) {

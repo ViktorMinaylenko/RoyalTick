@@ -14,6 +14,8 @@ export interface IUser {
     buyerRatingsCount: number
     sellerReviews: IReview[]
     buyerReviews: IReview[]
+    followers: string[]
+    following: string[]
 }
 
 export interface IUserGeolocation{

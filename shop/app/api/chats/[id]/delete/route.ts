@@ -2,9 +2,14 @@ import { NextResponse } from 'next/server'
 import { corsHeaders } from '@/constants/corsHeaders'
 import clientPromise from '@/lib/mongodb'
 import { getDbAndReqBody, isValidAccessToken, parseJwt, findUserByEmail } from '@/lib/utils/api-routes'
+import { ObjectId } from 'mongodb'
 
-export async function GET(req: Request) {
+export async function POST(
+    req: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
     try {
+        const { id } = await params
         const token = req.headers.get('authorization')?.split(' ')[1]
         const validatedTokenResult = await isValidAccessToken(token)
         if (validatedTokenResult.status !== 200) {
@@ -14,19 +19,12 @@ export async function GET(req: Request) {
         const { db } = await getDbAndReqBody(clientPromise, null)
         const user = await findUserByEmail(db, parseJwt(token as string).email)
 
-        const url = new URL(req.url)
-        const status = url.searchParams.get('status')
+        await db.collection('chats').updateOne(
+            { _id: new ObjectId(id) },
+            { $addToSet: { deletedFor: user?._id } } as any
+        )
 
-        const filter: any = { userId: user?._id }
-        if (status) filter.status = status
-
-        const lots = await db
-            .collection('lots')
-            .find(filter)
-            .sort({ createdAt: -1 })
-            .toArray()
-
-        return NextResponse.json({ status: 200, lots }, corsHeaders)
+        return NextResponse.json({ status: 200 }, corsHeaders)
     } catch (error) {
         return NextResponse.json({ message: (error as Error).message, status: 500 }, corsHeaders)
     }

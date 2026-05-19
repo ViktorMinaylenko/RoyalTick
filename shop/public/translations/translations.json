@@ -508,7 +508,14 @@
       "buy_now_modal_warning": "By clicking «Confirm» you take an obligation to purchase the item. Refusal will lower your rating.",
       "buy_now_modal_confirm_text": "I understand this is an obligation and agree to the platform rules",
       "buy_now_modal_cancel": "Cancel",
-      "buy_now_modal_confirm": "Confirm purchase"
+      "buy_now_modal_confirm": "Confirm purchase",
+      "comments_title": "Comments",
+      "comment_placeholder": "Write a comment...",
+      "comment_submit": "Send",
+      "comment_login_hint": "Sign in",
+      "comment_login_hint_text": "to leave a comment",
+      "comment_role_seller": "Seller",
+      "comment_role_buyer": "Buyer"
     },
     "profile": {
       "balance": "Balance",
@@ -527,7 +534,20 @@
       "reviews": "Reviews",
       "as_seller": "As seller",
       "as_buyer": "As buyer",
-      "no_reviews": "No reviews yet"
+      "no_reviews": "No reviews yet",
+      "active_lots": "Active lots",
+      "reserved_lots": "Reserve",
+      "completed_lots": "Completed lots",
+      "bid_lots": "Bidding activity",
+      "no_active_lots": "No active lots",
+      "no_reserved_lots": "No lots in reserve",
+      "no_completed_lots": "No completed lots",
+      "no_bid_lots": "You haven't participated in any auctions yet",
+      "lot_reserved": "Reserve",
+      "followers": "Followers",
+      "following": "Following",
+      "follow": "Follow",
+      "unfollow": "Unfollow"
     },
     "chats": {
       "title": "My chats",
@@ -1067,7 +1087,14 @@
       "buy_now_modal_warning": "Натискаючи «Підтвердити» ви берете на себе зобов'язання придбати товар. Відмова призведе до зниження вашого рейтингу.",
       "buy_now_modal_confirm_text": "Я розумію що це зобов'язання і погоджуюсь з правилами майданчика",
       "buy_now_modal_cancel": "Скасувати",
-      "buy_now_modal_confirm": "Підтвердити покупку"
+      "buy_now_modal_confirm": "Підтвердити покупку",
+      "comments_title": "Коментарі",
+      "comment_placeholder": "Написати коментар...",
+      "comment_submit": "Надіслати",
+      "comment_login_hint": "Увійдіть",
+      "comment_login_hint_text": "щоб залишити коментар",
+      "comment_role_seller": "Продавець",
+      "comment_role_buyer": "Покупець"
     },
     "profile": {
       "balance": "Баланс",
@@ -1086,7 +1113,20 @@
       "reviews": "Відгуки",
       "as_seller": "Як продавець",
       "as_buyer": "Як покупець",
-      "no_reviews": "Відгуків поки немає"
+      "no_reviews": "Відгуків поки немає",
+      "active_lots": "Активні лоти",
+      "reserved_lots": "Резерв",
+      "completed_lots": "Завершені лоти",
+      "bid_lots": "Участь у торгах",
+      "no_active_lots": "Немає активних лотів",
+      "no_reserved_lots": "Немає лотів в резерві",
+      "no_completed_lots": "Немає завершених лотів",
+      "no_bid_lots": "Ви ще не брали участі в торгах",
+      "lot_reserved": "Резерв",
+      "followers": "Підписники",
+      "following": "Підписки",
+      "follow": "Підписатись",
+      "unfollow": "Відписатись"
     },
     "chats": {
       "title": "Мої чати",

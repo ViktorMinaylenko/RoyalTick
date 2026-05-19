@@ -20,16 +20,13 @@ export async function GET(req: Request) {
         const { db } = await getDbAndReqBody(clientPromise, null)
         const user = await findUserByEmail(db, parseJwt(token as string).email)
 
-        const chats = await db
-            .collection('chats')
-            .find({
-                $or: [
-                    { winnerId: user?._id },
-                    { ownerId: user?._id },
-                ],
-            })
-            .sort({ createdAt: -1 })
-            .toArray()
+        const chats = await db.collection('chats').find({
+            $or: [
+                { winnerId: user?._id },
+                { ownerId: user?._id },
+            ],
+            deletedFor: { $nin: [user?._id] },
+        }).sort({ createdAt: -1 }).toArray()
 
         return NextResponse.json({ status: 200, chats }, corsHeaders)
     } catch (error) {

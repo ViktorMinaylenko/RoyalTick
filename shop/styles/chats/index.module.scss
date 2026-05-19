@@ -1,6 +1,111 @@
 .chats {
   padding: 40px 0 80px;
 
+  &__confirm_overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+&__confirm_modal {
+  background: #1a2128;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+&__confirm_title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #e8e9ea;
+  margin: 0;
+}
+
+&__confirm_text {
+  font-size: 14px;
+  color: rgba(232, 233, 234, 0.6);
+  line-height: 1.5;
+  margin: 0;
+
+  strong { color: #e8e9ea; }
+}
+
+&__confirm_btns {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+&__confirm_cancel {
+  padding: 9px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(232, 233, 234, 0.5);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+
+  &:hover { color: #e8e9ea; border-color: rgba(255,255,255,0.2); }
+}
+
+&__confirm_delete {
+  padding: 9px 20px;
+  border-radius: 8px;
+  background: rgba(248, 113, 113, 0.15);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: #f87171;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover { background: rgba(248, 113, 113, 0.25); }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+  &__delete_btn {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  color: rgba(248, 113, 113, 0.5);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 1;
+
+  li:hover & { opacity: 1; }
+
+  &:hover {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.4);
+  }
+}
+
   &__title {
     font-size: 28px;
     font-weight: 800;

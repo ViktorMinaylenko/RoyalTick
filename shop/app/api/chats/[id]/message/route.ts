@@ -35,6 +35,11 @@ export async function POST(
 
         await db.collection('chats').updateOne(
             { _id: new ObjectId(id) },
+            { $set: { deletedFor: [] } }
+        )
+
+        await db.collection('chats').updateOne(
+            { _id: new ObjectId(id) },
             { $push: { messages: newMessage } } as any
         )
 

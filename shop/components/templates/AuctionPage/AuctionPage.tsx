@@ -119,7 +119,7 @@ const AuctionPage = () => {
                         <div className={styles.auction__pagination}>
                             <ReactPaginate
                                 pageCount={Math.ceil(totalCount / LOTS_PER_PAGE)}
-                                forcePage={currentPage}  // 👈 було currentPage
+                                forcePage={currentPage}
                                 onPageChange={handlePageChange}
                                 nextLabel={translations[lang].catalog.next_page}
                                 previousLabel={translations[lang].catalog.previous_page}

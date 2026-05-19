@@ -18,6 +18,8 @@ const ChatsPage = () => {
     const user = useUnit($user) as any
     const [chats, setChats] = useState<IChat[]>([])
     const [spinner, setSpinner] = useState(true)
+    const [deletingId, setDeletingId] = useState<string | null>(null)
+    const [deleteConfirm, setDeleteConfirm] = useState<{ id: string, title: string } | null>(null)
 
     useEffect(() => {
         fetch('/api/auction/lots/finalize', { method: 'POST' }).catch(console.error)
@@ -66,6 +68,22 @@ const ChatsPage = () => {
             : date.toLocaleDateString(lang === 'ua' ? 'uk-UA' : 'en-US', { day: '2-digit', month: '2-digit' })
     }
 
+    const handleDelete = async (chatId: string) => {
+        const auth = JSON.parse(localStorage.getItem('auth') as string)
+        setDeletingId(chatId)
+        try {
+            await fetch(`/api/chats/${chatId}/delete`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${auth.accessToken}` },
+            })
+            setChats(prev => prev.filter(c => c._id !== chatId))
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setDeletingId(null)
+        }
+    }
+
     return (
         <main>
             <Breadcrumbs
@@ -101,7 +119,7 @@ const ChatsPage = () => {
                                     : formatDate(chat.createdAt)
 
                                 return (
-                                    <li key={chat._id}>
+                                    <li key={chat._id} style={{ position: 'relative' }}>
                                         <Link href={`/chats/${chat._id}`} className={styles.chats__item}>
                                             <div className={styles.chats__item_photo}>
                                                 <img src={chat.lotPhoto || '/img/no-image.jpg'} alt={chat.lotTitle} />
@@ -124,6 +142,17 @@ const ChatsPage = () => {
                                                 )}
                                             </div>
                                         </Link>
+                                        <button
+                                            className={`btn-reset ${styles.chats__delete_btn}`}
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                e.stopPropagation()
+                                                setDeleteConfirm({ id: chat._id, title: chat.lotTitle })
+                                            }}
+                                            title='Видалити чат'
+                                        >
+                                            ×
+                                        </button>
                                     </li>
                                 )
                             })}
@@ -131,6 +160,36 @@ const ChatsPage = () => {
                     )}
                 </div>
             </section>
+            {deleteConfirm && (
+                <div className={styles.chats__confirm_overlay} onClick={() => setDeleteConfirm(null)}>
+                    <div className={styles.chats__confirm_modal} onClick={e => e.stopPropagation()}>
+                        <h3 className={styles.chats__confirm_title}>Видалити чат?</h3>
+                        <p className={styles.chats__confirm_text}>
+                            Чат по лоту <strong>«{deleteConfirm.title}»</strong> буде приховано.
+                            Він з'явиться знову якщо співрозмовник напише повідомлення.
+                        </p>
+                        <div className={styles.chats__confirm_btns}>
+                            <button
+                                className={`btn-reset ${styles.chats__confirm_cancel}`}
+                                onClick={() => setDeleteConfirm(null)}
+                            >
+                                Скасувати
+                            </button>
+                            <button
+                                className={`btn-reset ${styles.chats__confirm_delete}`}
+                                onClick={async () => {
+                                    const id = deleteConfirm.id
+                                    setDeleteConfirm(null)
+                                    await handleDelete(id)
+                                }}
+                                disabled={deletingId === deleteConfirm.id}
+                            >
+                                {deletingId === deleteConfirm.id ? '...' : 'Видалити'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </main>
     )
 }
