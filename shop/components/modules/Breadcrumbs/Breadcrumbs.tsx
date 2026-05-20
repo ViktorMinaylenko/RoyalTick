@@ -38,7 +38,6 @@ const Breadcrumbs = ({
             text: getDefaultTextGenerator(subpath, href),
           }
         })
-        // КЛЮЧОВИЙ МОМЕНТ: видаляємо порожні сегменти, щоб не було "Каталог • Каталог"
         .filter((crumb) => crumb.text !== '')
     },
     [pathname, getTextGenerator, searchParams, getDefaultTextGenerator, lang]

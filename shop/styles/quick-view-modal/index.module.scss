@@ -155,7 +155,7 @@
     &__title {
       margin: 0;
       margin-bottom: 24px;
-      padding-right: 80px; // Місце для кнопок дій
+      padding-right: 80px;
       color: #f1f3f5;
       font-size: 22px;
       font-weight: 700;
@@ -190,14 +190,12 @@
         }
       }
 
-      // Новий блок для вертикального списку розмірів
       &__sizes_list {
         display: flex;
         flex-direction: column;
         gap: 12px;
       }
 
-      // Рядок: Назва (Ширина) + Кнопка
       &__size_row {
         display: flex;
         align-items: center;
@@ -207,13 +205,13 @@
       &__size_label {
         font-size: 14px;
         color: rgba(255, 255, 255, 0.6);
-        min-width: 80px; // однаковий відступ для всіх кнопок
+        min-width: 80px;
       }
 
       &__sizes {
         display: flex;
         align-items: center;
-        flex-wrap: wrap; // Дозволяє кнопкам переноситися на новий рядок, якщо їх багато
+        flex-wrap: wrap;
         gap: 8px;
         list-style: none;
         padding: 0;
@@ -224,7 +222,7 @@
           min-width: 59px;
           height: 32px;
           border-radius: 24px;
-          background: rgba(255, 255, 255, 0.08); // Легкий фон за замовчуванням
+          background: rgba(255, 255, 255, 0.08);
           transition: background-color 0.2s ease-in-out;
 
           &:hover {
@@ -251,12 +249,12 @@
       }
 
       &__sizes_btn {
-        margin-bottom: 0; // Скидаємо, бо тепер є gap
+        margin-bottom: 0;
       }
     }
 
     &__bottom {
-      margin-top: auto; // Притискає блок покупки до низу
+      margin-top: auto;
 
       &__inner {
         display: flex;
@@ -275,7 +273,7 @@
         font-weight: 500;
         cursor: pointer;
         transition: background-color 0.2s ease-in-out;
-        height: 52px; // Висота кнопки повинна збігатися з висотою лічильника для ідеального вирівнювання
+        height: 52px;
         flex-shrink: 0;
 
         &:hover {
@@ -291,10 +289,10 @@
       &__counter {
         margin-right: 24px;
         width: 212px;
-        height: 52px; // Вкажіть точну висоту, яку має ваш ProductCounter
+        height: 52px;
         display: flex;
         align-items: center;
-        overflow: hidden; // Щоб контент не розпирав блок
+        overflow: hidden;
       }
     }
 
@@ -318,7 +316,6 @@
   }
 }
 
-// Стилі для стрілок та точок (Slick slider)
 .modal__left__slider__slide__dot {
   width: 6px;
   height: 6px;

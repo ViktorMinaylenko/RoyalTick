@@ -206,6 +206,12 @@ const ProfilePage = () => {
                                     <span className={styles.profile__nav_item__icon}>👁</span>
                                     {t.breadcrumbs?.watched_products}
                                 </Link>
+                                {(user?.role === 'moderator' || user?.role === 'admin') && (
+                                    <Link href='/moderator' className={styles.profile__nav_item}>
+                                        <span className={styles.profile__nav_item__icon}>🛡️</span>
+                                        Панель модератора
+                                    </Link>
+                                )}
                                 <button
                                     className={`btn-reset ${styles.profile__nav_item} ${styles.profile__nav_item_danger}`}
                                     onClick={handleLogout}
@@ -228,8 +234,19 @@ const ProfilePage = () => {
                     </aside>
 
                     <div className={styles.profile__main}>
-
-                        {/* Banner */}
+                        {user?.isBlocked && (
+                            <div className={styles.profile__block_banner}>
+                                <span>🔒</span>
+                                <div>
+                                    <p className={styles.profile__block_banner__title}>Ваш акаунт заблоковано</p>
+                                    {user?.blockReason && (
+                                        <p className={styles.profile__block_banner__reason}>
+                                            Причина: {user.blockReason}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                         <div className={styles.profile__banner}>
                             <div className={styles.profile__banner_left}>
                                 <p className={styles.profile__banner_greeting}>{t.profile?.welcome || 'Вітаємо'}</p>
@@ -265,7 +282,6 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-                        {/* Stats */}
                         <div className={styles.profile__stats}>
                             <div className={styles.profile__stat_card}>
                                 <span className={styles.profile__stat_icon}>👥</span>
@@ -300,7 +316,6 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-                        {/* My Lots */}
                         <div className={styles.profile__lots}>
                             <ProfileLotsSlider
                                 title={t.profile?.active_lots || 'Активні лоти'}
@@ -335,7 +350,6 @@ const ProfilePage = () => {
                             />
                         </div>
 
-                        {/* Reviews */}
                         <div className={styles.profile__reviews}>
                             <div className={styles.profile__reviews_header}>
                                 <h2 className={styles.profile__reviews_title}>

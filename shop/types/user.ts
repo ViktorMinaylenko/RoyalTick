@@ -16,6 +16,8 @@ export interface IUser {
     buyerReviews: IReview[]
     followers: string[]
     following: string[]
+    isBlocked: boolean
+    blockReason: string | null
 }
 
 export interface IUserGeolocation{

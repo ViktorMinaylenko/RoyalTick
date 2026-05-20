@@ -43,7 +43,6 @@ export async function POST(req: Request) {
         }
 
         if (transactionStatus === 'Approved') {
-            // orderReference формат: topup_userId_timestamp
             const userId = orderReference.split('_')[1]
             const { db } = await getDbAndReqBody(clientPromise, null)
 

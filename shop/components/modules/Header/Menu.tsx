@@ -52,7 +52,6 @@ const Menu = () => {
     handleCloseMenu()
   }
 
-  // 1. ГОДИННИКИ
   const watchesLinks = [
     { id: 1, text: translations[lang].comparison.classic, href: '/catalog/watches?offset=0&type=classic' },
     { id: 2, text: translations[lang].comparison.sport, href: '/catalog/watches?offset=0&type=sport' },
@@ -60,7 +59,6 @@ const Menu = () => {
     { id: 4, text: translations[lang].comparison.line, href: '/catalog/watches?offset=0&type=line' },
   ]
 
-  // 2. РЕМІНЦІ
   const strapsLinks = [
     { id: 1, text: translations[lang].comparison.leather_strap, href: '/catalog/straps?offset=0&type=leather_strap' },
     { id: 2, text: translations[lang].comparison.metal_bracelet, href: '/catalog/straps?offset=0&type=metal_bracelet' },
@@ -69,12 +67,10 @@ const Menu = () => {
     { id: 5, text: translations[lang].comparison.mesh_bracelet, href: '/catalog/straps?offset=0&type=mesh_bracelet' },
   ]
 
-  // 3. КОРОБОЧКИ
   const boxesLinks = [
     { id: 1, text: translations[lang].comparison.boxes, href: '/catalog/boxes?offset=0&type=boxes' },
   ]
 
-  // 4. НАБОРИ ДЛЯ ДОГЛЯДУ
   const careLinks = [
     { id: 1, text: translations[lang].comparison.basic, href: '/catalog/care?offset=0&type=basic' },
     { id: 2, text: translations[lang].comparison.professional, href: '/catalog/care?offset=0&type=professional' },
@@ -122,7 +118,6 @@ const Menu = () => {
                     exit={{ opacity: 0 }}
                     className='list-reset nav-menu__accordion'
                   >
-                    {/* КАТЕГОРІЯ: ГОДИННИКИ */}
                     <li className='nav-menu__accordion__item'>
                       <Accordion
                         title={translations[lang].main_menu.watches}
@@ -136,7 +131,6 @@ const Menu = () => {
                       </Accordion>
                     </li>
 
-                    {/* КАТЕГОРІЯ: РЕМІНЦІ */}
                     <li className='nav-menu__accordion__item'>
                       <Accordion
                         title={translations[lang].main_menu.straps}
@@ -150,7 +144,6 @@ const Menu = () => {
                       </Accordion>
                     </li>
 
-                    {/* КАТЕГОРІЯ: КОРОБОЧКИ */}
                     <li className='nav-menu__accordion__item'>
                       <Accordion
                         title={translations[lang].main_menu.boxes}
@@ -164,7 +157,6 @@ const Menu = () => {
                       </Accordion>
                     </li>
 
-                    {/* КАТЕГОРІЯ: ДОГЛЯД */}
                     <li className='nav-menu__accordion__item'>
                       <Accordion
                         title={translations[lang].main_menu.care}
@@ -183,7 +175,6 @@ const Menu = () => {
             </li>
           )}
 
-          {/* BUYERS */}
           <li className='nav-menu__list__item'>
             {!isMedia640 ? (
               <>
@@ -205,7 +196,6 @@ const Menu = () => {
             )}
           </li>
 
-          {/* CONTACTS */}
           <li className='nav-menu__list__item'>
             {!isMedia640 ? (
               <>

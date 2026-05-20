@@ -29,7 +29,6 @@ export const useAuthForm = (
     try {
       let provider
 
-      // Вибираємо потрібний провайдер залежно від натиснутої кнопки
       switch (providerName) {
         case 'google':
           provider = new GoogleAuthProvider()
@@ -47,12 +46,9 @@ export const useAuthForm = (
           provider = new GoogleAuthProvider()
       }
 
-      // 1. Відкриваємо поп-ап вибраного сервісу
       const result = await signInWithPopup(auth, provider)
       const user = result.user
 
-      // 2. Відправляємо дані в Effector (signUpFx або signInFx)
-      // ВАЖЛИВО: Передаємо isOAuth: true, щоб бекенд знав, що bcrypt не потрібен
       event({
         name: user.displayName || 'Користувач',
         email: user.email || '',

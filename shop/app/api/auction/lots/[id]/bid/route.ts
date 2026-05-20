@@ -37,6 +37,13 @@ export async function POST(
 
         const user = await findUserByEmail(db, parseJwt(token as string).email)
 
+        if (user?.isBlocked) {
+            return NextResponse.json({
+                message: 'Ваш акаунт заблоковано. Ви не можете робити ставки.',
+                status: 403,
+            }, corsHeaders)
+        }
+
         if (String(lot.userId) === String(user?._id)) {
             return NextResponse.json({ message: 'Не можна ставити ставку на власний лот', status: 403 }, corsHeaders)
         }

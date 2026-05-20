@@ -20,6 +20,9 @@ export async function GET(
                     buyerRating: 1, buyerRatingsCount: 1,
                     followers: 1, following: 1,
                     sellerReviews: 1, createdAt: 1,
+                    isBlocked: 1,
+                    blockReason: 1,
+                    blockedAt: 1,
                 }
             }
         )
@@ -47,6 +50,8 @@ export async function GET(
                 followingCount: (user.following ?? []).length,
                 followers: user.followers ?? [],
                 sellerReviews: user.sellerReviews ?? [],
+                isBlocked: user.isBlocked ?? false,
+                blockReason: user.blockReason ?? null,
             },
             activeLots,
         }, corsHeaders)

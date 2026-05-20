@@ -31,8 +31,7 @@ export const handleResultsFound = (event, searchMarkersManager, map, isPickupTab
     }
 
     searchMarkersManager.draw(results)
-    
-    // Для pickup режиму показуємо viewport, для courier не переміщаємо карту (користувач клікне на потрібний результат)
+
     if (isPickupTab) {
         fitToViewport(results, map)
     }
@@ -114,10 +113,8 @@ export const handleResultSelection = async (event: any, searchMarkersManager: an
         return
     }
 
-    // У режимі pickup шукаємо Royal Tick магазини
     if (isPickupTab) {
         const royalTickData = await handleSelectPickupAddress(text)
-        // Якщо знайшли магазин — переміщаємо карту туди
         if (royalTickData && royalTickData.length > 0) {
             const store = royalTickData[0]
             map.setCenter([store.lon, store.lat]).zoomTo(13)
@@ -125,22 +122,18 @@ export const handleResultSelection = async (event: any, searchMarkersManager: an
         }
     }
 
-    // У режимі courier — показуємо точну позицію результату з максимальним zoom
     searchMarkersManager.draw([result])
     
     if (!isPickupTab) {
-        // Витягаємо координати з результату
         const lng = result.position?.lng || result.position?.lon
         const lat = result.position?.lat
         
         if (lng !== undefined && lat !== undefined) {
-            // Для курєрської доставки переміщаємось на точні координати з максимальним zoom
             map.setCenter([lng, lat]).zoomTo(16)
             return
         }
     }
 
-    // Fallback: використовуємо viewport
     fitToViewport(result, map)
   }
 
@@ -225,7 +218,6 @@ export function initSearchMarker(ttMaps) {
 
     SearchMarker.prototype.createMarker = function () {
         const elem = document.createElement('div')
-        // elem.className = 'tt-icon-marker-black tt-search-marker'
         if (this.options.markerClassName) {
             elem.className += ' ' + this.options.markerClassName
         }

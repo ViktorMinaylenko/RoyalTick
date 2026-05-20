@@ -136,9 +136,9 @@
 
 .cart-list__item__title {
   display: flex;
-  flex-direction: column; /* Ставимо назву і розмір один під одним */
+  flex-direction: column;
   text-decoration: none;
-  gap: 2px; /* Невелика відстань між рядками */
+  gap: 2px;
 }
 
 .cart-list__item__title span:first-child {
@@ -174,7 +174,7 @@
 
 .cart-list__item__size {
   display: block;
-  color: #A5A8AD; /* Світліший колір для другорядного тексту */
+  color: #A5A8AD;
   font-size: 12px;
   white-space: nowrap;
   overflow: hidden;

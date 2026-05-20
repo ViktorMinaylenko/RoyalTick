@@ -4,7 +4,7 @@ import clientPromise from '@/lib/mongodb'
 import { getDbAndReqBody, isValidAccessToken, parseJwt, findUserByEmail } from '@/lib/utils/api-routes'
 import { ObjectId } from 'mongodb'
 
-export async function GET(
+export async function POST(
     req: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
@@ -19,33 +19,30 @@ export async function GET(
         const { db } = await getDbAndReqBody(clientPromise, null)
         const user = await findUserByEmail(db, parseJwt(token as string).email)
 
-        const chat = await db.collection('chats').findOne({ _id: new ObjectId(id) })
-        if (!chat) {
-            return NextResponse.json({ message: 'Чат не знайдено', status: 404 }, corsHeaders)
+        if (user?.role !== 'moderator' && user?.role !== 'admin') {
+            return NextResponse.json({ message: 'Доступ заборонено', status: 403 }, corsHeaders)
         }
-        const isOwner = String(chat.ownerId) === String(user?._id)
-        const isParticipant = String(chat.ownerId) === String(user?._id) ||
-            String(chat.winnerId) === String(user?._id)
-        const isModerator = user?.role === 'moderator' || user?.role === 'admin'
 
-        if (!isParticipant && !isModerator) {
-            return NextResponse.json({ message: 'Немає доступу', status: 403 }, corsHeaders)
+        const systemMessage = {
+            _id: new ObjectId(),
+            senderId: 'system',
+            senderName: 'system',
+            text: `Модератор ${user?.name} приєднався до чату`,
+            isSystem: true,
+            createdAt: new Date(),
+            isRead: false,
         }
 
         await db.collection('chats').updateOne(
             { _id: new ObjectId(id) },
             {
-                $set: {
-                    ...(isOwner ? { unreadForOwner: false } : {}),
-                    'messages.$[msg].isRead': true,
-                },
-            },
-            {
-                arrayFilters: [{ 'msg.senderId': { $ne: user?._id }, 'msg.isRead': false }],
-            } as any
+                $set: { moderatorId: user?._id, moderatorName: user?.name },
+                $push: { messages: systemMessage } as any,
+            }
         )
 
-        return NextResponse.json({ status: 200, chat }, corsHeaders)
+        const updatedChat = await db.collection('chats').findOne({ _id: new ObjectId(id) })
+        return NextResponse.json({ status: 200, chat: updatedChat }, corsHeaders)
     } catch (error) {
         return NextResponse.json({ message: (error as Error).message, status: 500 }, corsHeaders)
     }

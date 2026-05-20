@@ -43,7 +43,7 @@ const NovaPoshtaMapModal = () => {
         removeMapMarkers()
         warehouses.forEach((item) => {
             const element = document.createElement('div')
-            element.classList.add('map-marker') // ← той самий клас
+            element.classList.add('map-marker')
             new ttMaps.Marker({ element })
                 .setLngLat([item.lon, item.lat])
                 .addTo(map)
@@ -116,7 +116,6 @@ const NovaPoshtaMapModal = () => {
         searchBoxHTML.classList.add('np-modal-search-input')
         searchBoxContainerRef.current.append(searchBoxHTML)
 
-        // якщо є вже вибране місто — показати його відділення
         if (novaPoshtaDataByCity.length > 0) {
             drawMarkersOnMap(map, ttMaps, novaPoshtaDataByCity)
         }
@@ -159,7 +158,6 @@ const NovaPoshtaMapModal = () => {
         setChosenNovaPoshtaAddressData(item)
         handleCloseModal()
 
-        // фокусуємо карту на вибраному відділенні
         if (mapInstanceRef.current) {
             mapInstanceRef.current.setCenter([item.lon, item.lat]).zoomTo(17)
         }

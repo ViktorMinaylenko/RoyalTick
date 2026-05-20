@@ -53,7 +53,6 @@ const OrderDelivery = () => {
     const handleLoadNovaPoshtaSearchBox = async () => {
         if (!novaPoshtaLabelRef.current) return
 
-        // прибираємо старий searchbox якщо є
         const old = novaPoshtaLabelRef.current.querySelector('.np-search-input')
         old?.remove()
 
@@ -102,12 +101,11 @@ const OrderDelivery = () => {
         const ttMaps = await import(`@tomtom-international/web-sdk-maps`)
 
         if (novaPoshtaMapInstanceRef.current) {
-            // очищаємо старі маркери
             document.querySelectorAll('.map-marker').forEach(m => m.remove())
 
             warehouses.forEach((item) => {
                 const element = document.createElement('div')
-                element.classList.add('map-marker') // ← той самий клас що в самовивозі
+                element.classList.add('map-marker')
                 new ttMaps.Marker({ element })
                     .setLngLat([item.lon, item.lat])
                     .addTo(novaPoshtaMapInstanceRef.current)
@@ -188,11 +186,9 @@ const OrderDelivery = () => {
     }
 
     const cleanupMap = () => {
-        // Видаляємо старий searchbox
         const oldSearchBox = labelRef.current?.querySelector('.delivery-search-input')
         oldSearchBox?.remove()
 
-        // Видаляємо маркери
         document.querySelectorAll('.map-marker').forEach(m => m.remove())
     }
 
@@ -279,7 +275,6 @@ const OrderDelivery = () => {
         },
         withMarker = false
     ) => {
-        // Перевіряємо, що контейнер існує
         if (!mapRef.current) {
             return
         }

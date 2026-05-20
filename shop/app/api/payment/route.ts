@@ -39,9 +39,9 @@ export async function POST(req: Request) {
             orderDate,
             amountString,
             currency,
-            productName[0], // Перший товар
-            productCount[0], // Кількість
-            productPrice[0].toString() // Ціна товару
+            productName[0],
+            productCount[0],
+            productPrice[0].toString()
         ].join(';');
 
         const merchantSignature = crypto

@@ -41,7 +41,7 @@ const LotPage = () => {
     const { getDefaultTextGenerator, getTextGenerator } = useBreadcrumbs('auction')
     const params = useParams()
     const router = useRouter()
-    const user = useUnit($user) as any  // 👈 додано
+    const user = useUnit($user) as any
 
     const [lot, setLot] = useState<ILot | null>(null)
     const [spinner, setSpinner] = useState(true)

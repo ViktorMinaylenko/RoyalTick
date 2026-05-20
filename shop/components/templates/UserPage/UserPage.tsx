@@ -25,6 +25,14 @@ const UserPage = () => {
     const [followSpinner, setFollowSpinner] = useState(false)
     const [isFollowing, setIsFollowing] = useState(false)
     const [followersCount, setFollowersCount] = useState(0)
+    const [blockSpinner, setBlockSpinner] = useState(false)
+    const [showReduceModal, setShowReduceModal] = useState(false)
+    const [reduceType, setReduceType] = useState<'seller' | 'buyer'>('seller')
+    const [reduceReason, setReduceReason] = useState('')
+    const [reduceSpinner, setReduceSpinner] = useState(false)
+    const [reducePercent, setReducePercent] = useState(20)
+    const [showBlockModal, setShowBlockModal] = useState(false)
+    const [blockReason, setBlockReason] = useState('')
 
     useEffect(() => {
         if (!params.id) return
@@ -72,6 +80,65 @@ const UserPage = () => {
         }
     }
 
+    const handleBlock = async (reason: string) => {
+        const auth = JSON.parse(localStorage.getItem('auth') as string)
+        setBlockSpinner(true)
+        try {
+            const res = await fetch(`/api/users/${params.id}/block`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${auth.accessToken}`,
+                },
+                body: JSON.stringify({ reason }),
+            })
+            const data = await res.json()
+            if (data.status === 200) {
+                setUserData((prev: any) => ({
+                    ...prev,
+                    isBlocked: data.isBlocked,
+                    blockReason: data.blockReason,
+                }))
+                setShowBlockModal(false)
+                setBlockReason('')
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setBlockSpinner(false)
+        }
+    }
+
+    const handleReduceRating = async () => {
+        const auth = JSON.parse(localStorage.getItem('auth') as string)
+        setReduceSpinner(true)
+        try {
+            const res = await fetch(`/api/users/${params.id}/reduce-rating`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${auth.accessToken}`,
+                },
+                body: JSON.stringify({
+                    reason: reduceReason,
+                    ratingType: reduceType,
+                    percent: reducePercent,
+                }),
+            })
+            const data = await res.json()
+            if (data.status === 200) {
+                setShowReduceModal(false)
+                setReduceReason('')
+                const field = reduceType === 'seller' ? 'sellerRating' : 'buyerRating'
+                setUserData((prev: any) => ({ ...prev, [field]: data.newRating }))
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setReduceSpinner(false)
+        }
+    }
+
     if (spinner) {
         return (
             <main>
@@ -85,19 +152,34 @@ const UserPage = () => {
     if (!userData) return null
 
     const isOwnProfile = String(currentUser?._id) === String(params.id)
+    const isModerator = currentUser?.role === 'moderator' || currentUser?.role === 'admin'
 
     return (
         <main>
             <section className={styles.user_page}>
                 <div className='container'>
 
+                    {userData.isBlocked && (
+                        <div className={styles.user_page__block_banner}>
+                            <span className={styles.user_page__block_banner__icon}>🔒</span>
+                            <div>
+                                <p className={styles.user_page__block_banner__title}>
+                                    Акаунт заблоковано
+                                </p>
+                                {userData.blockReason && (
+                                    <p className={styles.user_page__block_banner__reason}>
+                                        Причина: {userData.blockReason}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
                     <div className={styles.user_page__header}>
                         <div className={styles.user_page__avatar}>
-                            <img
-                                src={userData.image || '/img/no-image.jpg'}
-                                alt={userData.name}
-                            />
+                            <img src={userData.image || '/img/no-image.jpg'} alt={userData.name} />
                         </div>
+
                         <div className={styles.user_page__info}>
                             <span className={styles.user_page__badge}>RoyalTick Member</span>
                             <h1 className={styles.user_page__name}>{userData.name}</h1>
@@ -122,7 +204,6 @@ const UserPage = () => {
                                     </span>
                                     <span className={styles.user_page__stat_label}>{t.profile?.seller_rating || 'Рейтинг продавця'}</span>
                                 </div>
-
                                 <div className={styles.user_page__stat}>
                                     <span className={styles.user_page__stat_value}>
                                         🛒 {(userData.buyerRating ?? 0).toFixed(1)}
@@ -133,20 +214,43 @@ const UserPage = () => {
                             </div>
                         </div>
 
-                        {!isOwnProfile && (
-                            <button
-                                className={`btn-reset ${styles.user_page__follow_btn} ${isFollowing ? styles.user_page__follow_btn_active : ''}`}
-                                onClick={handleFollow}
-                                disabled={followSpinner}
-                            >
-                                {followSpinner
-                                    ? <FontAwesomeIcon icon={faSpinner} spin />
-                                    : isFollowing
-                                        ? (t.profile?.unfollow || 'Відписатись')
-                                        : (t.profile?.follow || 'Підписатись')
-                                }
-                            </button>
-                        )}
+                        <div className={styles.user_page__actions}>
+                            {!isOwnProfile && !isModerator && (
+                                <button
+                                    className={`btn-reset ${styles.user_page__follow_btn} ${isFollowing ? styles.user_page__follow_btn_active : ''}`}
+                                    onClick={handleFollow}
+                                    disabled={followSpinner}
+                                >
+                                    {followSpinner
+                                        ? <FontAwesomeIcon icon={faSpinner} spin />
+                                        : isFollowing
+                                            ? (t.profile?.unfollow || 'Відписатись')
+                                            : (t.profile?.follow || 'Підписатись')
+                                    }
+                                </button>
+                            )}
+
+                            {isModerator && !isOwnProfile && (
+                                <div className={styles.user_page__mod_actions}>
+                                    <button
+                                        className={`btn-reset ${styles.user_page__block_btn} ${userData.isBlocked ? styles.user_page__block_btn_blocked : ''}`}
+                                        onClick={() => userData.isBlocked ? handleBlock('') : setShowBlockModal(true)}
+                                        disabled={blockSpinner}
+                                    >
+                                        {blockSpinner
+                                            ? <FontAwesomeIcon icon={faSpinner} spin />
+                                            : userData.isBlocked ? '🔓 Розблокувати' : '🔒 Заблокувати'
+                                        }
+                                    </button>
+                                    <button
+                                        className={`btn-reset ${styles.user_page__reduce_btn}`}
+                                        onClick={() => setShowReduceModal(true)}
+                                    >
+                                        📉 Знизити рейтинг
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     {lots.length > 0 && (
@@ -174,6 +278,7 @@ const UserPage = () => {
                             </div>
                         </div>
                     )}
+
                     {userData.sellerReviews?.length > 0 && (
                         <div className={styles.user_page__reviews}>
                             <h2 className={styles.user_page__reviews_title}>
@@ -211,8 +316,106 @@ const UserPage = () => {
                             </div>
                         </div>
                     )}
+
                 </div>
             </section>
+
+            {showReduceModal && (
+                <div className={styles.user_page__modal_overlay} onClick={() => setShowReduceModal(false)}>
+                    <div className={styles.user_page__modal} onClick={e => e.stopPropagation()}>
+                        <h3>📉 Знизити рейтинг</h3>
+                        <p style={{ fontSize: 13, color: 'rgba(232,233,234,0.5)', margin: 0 }}>
+                            Користувач: <strong style={{ color: '#e8e9ea' }}>{userData.name}</strong>
+                        </p>
+                        <select
+                            value={reduceType}
+                            onChange={e => setReduceType(e.target.value as 'seller' | 'buyer')}
+                            className={styles.user_page__modal_select}
+                        >
+                            <option value='seller'>Як продавця</option>
+                            <option value='buyer'>Як покупця</option>
+                        </select>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            <label style={{ fontSize: 12, color: 'rgba(232,233,234,0.4)' }}>
+                                Знизити на: <strong style={{ color: '#fbbf24' }}>{reducePercent}%</strong>
+                            </label>
+                            <input
+                                type='range'
+                                min={10}
+                                max={50}
+                                step={5}
+                                value={reducePercent}
+                                onChange={e => setReducePercent(Number(e.target.value))}
+                                style={{ accentColor: '#fbbf24' }}
+                            />
+                        </div>
+                        <textarea
+                            className={styles.user_page__modal_textarea}
+                            placeholder='Причина зниження рейтингу...'
+                            value={reduceReason}
+                            onChange={e => setReduceReason(e.target.value)}
+                        />
+                        <div className={styles.user_page__modal_btns}>
+                            <button
+                                className={`btn-reset ${styles.user_page__modal_cancel}`}
+                                onClick={() => setShowReduceModal(false)}
+                            >
+                                Скасувати
+                            </button>
+                            <button
+                                className={`btn-reset ${styles.user_page__modal_confirm}`}
+                                onClick={handleReduceRating}
+                                disabled={reduceSpinner || !reduceReason.trim()}
+                            >
+                                {reduceSpinner ? '...' : 'Підтвердити'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showBlockModal && (
+                <div className={styles.user_page__modal_overlay} onClick={() => setShowBlockModal(false)}>
+                    <div className={styles.user_page__modal} onClick={e => e.stopPropagation()}>
+                        <h3>🔒 Заблокувати користувача</h3>
+                        <p style={{ fontSize: 13, color: 'rgba(232,233,234,0.5)', margin: 0 }}>
+                            <strong style={{ color: '#e8e9ea' }}>{userData.name}</strong> не зможе виставляти лоти та робити ставки.
+                        </p>
+                        <textarea
+                            className={styles.user_page__modal_textarea}
+                            placeholder='Причина блокування...'
+                            value={blockReason}
+                            onChange={e => setBlockReason(e.target.value)}
+                        />
+                        <div className={styles.user_page__modal_btns}>
+                            <button
+                                className={`btn-reset ${styles.user_page__modal_cancel}`}
+                                onClick={() => setShowBlockModal(false)}
+                            >
+                                Скасувати
+                            </button>
+                            <button
+                                className={`btn-reset`}
+                                style={{
+                                    padding: '9px 18px',
+                                    borderRadius: 8,
+                                    background: 'rgba(248,113,113,0.15)',
+                                    border: '1px solid rgba(248,113,113,0.3)',
+                                    color: '#f87171',
+                                    fontSize: 13,
+                                    fontWeight: 700,
+                                    cursor: blockSpinner || !blockReason.trim() ? 'not-allowed' : 'pointer',
+                                    opacity: blockSpinner || !blockReason.trim() ? 0.4 : 1,
+                                }}
+                                onClick={() => handleBlock(blockReason)}
+                                disabled={blockSpinner || !blockReason.trim()}
+                            >
+                                {blockSpinner ? '...' : 'Заблокувати'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </main>
     )
 }

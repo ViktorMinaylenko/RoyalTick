@@ -94,8 +94,8 @@ const OrderInfoBlock = ({
       amount: `${priceWithDiscount.replace(' ', '')}`,
       description,
       jwt: auth.accessToken,
-      orderDetails: orderDetailsValues,  // ← додай
-      cartItems: currentCartByAuth.map(item => ({  // ← додай
+      orderDetails: orderDetailsValues,
+      cartItems: currentCartByAuth.map(item => ({
         name: item.name,
         size: item.size,
         count: item.count,

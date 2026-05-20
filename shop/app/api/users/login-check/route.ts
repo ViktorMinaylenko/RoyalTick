@@ -47,6 +47,8 @@ export async function GET(req: Request) {
       following: user.following ?? [],
       followersCount: (user.followers ?? []).length,
       followingCount: (user.following ?? []).length,
+      isBlocked: user.isBlocked ?? false,
+      blockReason: user.blockReason ?? null,
     })
   } catch (error) {
     return NextResponse.json({

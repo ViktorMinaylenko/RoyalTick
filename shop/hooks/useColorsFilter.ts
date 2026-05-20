@@ -61,9 +61,9 @@ export const useColorsFilter = (
                     return ['white', 'black', 'green', 'blue', 'silver']
                 case 'boxes':
                     return ['black', 'dark brown', 'navy', 'carbon', 'cherry']
-                case 'straps': // Додано для повної підтримки маркетплейсу
+                case 'straps':
                     return ['white', 'black', 'green', 'navy', 'brown', 'bordeaux', 'grey', 'beige']
-                case 'catalog': // Для загальної сторінки каталогу
+                case 'catalog':
                     return [
                         'white', 'black', 'green', 'blue', 'silver',
                         'dark brown', 'navy', 'carbon', 'cherry',

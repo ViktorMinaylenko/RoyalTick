@@ -1,6 +1,31 @@
 .profile {
   padding: 48px 0 80px;
+  &__block_banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    background: rgba(248, 113, 113, 0.08);
+    border-bottom: 1px solid rgba(248, 113, 113, 0.2);
 
+    span {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    &__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f87171;
+      margin: 0 0 4px;
+    }
+
+    &__reason {
+      font-size: 13px;
+      color: rgba(248, 113, 113, 0.6);
+      margin: 0;
+    }
+  }
   &__lots_section {
     margin-top: 24px;
     width: 100%;
@@ -51,7 +76,6 @@
       overflow-x: auto;
       padding-bottom: 8px;
 
-      // Скрол без scrollbar
       &::-webkit-scrollbar {
         height: 3px;
       }
@@ -65,7 +89,7 @@
     }
 
     &__slide {
-      flex: 0 0 180px; // фіксована ширина картки
+      flex: 0 0 180px;
       width: 180px;
     }
   }
@@ -346,7 +370,6 @@
     flex-shrink: 0;
     overflow: hidden;
 
-    // next/image override
     img,
     span {
       width: 72px !important;

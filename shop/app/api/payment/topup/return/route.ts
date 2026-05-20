@@ -11,18 +11,18 @@ export async function POST(req: Request) {
         const amount = body.get('amount') as string
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 
-        console.log('TOPUP RETURN:', { transactionStatus, orderReference, amount }) // 👈
+        console.log('TOPUP RETURN:', { transactionStatus, orderReference, amount })
 
         if (transactionStatus === 'Approved' && orderReference?.startsWith('topup_')) {
             const userId = orderReference.split('_')[1]
-            console.log('Updating userId:', userId, 'amount:', amount) // 👈
+            console.log('Updating userId:', userId, 'amount:', amount)
 
             const { db } = await getDbAndReqBody(clientPromise, null)
             const result = await db.collection('users').updateOne(
                 { _id: new ObjectId(userId) },
                 { $inc: { balance: Number(amount) } }
             )
-            console.log('Update result:', result) // 👈
+            console.log('Update result:', result)
         }
 
         return NextResponse.redirect(
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
             { status: 302 }
         )
     } catch (error) {
-        console.error('TOPUP RETURN ERROR:', error) // 👈
+        console.error('TOPUP RETURN ERROR:', error)
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
         return NextResponse.redirect(`${baseUrl}/profile`, { status: 302 })
     }

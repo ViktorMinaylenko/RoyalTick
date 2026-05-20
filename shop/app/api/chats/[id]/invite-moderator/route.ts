@@ -4,7 +4,7 @@ import clientPromise from '@/lib/mongodb'
 import { getDbAndReqBody, isValidAccessToken, parseJwt, findUserByEmail } from '@/lib/utils/api-routes'
 import { ObjectId } from 'mongodb'
 
-export async function GET(
+export async function POST(
     req: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
@@ -19,33 +19,18 @@ export async function GET(
         const { db } = await getDbAndReqBody(clientPromise, null)
         const user = await findUserByEmail(db, parseJwt(token as string).email)
 
-        const chat = await db.collection('chats').findOne({ _id: new ObjectId(id) })
-        if (!chat) {
-            return NextResponse.json({ message: 'Чат не знайдено', status: 404 }, corsHeaders)
-        }
-        const isOwner = String(chat.ownerId) === String(user?._id)
-        const isParticipant = String(chat.ownerId) === String(user?._id) ||
-            String(chat.winnerId) === String(user?._id)
-        const isModerator = user?.role === 'moderator' || user?.role === 'admin'
-
-        if (!isParticipant && !isModerator) {
-            return NextResponse.json({ message: 'Немає доступу', status: 403 }, corsHeaders)
-        }
-
         await db.collection('chats').updateOne(
             { _id: new ObjectId(id) },
             {
                 $set: {
-                    ...(isOwner ? { unreadForOwner: false } : {}),
-                    'messages.$[msg].isRead': true,
-                },
-            },
-            {
-                arrayFilters: [{ 'msg.senderId': { $ne: user?._id }, 'msg.isRead': false }],
-            } as any
+                    moderatorRequested: true,
+                    moderatorRequestedBy: user?._id,
+                }
+            }
         )
 
-        return NextResponse.json({ status: 200, chat }, corsHeaders)
+        const updatedChat = await db.collection('chats').findOne({ _id: new ObjectId(id) })
+        return NextResponse.json({ status: 200, chat: updatedChat }, corsHeaders)
     } catch (error) {
         return NextResponse.json({ message: (error as Error).message, status: 500 }, corsHeaders)
     }

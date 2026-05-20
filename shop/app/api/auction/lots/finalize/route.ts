@@ -48,6 +48,11 @@ export async function POST() {
                             createdAt: new Date(),
                             status: 'active',
                             unreadForOwner: true,
+                            deletedFor: [],
+                            moderatorRequested: false,
+                            moderatorRequestedBy: null,
+                            moderatorId: null,
+                            moderatorName: null,
                         },
                     },
                     { upsert: true }

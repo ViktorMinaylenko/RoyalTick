@@ -1,5 +1,5 @@
 'use client'
-import { use, useEffect } from 'react' // Імпортуємо use для Next.js 15
+import { use, useEffect } from 'react'
 import { useProductFilters } from "@/hooks/useProductFilters"
 import { IProductsPage, SearchParams } from "@/types/catalog"
 import ReactPaginate from 'react-paginate'

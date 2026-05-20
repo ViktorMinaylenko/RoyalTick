@@ -28,7 +28,7 @@ const NovaPoshtaAddressesList = ({ listClassName, onSelectAddress, }: { listClas
     const handleChosenAddressData = (data: Partial<IRoyalTickAddressData>) => {
         setShouldLoadNovaPoshtaData(false)
         setChosenNovaPoshtaAddressData(data)
-        onSelectAddress?.(data as IRoyalTickAddressData) // ← додай
+        onSelectAddress?.(data as IRoyalTickAddressData)
     }
 
     

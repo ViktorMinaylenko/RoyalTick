@@ -13,7 +13,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: 'API keys are missing' }, { status: 500 })
         }
 
-        // Create signature for WayForPay API request
         const signatureString = [
             merchantAccount,
             reqBody.orderReference,
@@ -24,7 +23,6 @@ export async function POST(req: Request) {
             .update(signatureString)
             .digest('hex')
 
-        // Get payment info from WayForPay
         const { data } = await axios({
             method: 'post',
             url: 'https://api.wayforpay.com/api/merchant/transactions',

@@ -14,8 +14,8 @@
 }
 
 .footer__logo .logo__img {
-  width: 100%;          /* Заповнює контейнер footer__logo */
-  max-width: 180px;     /* Оптимальна ширина для логотипа */
+  width: 100%;
+  max-width: 180px;
   height: auto;
   display: block;
   object-fit: contain;
@@ -23,7 +23,6 @@
 
 .footer__logo {
   width: 25%;
-  /* Додаємо легке вирівнювання, щоб логотип не притискався до верху */
   display: flex;
   align-items: center;
 }

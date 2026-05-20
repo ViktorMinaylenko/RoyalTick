@@ -9,7 +9,7 @@ const ProductMechanism = ({
   mechanism: string | number | boolean
 }) => {
   const { lang, translations } = useLang()
-  const mechKey = String(mechanism) // перетворюємо в рядок на всяк випадок
+  const mechKey = String(mechanism)
 
   return (
     <span className={styles.product__color}>

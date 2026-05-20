@@ -80,6 +80,11 @@ export async function POST(req: Request) {
             createdAt: new Date(),
             status: 'active',
             unreadForOwner: true,
+            deletedFor: [],
+            moderatorRequested: false,
+            moderatorRequestedBy: null,
+            moderatorId: null,
+            moderatorName: null,
         }
 
         const result = await db.collection('chats').insertOne(newChat)

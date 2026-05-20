@@ -62,11 +62,11 @@
 }
 
 .nav-menu__logo {
-  width: 180px; /* потрібна ширина */
-  height: auto; /* висота підбирається автоматично */
+  width: 180px;
+  height: auto;
   opacity: 0;
   transform: translate3d(0, 36px, 0);
-  margin-bottom: 150px; /* прибираємо анімацію, якщо не потрібна */
+  margin-bottom: 150px;
 }
 
 .nav-menu__logo img {

@@ -31,6 +31,8 @@ const ChatPage = () => {
     const [selectedRating, setSelectedRating] = useState(0)
     const [ratingComment, setRatingComment] = useState('')
     const [ratingSpinner, setRatingSpinner] = useState(false)
+    const [inviteModSpinner, setInviteModSpinner] = useState(false)
+    const [showInviteModModal, setShowInviteModModal] = useState(false)
 
     useEffect(() => {
         if (!params.id) return
@@ -137,6 +139,23 @@ const ChatPage = () => {
         }
     }
 
+    const handleInviteModerator = async () => {
+        const auth = JSON.parse(localStorage.getItem('auth') as string)
+        setInviteModSpinner(true)
+        try {
+            const res = await fetch(`/api/chats/${params.id}/invite-moderator`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${auth.accessToken}` },
+            })
+            const data = await res.json()
+            if (data.status === 200) setChat(data.chat)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setInviteModSpinner(false)
+        }
+    }
+
     const formatTime = (dateStr: string) =>
         new Date(dateStr).toLocaleTimeString(
             lang === 'ua' ? 'uk-UA' : 'en-US',
@@ -156,6 +175,8 @@ const ChatPage = () => {
     if (!chat) return null
 
     const isOwner = String(chat.ownerId) === String(user?._id)
+    const isParticipant = isOwner || String(chat.winnerId) === String(user?._id)
+    const isModerator = user?.role === 'moderator' || user?.role === 'admin'
     const myCompleted = isOwner ? chat.dealCompletedByOwner : chat.dealCompletedByWinner
     const otherCompleted = isOwner ? chat.dealCompletedByWinner : chat.dealCompletedByOwner
     const alreadyRated = isOwner ? chat.ownerRatedBuyer : chat.winnerRatedSeller
@@ -197,7 +218,27 @@ const ChatPage = () => {
                                         {chat.ownerName}
                                     </Link>
                                 </span>
+
+                                {(chat as any).moderatorId ? (
+                                    <span className={styles.chat__mod_active}>
+                                        🛡️ Модератор: {(chat as any).moderatorName}
+                                    </span>
+                                ) : (chat as any).moderatorRequested ? (
+                                    <span className={styles.chat__mod_pending}>
+                                        🛡️ Очікує модератора...
+                                    </span>
+                                ) : null}
                             </div>
+
+                            {isParticipant && !(chat as any).moderatorRequested && !(chat as any).moderatorId && (
+                                <button
+                                    className={`btn-reset ${styles.chat__invite_mod_btn}`}
+                                    onClick={() => setShowInviteModModal(true)}
+                                    title='Запросити модератора'
+                                >
+                                    🛡️
+                                </button>
+                            )}
                         </div>
 
                         <div className={styles.chat__messages}>
@@ -220,7 +261,9 @@ const ChatPage = () => {
                                         className={`${styles.chat__message} ${isMine ? styles.chat__message_mine : styles.chat__message_other}`}
                                     >
                                         {!isMine && (
-                                            <span className={styles.chat__message_sender}>{msg.senderName}</span>
+                                            <span className={styles.chat__message_sender}>
+                                                {msg.senderName}
+                                            </span>
                                         )}
                                         <div className={styles.chat__message_bubble}>{msg.text}</div>
                                         <span className={styles.chat__message_time}>{formatTime(msg.createdAt)}</span>
@@ -230,7 +273,7 @@ const ChatPage = () => {
                             <div ref={messagesEndRef} />
                         </div>
 
-                        {chat.status !== 'completed' && (
+                        {isParticipant && chat.status !== 'completed' && (
                             <div className={styles.chat__deal}>
                                 <div className={styles.chat__deal_status}>
                                     <div className={styles.chat__deal_info}>
@@ -261,7 +304,7 @@ const ChatPage = () => {
                             </div>
                         )}
 
-                        {chat.status === 'completed' && (
+                        {isParticipant && chat.status === 'completed' && (
                             <div className={styles.chat__deal}>
                                 <div className={styles.chat__completed_badge}>
                                     ✅ {t.deal?.completed}
@@ -314,29 +357,63 @@ const ChatPage = () => {
                             </div>
                         )}
 
-                        <div className={styles.chat__input_area}>
-                            <textarea
-                                className={styles.chat__input}
-                                placeholder={t.input_placeholder}
-                                value={text}
-                                onChange={(e) => setText(e.target.value)}
-                                onKeyDown={handleKeyDown}
-                            />
-                            <button
-                                className={`btn-reset ${styles.chat__send_btn}`}
-                                onClick={handleSend}
-                                disabled={sendSpinner || !text.trim()}
-                            >
-                                {sendSpinner
-                                    ? <FontAwesomeIcon icon={faSpinner} spin />
-                                    : t.send
-                                }
-                            </button>
-                        </div>
+                        {isModerator && !isParticipant && (
+                            <div className={styles.chat__mod_view}>
+                                🛡️ Ви переглядаєте чат як модератор
+                            </div>
+                        )}
+
+                        {(isParticipant || (isModerator && (chat as any).moderatorId && String((chat as any).moderatorId) === String(user?._id))) && (
+                            <div className={styles.chat__input_area}>
+                                <textarea
+                                    className={styles.chat__input}
+                                    placeholder={t.input_placeholder}
+                                    value={text}
+                                    onChange={(e) => setText(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                />
+                                <button
+                                    className={`btn-reset ${styles.chat__send_btn}`}
+                                    onClick={handleSend}
+                                    disabled={sendSpinner || !text.trim()}
+                                >
+                                    {sendSpinner
+                                        ? <FontAwesomeIcon icon={faSpinner} spin />
+                                        : t.send
+                                    }
+                                </button>
+                            </div>
+                        )}
 
                     </div>
                 </div>
             </section>
+            {showInviteModModal && (
+                <div className={styles.chat__confirm_overlay} onClick={() => setShowInviteModModal(false)}>
+                    <div className={styles.chat__confirm_modal} onClick={e => e.stopPropagation()}>
+                        <h3 className={styles.chat__confirm_title}>🛡️ Викликати модератора?</h3>
+                        <p className={styles.chat__confirm_text}>
+                            Модератор отримає доступ до всієї історії чату. Він допоможе вирішити конфліктну ситуацію або зафіксувати порушення.
+                        </p>
+                        <div className={styles.chat__confirm_btns}>
+                            <button className={`btn-reset ${styles.chat__confirm_cancel}`} onClick={() => setShowInviteModModal(false)}>
+                                Скасувати
+                            </button>
+                            <button
+                                className={`btn-reset ${styles.chat__confirm_delete}`}
+                                style={{ background: 'rgba(123,47,247,0.15)', borderColor: 'rgba(123,47,247,0.3)', color: '#a78bfa' }}
+                                onClick={async () => {
+                                    setShowInviteModModal(false)
+                                    await handleInviteModerator()
+                                }}
+                                disabled={inviteModSpinner}
+                            >
+                                {inviteModSpinner ? '...' : 'Викликати'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </main>
     )
 }

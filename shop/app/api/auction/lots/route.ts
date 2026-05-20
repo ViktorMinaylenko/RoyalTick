@@ -108,6 +108,13 @@ export async function POST(req: Request) {
         const { db } = await getDbAndReqBody(clientPromise, null)
         const user = await findUserByEmail(db, parseJwt(token as string).email)
 
+        if (user?.isBlocked) {
+            return NextResponse.json({
+                message: 'Ваш акаунт заблоковано. Ви не можете виставляти лоти.',
+                status: 403,
+            }, corsHeaders)
+        }
+
         const newLot = {
             title,
             category: formData.get('category') as string,

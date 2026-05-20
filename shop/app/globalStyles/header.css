@@ -1,4 +1,3 @@
-/* --- ОСНОВНИЙ ХЕДЕР --- */
 .header {
   position: relative;
   z-index: 3;
@@ -7,7 +6,7 @@
 }
 
 .header__container {
-  position: relative; /* Обов'язково для абсолютного лого */
+  position: relative;
   padding-top: 28px !important;
   padding-bottom: 28px !important;
   display: flex;
@@ -16,18 +15,17 @@
   min-height: 90px;
 }
 
-/* --- ЛОГОТИП (Центрування та Стиль) --- */
 .header__logo {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%); /* Ідеальне вирівнювання */
+  transform: translate(-50%, -50%);
   z-index: 5;
-  pointer-events: none; /* Пропускає кліки крізь контейнер на бургер */
+  pointer-events: none;
 }
 
 .logo-text {
-  pointer-events: auto; /* Повертає клікабельність самому тексту */
+  pointer-events: auto;
   font-family: 'Rostelecom Basis', sans-serif;
   font-weight: 900;
   font-size: 48px;
@@ -59,7 +57,6 @@
   position: relative;
 }
 
-/* Ефекти блиску */
 .logo-royal::after {
   content: '';
   position: absolute;
@@ -103,7 +100,6 @@
   pointer-events: none;
 }
 
-/* --- БУРГЕР МЕНЮ --- */
 .header__burger {
   position: relative;
   z-index: 10;
@@ -141,7 +137,6 @@
   background-color: #4a8c7e;
 }
 
-/* --- ПРАВІ ПОСИЛАННЯ (ІКОНКИ) --- */
 .header__links {
   display: flex;
   align-items: center;
@@ -180,7 +175,6 @@
   mask-repeat: no-repeat;
 }
 
-/* Шляхи до іконок */
 .header__links__item__btn--search::before {
   -webkit-mask-image: url(/img/search.svg);
   mask-image: url(/img/search.svg);
@@ -206,18 +200,17 @@
   background-color: #4a8c7e;
 }
 
-/* --- АДАПТИВ --- */
 @media (max-width: 850px) {
   .header__container {
-    justify-content: flex-end; /* Лінки вправо */
+    justify-content: flex-end;
     padding-top: 20px !important;
     padding-bottom: 20px !important;
   }
 
   .header__logo {
-    position: static; /* Повертаємо в потік */
+    position: static;
     transform: none;
-    margin-right: auto; /* Відштовхує іконки вправо */
+    margin-right: auto;
   }
 
   .logo-text {
@@ -226,7 +219,7 @@
 
   .header__burger,
   .header__link-item:nth-child(n + 2):nth-child(-n + 4) {
-    display: none; /* Ховаємо зайве на малих екранах */
+    display: none;
   }
 
   .header__link-item:not(:last-child) {

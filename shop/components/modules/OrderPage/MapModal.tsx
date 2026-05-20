@@ -63,7 +63,6 @@ const MapModal = () => {
     const shouldShowCourierAddressData = useUnit($shouldShowCourierAddressData)
     const courierAddressData = useUnit($courierAddressData)
 
-    // Синхронізуємо refs зі станом
     useEffect(() => {
         pickupTabRef.current = pickupTab
         courierTabRef.current = courierTab
@@ -102,14 +101,12 @@ const MapModal = () => {
         setCourierTab(false)
         removeMapMarkers()
         removeSearchBox()
-        
-        // Очищаємо старих listeners перед завантаженням нової карти
+
         if (ttSearchBoxRef.current) {
             ttSearchBoxRef.current.off('tomtom.searchbox.resultselected')
             ttSearchBoxRef.current.off('tomtom.searchbox.resultscleared')
             ttSearchBoxRef.current.off('tomtom.searchbox.resultsfound')
         }
-        // Очищаємо refs ПЕРЕД завантаженням нової карти
         searchMarkersManagerRef.current = null
         ttSearchBoxRef.current = null
         mapRef.current = null
@@ -128,19 +125,18 @@ const MapModal = () => {
 
         removeMapMarkers()
         removeSearchBox()
-        
-        // Очищаємо старих listeners перед завантаженням нової карти
+
         if (ttSearchBoxRef.current) {
             ttSearchBoxRef.current.off('tomtom.searchbox.resultselected')
             ttSearchBoxRef.current.off('tomtom.searchbox.resultscleared')
             ttSearchBoxRef.current.off('tomtom.searchbox.resultsfound')
         }
-        // Очищаємо refs ПЕРЕД завантаженням нової карти
+
         searchMarkersManagerRef.current = null
         ttSearchBoxRef.current = null
         mapRef.current = null
         
-        setTimeout(async () => { // ← додай setTimeout
+        setTimeout(async () => {
             const map = await handleLoadMap(courierMapRef)
             removeMapMarkers()
             if (!chosenPickupAddressData.address_line1 && courierAddressData.lat) {
@@ -272,14 +268,12 @@ const MapModal = () => {
 
         //@ts-ignore
         ttSearchBox.on('tomtom.searchbox.resultselected', async (e) => {
-            // Проверяем, что это еще активный searchMarkersManager
             if (searchMarkersManagerRef.current && mapRef.current === map) {
                 if (pickupTabRef.current) {
                     const data = await handleSelectPickupAddress(e.data.text)
                     handleResultSelection(e, searchMarkersManagerRef.current, map, true)
                     setMarkersByLocationsData(data)
                 } else {
-                    // Для курєрської доставки використовуємо результат TomTom напряму
                     handleResultSelection(e, searchMarkersManagerRef.current, map, false)
                 }
             }

@@ -50,7 +50,6 @@
   }
 }
 
-// ─── CREATE LOT FORM ──────────────────────────────────────────────────────────
 
 .create_lot {
   padding: 40px 0 80px;
@@ -69,7 +68,6 @@
     max-width: 820px;
   }
 
-  // ── Section block ──
   &__section {
     display: flex;
     flex-direction: column;
@@ -89,7 +87,6 @@
     border-bottom: 1px solid rgba(167, 139, 250, 0.2);
   }
 
-  // ── Field ──
   &__field {
     display: flex;
     flex-direction: column;
@@ -182,7 +179,6 @@
     }
   }
 
-  // ── Photo upload ──
   &__photo_main {
     display: flex;
     flex-direction: column;
@@ -288,7 +284,6 @@
     }
   }
 
-  // ── Toggle ──
   &__toggle {
     display: flex;
     align-items: center;
@@ -336,7 +331,6 @@
     }
   }
 
-  // ── Checkbox rule ──
   &__checkbox {
     display: flex;
     align-items: flex-start;
@@ -370,7 +364,6 @@
     margin-top: -4px;
   }
 
-  // ── Submit ──
   &__submit {
     display: flex;
     justify-content: flex-end;
@@ -435,7 +428,6 @@
   }
 }
 
-// ─── LOT CARD ────────────────────────────────────────────────────────────────
 
 .lot__item {
   border-radius: 16px;
@@ -546,7 +538,6 @@
   }
 }
 
-// ─── LOT PAGE ────────────────────────────────────────────────────────────────
 
 .lot_page {
   padding: 32px 0 80px;
@@ -609,7 +600,6 @@
     }
   }
 
-  // Gallery
   &__gallery {
     display: flex;
     flex-direction: column;
@@ -657,7 +647,6 @@
     }
   }
 
-  // Sidebar
   &__sidebar {
     display: flex;
     flex-direction: column;
@@ -844,7 +833,6 @@
     }
   }
 
-  // Tabs
   &__tabs {
     display: flex;
     gap: 4px;
@@ -874,7 +862,6 @@
     }
   }
 
-  // Description
   &__description {
     display: flex;
     flex-direction: column;
@@ -927,7 +914,6 @@
     }
   }
 
-  // Photos grid
   &__photos_grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1221,7 +1207,6 @@
   }
 }
 
-// ── BUY NOW MODAL ─────────────────────────────
 .buy_now_modal {
   position: fixed;
   inset: 0;

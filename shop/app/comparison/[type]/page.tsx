@@ -8,8 +8,6 @@ import React from 'react';
 export default function ComparisonType({ params }: { params: Promise<{ type: string }> }) {
   const resolvedParams = React.use(params);
 
-  // Тут нам потрібно обробити resolvedParams.type
-
   if (!productTypes.includes(resolvedParams.type)) {
     notFound()
   }

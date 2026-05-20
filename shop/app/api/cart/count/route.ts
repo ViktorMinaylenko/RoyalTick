@@ -10,11 +10,9 @@ export async function PATCH(req: Request) {
       req
     )
 
-    // 1. Отримуємо ID безпечно
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
 
-    // 2. ПЕРЕВІРКА: якщо ID немає або він кривий - не пускаємо далі
     if (!id || id === 'undefined') {
       return NextResponse.json({
         status: 400,

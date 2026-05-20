@@ -178,7 +178,6 @@ const CreateLotPage = () => {
 
                     <form className={styles.create_lot__form} onSubmit={handleSubmit} noValidate>
 
-                        {/* ── 1. ОСНОВНІ ПОЛЯ ── */}
                         <div className={styles.create_lot__section}>
                             <h2 className={styles.create_lot__section_title}>{t.section_main}</h2>
 
@@ -271,7 +270,6 @@ const CreateLotPage = () => {
                             </div>
                         </div>
 
-                        {/* ── 2. ФОТО ТА МЕДІА ── */}
                         <div className={styles.create_lot__section}>
                             <h2 className={styles.create_lot__section_title}>{t.section_media}</h2>
 
@@ -329,7 +327,6 @@ const CreateLotPage = () => {
                             </div>
                         </div>
 
-                        {/* ── 3. ПАРАМЕТРИ АУКЦІОНУ ── */}
                         <div className={styles.create_lot__section}>
                             <h2 className={styles.create_lot__section_title}>{t.section_auction}</h2>
 
@@ -448,7 +445,6 @@ const CreateLotPage = () => {
                             </label>
                         </div>
 
-                        {/* ── 4. ДОСТАВКА ── */}
                         <div className={styles.create_lot__section}>
                             <h2 className={styles.create_lot__section_title}>{t.section_delivery}</h2>
 
@@ -499,7 +495,6 @@ const CreateLotPage = () => {
                             </div>
                         </div>
 
-                        {/* ── 5. ДОДАТКОВО ── */}
                         <div className={styles.create_lot__section}>
                             <h2 className={styles.create_lot__section_title}>{t.section_additional}</h2>
 
@@ -564,7 +559,6 @@ const CreateLotPage = () => {
                             {errors.confirmRules && <span className={styles.create_lot__error}>{errors.confirmRules}</span>}
                         </div>
 
-                        {/* ── SUBMIT ── */}
                         <div className={styles.create_lot__submit}>
                             <button type='submit' disabled={spinner}>
                                 {spinner ? t.submitting : t.submit}

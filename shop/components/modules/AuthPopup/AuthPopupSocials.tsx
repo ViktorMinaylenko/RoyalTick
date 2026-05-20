@@ -9,7 +9,6 @@ import {
 const AuthPopupSocials = ({
   submitSignUpWithOAuth,
 }: {
-  // Тепер приймаємо назву провайдера як рядок
   submitSignUpWithOAuth: (provider: string) => Promise<void>
 }) => (
   <div className='cart-body__socials'>

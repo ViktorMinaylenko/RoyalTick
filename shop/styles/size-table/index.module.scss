@@ -70,9 +70,8 @@
   &__inner {
     margin-bottom: 32px;
     width: 100%;
-    // Дозволяємо горизонтальний скрол для всього внутрішнього контенту
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; // Плавний скрол на iOS
+    -webkit-overflow-scrolling: touch;
 
     &::-webkit-scrollbar {
       height: 6px;
@@ -87,9 +86,7 @@
     display: flex;
     gap: 20px;
     align-items: flex-start;
-    // ЗАБОРОНЯЄМО перенос на новий рядок
     flex-wrap: nowrap;
-    // Встановлюємо мінімальну ширину, щоб таблиці мали вигляд (наприклад, 750px)
     min-width: 750px;
 
     & > div {
@@ -98,7 +95,6 @@
   }
 
   &_straps {
-    // Для ремінців можемо зробити вікно трохи ширшим або дозволити йому адаптуватися
     @media (max-width: 620px) {
       width: calc(100vw - 30px);
     }
@@ -110,11 +106,10 @@
     color: #4a8c7e;
   }
 
-  // Прибираємо фіксовану ширину таблиць для ремінців, щоб вони вписувались в флекс
   &_straps .size_table__table {
     width: 100%;
     @media (max-width: 770px) {
-      width: 100%; // або залиште 700px, якщо хочете скрол
+      width: 100%;
     }
   }
 
