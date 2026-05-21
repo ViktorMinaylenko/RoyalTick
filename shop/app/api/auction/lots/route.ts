@@ -38,20 +38,53 @@ export async function GET(req: Request) {
         const offset = Number(url.searchParams.get('offset')) || 0
         const limit = Number(url.searchParams.get('limit')) || 12
         const userId = url.searchParams.get('userId')
+        const category = url.searchParams.get('category')
+        const condition = url.searchParams.get('condition')
+        const minPrice = url.searchParams.get('minPrice')
+        const maxPrice = url.searchParams.get('maxPrice')
+        const sort = url.searchParams.get('sort') || 'newest'
 
         const filter: any = { status: 'active' }
+
         if (userId) {
-            try {
-                filter.userId = new ObjectId(userId)
-            } catch {
-                filter.userId = userId
-            }
+            try { filter.userId = new ObjectId(userId) }
+            catch { filter.userId = userId }
+        }
+        if (category) filter.category = category
+        if (condition) filter.condition = condition
+        if (minPrice || maxPrice) {
+            filter.currentPrice = {}
+            if (minPrice) filter.currentPrice.$gte = Number(minPrice)
+            if (maxPrice) filter.currentPrice.$lte = Number(maxPrice)
+        }
+
+        const sortMap: any = {
+            newest: { createdAt: -1 },
+            oldest: { createdAt: 1 },
+            price_asc: { currentPrice: 1 },
+            price_desc: { currentPrice: -1 },
+            ending_soon: { endDate: 1 },
+            most_bids: { 'bids.length': -1 },
+        }
+
+        if (sort === 'most_bids') {
+            const [lots, count] = await Promise.all([
+                db.collection('lots').aggregate([
+                    { $match: filter },
+                    { $addFields: { bidsCount: { $size: '$bids' } } },
+                    { $sort: { bidsCount: -1 } },
+                    { $skip: offset },
+                    { $limit: limit },
+                ]).toArray(),
+                db.collection('lots').countDocuments(filter),
+            ])
+            return NextResponse.json({ status: 200, lots, count }, corsHeaders)
         }
 
         const [lots, count] = await Promise.all([
             db.collection('lots')
                 .find(filter)
-                .sort({ createdAt: -1 })
+                .sort(sortMap[sort] || { createdAt: -1 })
                 .skip(offset)
                 .limit(limit)
                 .toArray(),

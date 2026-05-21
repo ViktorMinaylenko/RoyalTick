@@ -1,6 +1,173 @@
 .auction {
   padding: 40px 0 80px;
 
+  &__filters {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__sort {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  &__sort_btn {
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(232, 233, 234, 0.4);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover { color: #e8e9ea; border-color: rgba(255,255,255,0.12); }
+
+    &_active {
+      background: rgba(123, 47, 247, 0.15);
+      border-color: rgba(123, 47, 247, 0.3);
+      color: #a78bfa;
+    }
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(232, 233, 234, 0.5);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+
+    &:hover { color: #e8e9ea; }
+
+    &_open {
+      color: #e8e9ea;
+      border-color: rgba(255,255,255,0.12);
+    }
+  }
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #7b2ff7;
+    flex-shrink: 0;
+  }
+
+  &__reset {
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(248, 113, 113, 0.6);
+    background: rgba(248, 113, 113, 0.06);
+    border: 1px solid rgba(248, 113, 113, 0.15);
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover { color: #f87171; background: rgba(248,113,113,0.1); }
+  }
+
+  &__count {
+    margin-left: auto;
+    font-size: 12px;
+    color: rgba(232, 233, 234, 0.25);
+    font-weight: 600;
+  }
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__group_label {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(232, 233, 234, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  &__chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  &__chip {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(232, 233, 234, 0.5);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover { color: #e8e9ea; }
+
+    &_active {
+      background: rgba(123, 47, 247, 0.12);
+      border-color: rgba(123, 47, 247, 0.3);
+      color: #a78bfa;
+    }
+  }
+
+  &__price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__price_input {
+    width: 120px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    color: #e8e9ea;
+    font-size: 13px;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus { border-color: rgba(123, 47, 247, 0.4); }
+    &::placeholder { color: rgba(232, 233, 234, 0.2); }
+  }
+
+  &__price_sep {
+    color: rgba(232, 233, 234, 0.2);
+    font-size: 14px;
+  }
+}
+
   &__header {
     display: flex;
     align-items: center;

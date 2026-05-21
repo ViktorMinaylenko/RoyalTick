@@ -13,6 +13,8 @@ import { motion } from 'framer-motion'
 import { basePropsForMotion } from '@/constants/motion'
 
 const LOTS_PER_PAGE = 12
+const CATEGORIES = ['watches', 'straps', 'boxes', 'care']
+const CONDITIONS = ['new', 'like_new', 'good', 'used', 'for_parts']
 
 const AuctionPage = () => {
     const { lang, translations } = useLang()
@@ -20,15 +22,43 @@ const AuctionPage = () => {
     const { getDefaultTextGenerator, getTextGenerator } = useBreadcrumbs('auction')
     const router = useRouter()
 
+    const SORTS = [
+        { value: 'newest', label: t.sort_newest || 'Новіші' },
+        { value: 'oldest', label: t.sort_oldest || 'Старіші' },
+        { value: 'price_asc', label: t.sort_price_asc || 'Ціна ↑' },
+        { value: 'price_desc', label: t.sort_price_desc || 'Ціна ↓' },
+        { value: 'ending_soon', label: t.sort_ending_soon || 'Закінчуються' },
+        { value: 'most_bids', label: t.sort_most_bids || 'Більше ставок' },
+    ]
+
     const [lots, setLots] = useState([])
     const [totalCount, setTotalCount] = useState(0)
     const [currentPage, setCurrentPage] = useState(0)
     const [spinner, setSpinner] = useState(false)
 
+    const [category, setCategory] = useState('')
+    const [condition, setCondition] = useState('')
+    const [minPrice, setMinPrice] = useState('')
+    const [maxPrice, setMaxPrice] = useState('')
+    const [sort, setSort] = useState('newest')
+    const [filtersOpen, setFiltersOpen] = useState(false)
+
+    const buildQuery = (page: number) => {
+        const params = new URLSearchParams()
+        params.set('offset', String(page * LOTS_PER_PAGE))
+        params.set('limit', String(LOTS_PER_PAGE))
+        params.set('sort', sort)
+        if (category) params.set('category', category)
+        if (condition) params.set('condition', condition)
+        if (minPrice) params.set('minPrice', minPrice)
+        if (maxPrice) params.set('maxPrice', maxPrice)
+        return params.toString()
+    }
+
     const fetchLots = async (page: number) => {
         setSpinner(true)
         try {
-            const res = await fetch(`/api/auction/lots?offset=${page * LOTS_PER_PAGE}&limit=${LOTS_PER_PAGE}`)
+            const res = await fetch(`/api/auction/lots?${buildQuery(page)}`)
             const data = await res.json()
             if (data.status === 200) {
                 setLots(data.lots)
@@ -47,8 +77,9 @@ const AuctionPage = () => {
     }, [])
 
     useEffect(() => {
+        setCurrentPage(0)
         fetchLots(0)
-    }, [])
+    }, [category, condition, minPrice, maxPrice, sort])
 
     const handlePageChange = ({ selected }: { selected: number }) => {
         setCurrentPage(selected)
@@ -57,11 +88,18 @@ const AuctionPage = () => {
     }
 
     const handleCreateLot = () => {
-        if (!isUserAuth()) {
-            handleopenAuthModal()
-            return
-        }
+        if (!isUserAuth()) { handleopenAuthModal(); return }
         router.push('/auction/create')
+    }
+
+    const hasActiveFilters = !!(category || condition || minPrice || maxPrice || sort !== 'newest')
+
+    const handleReset = () => {
+        setCategory('')
+        setCondition('')
+        setMinPrice('')
+        setMaxPrice('')
+        setSort('newest')
     }
 
     return (
@@ -72,6 +110,7 @@ const AuctionPage = () => {
             />
             <section className={styles.auction}>
                 <div className='container'>
+
                     <div className={styles.auction__header}>
                         <h1 className={styles.auction__title}>
                             {translations[lang].main_menu.auction}
@@ -83,6 +122,121 @@ const AuctionPage = () => {
                             <span className={styles.auction__create_btn__icon}>+</span>
                             {t.create_lot}
                         </button>
+                    </div>
+
+                    <div className={styles.auction__filters}>
+
+                        <div className={styles.auction__filters__sort}>
+                            {SORTS.map((s) => (
+                                <button
+                                    key={s.value}
+                                    className={`btn-reset ${styles.auction__filters__sort_btn} ${sort === s.value ? styles.auction__filters__sort_btn_active : ''}`}
+                                    onClick={() => setSort(s.value)}
+                                >
+                                    {s.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className={styles.auction__filters__row}>
+                            <button
+                                className={`btn-reset ${styles.auction__filters__toggle} ${filtersOpen ? styles.auction__filters__toggle_open : ''}`}
+                                onClick={() => setFiltersOpen(!filtersOpen)}
+                            >
+                                ⚙ {t.filters_btn || 'Фільтри'}
+                                {hasActiveFilters && !filtersOpen && (
+                                    <span className={styles.auction__filters__dot} />
+                                )}
+                            </button>
+
+                            {hasActiveFilters && (
+                                <button
+                                    className={`btn-reset ${styles.auction__filters__reset}`}
+                                    onClick={handleReset}
+                                >
+                                    ✕ {t.filters_reset || 'Скинути'}
+                                </button>
+                            )}
+
+                            <span className={styles.auction__filters__count}>
+                                {totalCount} {t.lots_count_label || 'лотів'}
+                            </span>
+                        </div>
+
+                        {filtersOpen && (
+                            <div className={styles.auction__filters__panel}>
+
+                                <div className={styles.auction__filters__group}>
+                                    <span className={styles.auction__filters__group_label}>
+                                        {t.filter_category || 'Категорія'}
+                                    </span>
+                                    <div className={styles.auction__filters__chips}>
+                                        <button
+                                            className={`btn-reset ${styles.auction__filters__chip} ${!category ? styles.auction__filters__chip_active : ''}`}
+                                            onClick={() => setCategory('')}
+                                        >
+                                            {t.filter_all || 'Всі'}
+                                        </button>
+                                        {CATEGORIES.map((cat) => (
+                                            <button
+                                                key={cat}
+                                                className={`btn-reset ${styles.auction__filters__chip} ${category === cat ? styles.auction__filters__chip_active : ''}`}
+                                                onClick={() => setCategory(cat === category ? '' : cat)}
+                                            >
+                                                {t[`category_${cat}`] || cat}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className={styles.auction__filters__group}>
+                                    <span className={styles.auction__filters__group_label}>
+                                        {t.filter_condition || 'Стан товару'}
+                                    </span>
+                                    <div className={styles.auction__filters__chips}>
+                                        <button
+                                            className={`btn-reset ${styles.auction__filters__chip} ${!condition ? styles.auction__filters__chip_active : ''}`}
+                                            onClick={() => setCondition('')}
+                                        >
+                                            {t.filter_all || 'Всі'}
+                                        </button>
+                                        {CONDITIONS.map((cond) => (
+                                            <button
+                                                key={cond}
+                                                className={`btn-reset ${styles.auction__filters__chip} ${condition === cond ? styles.auction__filters__chip_active : ''}`}
+                                                onClick={() => setCondition(cond === condition ? '' : cond)}
+                                            >
+                                                {t[`condition_${cond}`] || cond}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className={styles.auction__filters__group}>
+                                    <span className={styles.auction__filters__group_label}>
+                                        {t.filter_price || 'Ціна (₴)'}
+                                    </span>
+                                    <div className={styles.auction__filters__price}>
+                                        <input
+                                            type='number'
+                                            placeholder={t.price_from || 'Від'}
+                                            value={minPrice}
+                                            onChange={e => setMinPrice(e.target.value)}
+                                            className={styles.auction__filters__price_input}
+                                        />
+                                        <span className={styles.auction__filters__price_sep}>—</span>
+                                        <input
+                                            type='number'
+                                            placeholder={t.price_to || 'До'}
+                                            value={maxPrice}
+                                            onChange={e => setMaxPrice(e.target.value)}
+                                            className={styles.auction__filters__price_input}
+                                        />
+                                    </div>
+                                </div>
+
+                            </div>
+                        )}
                     </div>
 
                     {spinner && (
@@ -128,6 +282,7 @@ const AuctionPage = () => {
                             />
                         </div>
                     )}
+
                 </div>
             </section>
         </main>

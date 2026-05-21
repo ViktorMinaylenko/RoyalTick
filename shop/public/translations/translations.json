@@ -39,7 +39,49 @@
       "profile": "Profile",
       "logout": "Logout"
     },
+    "community": {
+      "badge_author": "Author",
+      "reply_to": "Reply",
+      "replying_to": "Replying to",
+      "title": "Community",
+      "create_btn": "New Topic",
+      "count_label": "topics",
+      "empty": "No topics yet. Be the first!",
+      "all_categories": "All Topics",
+      "sections": "Sections",
+      "new_badge": "New",
+      "back": "← Community",
+      "messages_title": "Messages",
+      "reply_placeholder": "Write a message...",
+      "reply_btn": "Send",
+      "login_hint_link": "Sign in",
+      "login_hint_text": "to leave a message",
+      "create_title": "New Topic",
+      "field_title": "Title",
+      "field_category": "Category",
+      "field_body": "Text",
+      "field_tags": "Tags (press Enter to add, up to 5)",
+      "title_placeholder": "Enter topic title...",
+      "category_placeholder": "Choose a category",
+      "body_placeholder": "Describe your topic...",
+      "tags_placeholder": "E.g. Tissot, service, strap...",
+      "cancel": "Cancel",
+      "publish": "Publish",
+      "required": "Please fill in all required fields",
+      "success": "Topic created!",
+      "tags_label": "Tags:",
+      "categories": {
+        "valuation": "Valuation & Identification",
+        "watches": "Watches",
+        "straps": "Straps & Bracelets",
+        "care": "Care & Service",
+        "auction": "Auction",
+        "trade": "Buy/Sell",
+        "general": "General"
+      }
+    },
     "main_menu": {
+      "community": "Community",
       "catalog": "Catalog",
       "buyers": "For buyers",
       "contacts": "Contacts",
@@ -91,6 +133,9 @@
       "nato_strap": "NATO Straps"
     },
     "breadcrumbs": {
+      "community": "Community",
+      "topic": "Topic",
+      "create": "New Topic",
       "main": "Home",
       "comparison": "Comparison",
       "cart": "Cart",
@@ -515,7 +560,26 @@
       "comment_login_hint": "Sign in",
       "comment_login_hint_text": "to leave a comment",
       "comment_role_seller": "Seller",
-      "comment_role_buyer": "Buyer"
+      "comment_role_buyer": "Buyer",
+      "sort_newest": "Newest",
+      "sort_oldest": "Oldest",
+      "sort_price_asc": "Price ↑",
+      "sort_price_desc": "Price ↓",
+      "sort_ending_soon": "Ending soon",
+      "sort_most_bids": "Most bids",
+      "filters_btn": "Filters",
+      "filters_reset": "Reset",
+      "lots_count_label": "lots",
+      "filter_category": "Category",
+      "filter_condition": "Condition",
+      "filter_price": "Price (₴)",
+      "filter_all": "All",
+      "price_from": "From",
+      "price_to": "To",
+      "category_watches": "Watches",
+      "category_straps": "Straps",
+      "category_boxes": "Boxes",
+      "category_care": "Care"
     },
     "profile": {
       "balance": "Balance",
@@ -577,6 +641,18 @@
         "submit_rating": "Submit rating",
         "already_rated": "You have already rated"
       }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "read_all": "Mark all as read",
+      "empty": "No notifications",
+      "bid_on_lot_title": "New bid on your lot",
+      "bid_outbid_title": "Your bid was outbid",
+      "new_message_title": "New message",
+      "bid_on_lot_text": "placed a bid of",
+      "bid_outbid_text": "outbid you on",
+      "new_message_text": "sent a message in chat for",
+      "clear_all": "Clear all"
     }
   },
   "ua": {
@@ -619,7 +695,49 @@
       "profile": "Профіль",
       "logout": "Вийти"
     },
+    "community": {
+      "badge_author": "Автор",
+      "reply_to": "Відповісти",
+      "replying_to": "Відповідь",
+      "title": "Спільнота",
+      "create_btn": "Нова тема",
+      "count_label": "тем",
+      "empty": "Тем поки немає. Будьте першим!",
+      "all_categories": "Всі теми",
+      "sections": "Розділи",
+      "new_badge": "Нова",
+      "back": "← Спільнота",
+      "messages_title": "Повідомлення",
+      "reply_placeholder": "Написати повідомлення...",
+      "reply_btn": "Надіслати",
+      "login_hint_link": "Увійдіть",
+      "login_hint_text": "щоб залишити повідомлення",
+      "create_title": "Нова тема",
+      "field_title": "Заголовок",
+      "field_category": "Категорія",
+      "field_body": "Текст",
+      "field_tags": "Теги (Enter щоб додати, до 5)",
+      "title_placeholder": "Введіть заголовок теми...",
+      "category_placeholder": "Оберіть категорію",
+      "body_placeholder": "Опишіть вашу тему...",
+      "tags_placeholder": "Наприклад: Tissot, сервіс, ремінець...",
+      "cancel": "Скасувати",
+      "publish": "Опублікувати",
+      "required": "Заповніть всі обовʼязкові поля",
+      "success": "Тему створено!",
+      "tags_label": "Теги:",
+      "categories": {
+        "valuation": "Оцінка та визначення",
+        "watches": "Годинники",
+        "straps": "Ремінці та браслети",
+        "care": "Догляд та сервіс",
+        "auction": "Аукціон",
+        "trade": "Купівля/продаж",
+        "general": "Загальне"
+      }
+    },
     "main_menu": {
+      "community": "Спільнота",
       "catalog": "Каталог",
       "buyers": "Покупцям",
       "contacts": "Контакти",
@@ -671,6 +789,9 @@
       "nato_strap": "Ремінці NATO"
     },
     "breadcrumbs": {
+      "community": "Спільнота",
+      "topic": "Тема",
+      "create": "Нова тема",
       "main": "Головна",
       "comparison": "Порівняння",
       "cart": "Кошик",
@@ -1094,7 +1215,26 @@
       "comment_login_hint": "Увійдіть",
       "comment_login_hint_text": "щоб залишити коментар",
       "comment_role_seller": "Продавець",
-      "comment_role_buyer": "Покупець"
+      "comment_role_buyer": "Покупець",
+      "sort_newest": "Новіші",
+      "sort_oldest": "Старіші",
+      "sort_price_asc": "Ціна ↑",
+      "sort_price_desc": "Ціна ↓",
+      "sort_ending_soon": "Закінчуються",
+      "sort_most_bids": "Більше ставок",
+      "filters_btn": "Фільтри",
+      "filters_reset": "Скинути",
+      "lots_count_label": "лотів",
+      "filter_category": "Категорія",
+      "filter_condition": "Стан товару",
+      "filter_price": "Ціна (₴)",
+      "filter_all": "Всі",
+      "price_from": "Від",
+      "price_to": "До",
+      "category_watches": "Годинники",
+      "category_straps": "Ремінці",
+      "category_boxes": "Коробки",
+      "category_care": "Догляд"
     },
     "profile": {
       "balance": "Баланс",
@@ -1156,6 +1296,18 @@
         "submit_rating": "Надіслати оцінку",
         "already_rated": "Ви вже залишили оцінку"
       }
+    },
+    "notifications": {
+      "title": "Сповіщення",
+      "read_all": "Прочитати всі",
+      "empty": "Сповіщень немає",
+      "bid_on_lot_title": "Нова ставка на ваш лот",
+      "bid_outbid_title": "Вашу ставку перебито",
+      "new_message_title": "Нове повідомлення",
+      "bid_on_lot_text": "поставив ставку",
+      "bid_outbid_text": "перебив вашу ставку на",
+      "new_message_text": "написав у чат по лоту",
+      "clear_all": "Очистити"
     }
   }
 }

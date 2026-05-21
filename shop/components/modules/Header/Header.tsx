@@ -43,6 +43,7 @@ import {
   setShouldShowEmptyComparison,
 } from '@/context/comparison/index'
 import { setLang } from '@/context/lang/index'
+import NotificationsPopup from './NotificationsPopup/NotificationsPopup'
 
 const Header = () => {
   const isAuth = useUnit($isAuth)
@@ -164,6 +165,11 @@ const Header = () => {
           {isAuth && (
             <li className='header__link-item'>
               <ChatIcon />
+            </li>
+          )}
+          {isAuth && (
+            <li className='header__link-item'>
+              <NotificationsPopup />
             </li>
           )}
           <li className='header__link-item'>

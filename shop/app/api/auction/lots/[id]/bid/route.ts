@@ -3,6 +3,7 @@ import { corsHeaders } from '@/constants/corsHeaders'
 import clientPromise from '@/lib/mongodb'
 import { getDbAndReqBody, isValidAccessToken, parseJwt, findUserByEmail } from '@/lib/utils/api-routes'
 import { ObjectId } from 'mongodb'
+import { createNotification } from '@/lib/utils/createNotification'
 
 export async function POST(
     req: Request,
@@ -70,6 +71,33 @@ export async function POST(
                 $push: { bids: newBid } as any,
             }
         )
+
+        await createNotification({
+            db,
+            userId: lot.userId,
+            type: 'bid_on_lot',
+            actorName: user?.name,
+            lotTitle: lot.title,
+            bidAmount,
+            href: `/auction/${id}`,
+        })
+
+        const previousTopBid = lot.bids[lot.bids.length - 1]
+        if (
+            previousTopBid &&
+            String(previousTopBid.userId) !== String(user?._id) &&
+            String(previousTopBid.userId) !== String(lot.userId)
+        ) {
+            await createNotification({
+                db,
+                userId: previousTopBid.userId,
+                type: 'bid_outbid',
+                actorName: user?.name,
+                lotTitle: lot.title,
+                bidAmount,
+                href: `/auction/${id}`,
+            })
+        }
 
         const updatedLot = await db.collection('lots').findOne({ _id: new ObjectId(id) })
 

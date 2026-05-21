@@ -3,7 +3,6 @@ import { corsHeaders } from '@/constants/corsHeaders'
 import clientPromise from '@/lib/mongodb'
 import { getDbAndReqBody, isValidAccessToken, parseJwt, findUserByEmail } from '@/lib/utils/api-routes'
 import { ObjectId } from 'mongodb'
-import { createNotification } from '@/lib/utils/createNotification'
 
 export async function POST(
     req: Request,
@@ -19,6 +18,7 @@ export async function POST(
 
         const { db, reqBody } = await getDbAndReqBody(clientPromise, req)
         const { text } = reqBody
+
         if (!text?.trim()) {
             return NextResponse.json({ message: 'Порожнє повідомлення', status: 400 }, corsHeaders)
         }
@@ -27,43 +27,22 @@ export async function POST(
 
         const newMessage = {
             _id: new ObjectId(),
-            senderId: user?._id,
-            senderName: user?.name,
+            userId: user?._id,
+            userName: user?.name,
+            userImage: user?.image || '',
             text: text.trim(),
+            replyToId: reqBody.replyToId || null,
+            replyToUserName: reqBody.replyToUserName || null,
             createdAt: new Date(),
-            isRead: false,
         }
 
-        await db.collection('chats').updateOne(
-            { _id: new ObjectId(id) },
-            { $set: { deletedFor: [] } }
-        )
-
-        await db.collection('chats').updateOne(
+        await db.collection('topics').updateOne(
             { _id: new ObjectId(id) },
             { $push: { messages: newMessage } } as any
         )
 
-        const chatDoc = await db.collection('chats').findOne({ _id: new ObjectId(id) })
-        const recipientId = String(user?._id) === String(chatDoc?.ownerId)
-            ? chatDoc?.winnerId
-            : chatDoc?.ownerId
-
-        if (recipientId) {
-            await createNotification({
-                db,
-                userId: recipientId,
-                type: 'new_message',
-                actorName: user?.name,
-                lotTitle: chatDoc?.lotTitle,
-                chatId: id,
-                href: `/chats/${id}`,
-            })
-        }
-
-        const updatedChat = await db.collection('chats').findOne({ _id: new ObjectId(id) })
-
-        return NextResponse.json({ status: 200, chat: updatedChat }, corsHeaders)
+        const updated = await db.collection('topics').findOne({ _id: new ObjectId(id) })
+        return NextResponse.json({ status: 200, topic: updated }, corsHeaders)
     } catch (error) {
         return NextResponse.json({ message: (error as Error).message, status: 500 }, corsHeaders)
     }

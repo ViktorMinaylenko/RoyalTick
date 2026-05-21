@@ -15,6 +15,7 @@ import Accordion from '../Accordion/Accordion'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import BuyersListItems from './BuyersListItems'
 import ContactsListItems from './ContactsListItems'
+import AuctionListItems from './AuctionListItems'
 import Link from 'next/link'
 
 const Menu = () => {
@@ -37,6 +38,7 @@ const Menu = () => {
   const handleShowCatalogList = () => setActiveListId(1)
   const handleShowBuyersList = () => setActiveListId(2)
   const handleShowContactsList = () => setActiveListId(3)
+  const handleShowAuctionList = () => setActiveListId(4)
 
   const handleCloseMenu = () => {
     removeOverflowHiddenFromBody()
@@ -90,7 +92,7 @@ const Menu = () => {
         <button
           className={`btn-reset nav-menu__close ${menuIsOpen ? 'open' : ''}`}
           onClick={handleCloseMenu}
-        ></button>
+        />
         <div className={`nav-menu__lang ${menuIsOpen ? 'open' : ''}`}>
           <button
             className={`btn-reset nav-menu__lang__btn ${lang === 'ua' ? 'lang-active' : ''}`}
@@ -101,7 +103,9 @@ const Menu = () => {
             onClick={handleSwitchLangToEn}
           >EN</button>
         </div>
+
         <ul className={`list-reset nav-menu__list ${menuIsOpen ? 'open' : ''}`}>
+
           {!isMedia800 && (
             <li className='nav-menu__list__item'>
               <button
@@ -130,7 +134,6 @@ const Menu = () => {
                         </ul>
                       </Accordion>
                     </li>
-
                     <li className='nav-menu__accordion__item'>
                       <Accordion
                         title={translations[lang].main_menu.straps}
@@ -143,7 +146,6 @@ const Menu = () => {
                         </ul>
                       </Accordion>
                     </li>
-
                     <li className='nav-menu__accordion__item'>
                       <Accordion
                         title={translations[lang].main_menu.boxes}
@@ -156,7 +158,6 @@ const Menu = () => {
                         </ul>
                       </Accordion>
                     </li>
-
                     <li className='nav-menu__accordion__item'>
                       <Accordion
                         title={translations[lang].main_menu.care}
@@ -178,20 +179,33 @@ const Menu = () => {
           <li className='nav-menu__list__item'>
             {!isMedia640 ? (
               <>
-                <button className='btn-reset nav-menu__list__item__btn' onMouseEnter={handleShowBuyersList}>
+                <button
+                  className='btn-reset nav-menu__list__item__btn'
+                  onMouseEnter={handleShowBuyersList}
+                >
                   {translations[lang].main_menu.buyers}
                 </button>
                 <AnimatePresence>
                   {activelistId === 2 && (
-                    <motion.ul initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className='list-reset nav-menu__accordion'>
+                    <motion.ul
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className='list-reset nav-menu__accordion'
+                    >
                       <BuyersListItems />
                     </motion.ul>
                   )}
                 </AnimatePresence>
               </>
             ) : (
-              <Accordion title={translations[lang].main_menu.buyers} titleClass='btn-reset nav-menu__list__item__btn'>
-                <ul className='list-reset nav-menu__accordion__item__list'><BuyersListItems /></ul>
+              <Accordion
+                title={translations[lang].main_menu.buyers}
+                titleClass='btn-reset nav-menu__list__item__btn'
+              >
+                <ul className='list-reset nav-menu__accordion__item__list'>
+                  <BuyersListItems />
+                </ul>
               </Accordion>
             )}
           </li>
@@ -199,42 +213,71 @@ const Menu = () => {
           <li className='nav-menu__list__item'>
             {!isMedia640 ? (
               <>
-                <button className='btn-reset nav-menu__list__item__btn' onMouseEnter={handleShowContactsList}>
+                <button
+                  className='btn-reset nav-menu__list__item__btn'
+                  onMouseEnter={handleShowContactsList}
+                >
                   {translations[lang].main_menu.contacts}
                 </button>
                 <AnimatePresence>
                   {activelistId === 3 && (
-                    <motion.ul initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className='list-reset nav-menu__accordion'>
+                    <motion.ul
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className='list-reset nav-menu__accordion'
+                    >
                       <ContactsListItems />
                     </motion.ul>
                   )}
                 </AnimatePresence>
               </>
             ) : (
-              <Accordion title={translations[lang].main_menu.contacts} titleClass='btn-reset nav-menu__list__item__btn'>
-                <ul className='list-reset nav-menu__accordion__item__list'><ContactsListItems /></ul>
+              <Accordion
+                title={translations[lang].main_menu.contacts}
+                titleClass='btn-reset nav-menu__list__item__btn'
+              >
+                <ul className='list-reset nav-menu__accordion__item__list'>
+                  <ContactsListItems />
+                </ul>
               </Accordion>
             )}
           </li>
+
           <li className='nav-menu__list__item'>
             {!isMedia640 ? (
-              <Link
-                href='/auction'
-                className='btn-reset nav-menu__list__item__btn'
-                onClick={handleCloseMenu}
-              >
-                {translations[lang].main_menu.auction}
-              </Link>
+              <>
+                <button
+                  className='btn-reset nav-menu__list__item__btn'
+                  onMouseEnter={handleShowAuctionList}
+                >
+                  {translations[lang].main_menu.auction}
+                </button>
+                <AnimatePresence>
+                  {activelistId === 4 && (
+                    <motion.ul
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className='list-reset nav-menu__accordion'
+                    >
+                      <AuctionListItems handleCloseMenu={handleCloseMenu} />
+                    </motion.ul>
+                  )}
+                </AnimatePresence>
+              </>
             ) : (
-              <Link
-                href='/auction'
-                className='btn-reset nav-menu__list__item__btn'
-                onClick={handleCloseMenu}
+              <Accordion
+                title={translations[lang].main_menu.auction}
+                titleClass='btn-reset nav-menu__list__item__btn'
               >
-                {translations[lang].main_menu.auction}
-              </Link>
+                <ul className='list-reset nav-menu__accordion__item__list'>
+                    <AuctionListItems handleCloseMenu={handleCloseMenu} />
+                </ul>
+              </Accordion>
             )}
           </li>
+
         </ul>
       </div>
     </nav>
