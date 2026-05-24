@@ -1,4 +1,4 @@
- 
+'use client'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import Crumb from './Crumb'

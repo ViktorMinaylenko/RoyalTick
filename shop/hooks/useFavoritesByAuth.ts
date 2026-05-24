@@ -1,3 +1,4 @@
+'use client'
 import { $isAuth } from '@/context/auth/state'
 import { $favorites, $favoritesFromLS } from '@/context/favorites/state'
 import { useUnit } from 'effector-react'

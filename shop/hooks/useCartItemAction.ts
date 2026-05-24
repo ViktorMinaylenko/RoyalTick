@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react'
 import { ICartItem } from '@/types/cart'
 import { deleteProductFromLS, isUserAuth } from '@/lib/utils/common'

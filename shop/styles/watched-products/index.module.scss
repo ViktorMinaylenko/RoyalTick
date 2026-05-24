@@ -1,22 +1,21 @@
 .watched {
-  padding-top: 40px;
-  margin-bottom: 40px;
+  padding-top: 48px;
+  margin-bottom: 48px;
   position: relative;
 
   &__title {
-    margin: 0;
-    color: #F1F3F5;
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 40px;
+    margin: 0 0 40px;
+    color: #f0ede8;
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 
-    @media (max-width: 650px) {
-      font-size: 32px;
-    }
+    @media (max-width: 650px) { font-size: 18px; }
 
     @media (max-width: 590px) {
       margin-bottom: 20px;
-      font-size: 24px;
+      font-size: 16px;
       max-width: 200px;
     }
   }

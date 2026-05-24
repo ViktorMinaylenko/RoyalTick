@@ -1,10 +1,11 @@
-import CommunityPage from '@/components/templates/CommunityPage/CommunityPage'
-import { Suspense } from 'react'
+'use client'
+import dynamic from 'next/dynamic'
 
-const Community = () => (
-    <Suspense fallback={null}>
-        <CommunityPage />
-    </Suspense>
+const CommunityPage = dynamic(
+    () => import('@/components/templates/CommunityPage/CommunityPage'),
+    { ssr: false, loading: () => null }
 )
+
+const Community = () => <CommunityPage />
 
 export default Community

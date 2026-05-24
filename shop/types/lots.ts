@@ -83,3 +83,53 @@ export interface IUserLot {
     status: string
     bids: unknown[]
 }
+
+export interface ILotForm {
+    title: string
+    category: string
+    subcategory: string
+    description: string
+    condition: string
+    saleType: string
+    startPrice: string
+    bidStep: string
+    reservePrice: string
+    buyNowPrice: string
+    startDate: string
+    endDate: string
+    autoExtend: boolean
+    location: string
+    deliveryMethods: string[]
+    deliveryPayer: string
+    returnsAllowed: boolean
+    guarantees: string
+    buyerComment: string
+    moderatorNote: string
+    confirmRules: boolean
+    videoUrl: string
+}
+
+export const initialForm: ILotForm = {
+    title: '',
+    category: '',
+    subcategory: '',
+    description: '',
+    condition: '',
+    saleType: 'auction',
+    startPrice: '',
+    bidStep: '',
+    reservePrice: '',
+    buyNowPrice: '',
+    startDate: '',
+    endDate: '',
+    autoExtend: false,
+    location: '',
+    deliveryMethods: [],
+    deliveryPayer: 'buyer',
+    returnsAllowed: false,
+    guarantees: '',
+    buyerComment: '',
+    moderatorNote: '',
+    confirmRules: false,
+    videoUrl: '',
+}

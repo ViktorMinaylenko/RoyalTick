@@ -1,3 +1,4 @@
+'use client'
 import { useEffect } from 'react'
 import { useUnit } from 'effector-react'
 import { $cart, $cartFromLs, $totalPrice } from '@/context/cart/state'

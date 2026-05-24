@@ -1,3 +1,4 @@
+'use client'
 import { useMemo } from 'react'
 import { idGenerator } from '@/lib/utils/common'
 import { IProduct } from '@/types/common'

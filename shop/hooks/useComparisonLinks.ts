@@ -1,3 +1,4 @@
+'use client'
 import { useMemo } from 'react'
 import { useUnit } from 'effector-react'
 import { usePathname } from 'next/navigation'

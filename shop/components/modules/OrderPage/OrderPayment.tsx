@@ -6,6 +6,14 @@ import { basePropsForMotion } from '@/constants/motion'
 import styles from '@/styles/order/index.module.scss'
 import { $cashPaymentTab, $onlinePaymentTab } from '@/context/order/state'
 import { setCashPaymentTb, setOnlinePaymentTb } from '@/context/order'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+    faCreditCard,
+    faMobileScreen,
+    faUniversity,
+    faMoneyBillWave,
+    faStore,
+} from '@fortawesome/free-solid-svg-icons'
 
 const OrderPayment = () => {
     const { lang, translations } = useLang()
@@ -54,8 +62,12 @@ const OrderPayment = () => {
                                 />
                                 <label
                                     htmlFor='payment-1'
-                                    className={styles.order__list__item__payment__content__label}
+                                    className={`${styles.order__list__item__payment__content__label} ${styles.no_bg}`}
                                 >
+                                    <FontAwesomeIcon
+                                        icon={faCreditCard}
+                                        className={styles.order__list__item__payment__content__label__icon}
+                                    />
                                     <span className={styles.order__list__item__payment__content__label__info}>
                                         {translations[lang].order.card_number}
                                     </span>
@@ -67,8 +79,12 @@ const OrderPayment = () => {
                                 <input type='radio' id='payment-2' name='radio-group' />
                                 <label
                                     htmlFor='payment-2'
-                                    className={styles.order__list__item__payment__content__label}
+                                    className={`${styles.order__list__item__payment__content__label} ${styles.no_bg}`}
                                 >
+                                    <FontAwesomeIcon
+                                        icon={faMobileScreen}
+                                        className={styles.order__list__item__payment__content__label__icon}
+                                    />
                                     Apple Pay / Google Pay
                                 </label>
                             </p>
@@ -77,14 +93,19 @@ const OrderPayment = () => {
                                 <input type='radio' id='payment-3' name='radio-group' />
                                 <label
                                     htmlFor='payment-3'
-                                    className={styles.order__list__item__payment__content__label}
+                                    className={`${styles.order__list__item__payment__content__label} ${styles.no_bg}`}
                                 >
+                                    <FontAwesomeIcon
+                                        icon={faUniversity}
+                                        className={styles.order__list__item__payment__content__label__icon}
+                                    />
                                     Monobank / Privat24
                                 </label>
                             </p>
                         </form>
                     </motion.div>
                 )}
+
                 {cashPaymentTab && (
                     <motion.div
                         {...basePropsForMotion}
@@ -102,6 +123,10 @@ const OrderPayment = () => {
                                     htmlFor='payment-1'
                                     className={`${styles.order__list__item__payment__content__label} ${styles.no_bg}`}
                                 >
+                                    <FontAwesomeIcon
+                                        icon={faMoneyBillWave}
+                                        className={styles.order__list__item__payment__content__label__icon}
+                                    />
                                     {translations[lang].order.cash_office}
                                 </label>
                             </p>
@@ -111,6 +136,10 @@ const OrderPayment = () => {
                                     htmlFor='payment-2'
                                     className={`${styles.order__list__item__payment__content__label} ${styles.no_bg}`}
                                 >
+                                    <FontAwesomeIcon
+                                        icon={faStore}
+                                        className={styles.order__list__item__payment__content__label__icon}
+                                    />
                                     {translations[lang].order.card_office}
                                 </label>
                             </p>

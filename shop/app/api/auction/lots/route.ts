@@ -9,6 +9,7 @@ import {
 } from '@/lib/utils/api-routes'
 import { v2 as cloudinary } from 'cloudinary'
 import { ObjectId } from 'mongodb'
+import { LOT_CREATION_FEE } from '@/constants/auction'
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -148,6 +149,13 @@ export async function POST(req: Request) {
             }, corsHeaders)
         }
 
+        if ((user?.balance || 0) < LOT_CREATION_FEE) {
+            return NextResponse.json({
+                message: `Недостатньо коштів. Для створення лоту потрібно ${LOT_CREATION_FEE} ₴`,
+                status: 402,
+            }, corsHeaders)
+        }
+
         const newLot = {
             title,
             category: formData.get('category') as string,
@@ -182,6 +190,11 @@ export async function POST(req: Request) {
         }
 
         const result = await db.collection('lots').insertOne(newLot)
+
+        await db.collection('users').updateOne(
+            { _id: user?._id },
+            { $inc: { balance: -LOT_CREATION_FEE } }
+        )
 
         return NextResponse.json(
             { status: 201, lot: { ...newLot, _id: result.insertedId } },

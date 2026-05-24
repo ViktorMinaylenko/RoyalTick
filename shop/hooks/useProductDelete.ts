@@ -1,3 +1,4 @@
+'use client'
 import { EventCallable } from 'effector'
 import { useState } from 'react'
 import { IBaseEffectProps } from '@/types/common'

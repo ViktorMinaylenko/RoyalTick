@@ -1,3 +1,4 @@
+'use client'
 import { animate } from 'framer-motion'
 import { useEffect, useState } from 'react'
 

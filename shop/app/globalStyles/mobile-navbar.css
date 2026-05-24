@@ -3,8 +3,9 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px 24px;
-  background-color: #1D2533;
+  padding: 16px 24px;
+  background: #0c0c0c;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -13,15 +14,23 @@
 
 .mobile-navbar__btn {
   min-width: max-content;
-  height: 52px;
+  height: 48px;
   position: relative;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   text-decoration: none;
-  color: #E8E9EA;
-  font-size: 14px;
+  color: rgba(240, 237, 232, 0.25);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   background-repeat: no-repeat;
-  background-position: top 5px center;
+  background-position: top 4px center;
+  transition: color 0.2s;
+}
+
+.mobile-navbar__btn:hover {
+  color: #b8973f;
 }
 
 .mobile-navbar__btn:first-child {
@@ -42,7 +51,7 @@
 
 .mobile-navbar__btn:last-child {
   background-image: url(/img/more.svg);
-  background-position: top 13px center;
+  background-position: top 12px center;
 }
 
 @media (max-width: 450px) {

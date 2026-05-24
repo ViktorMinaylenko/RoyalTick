@@ -1,22 +1,22 @@
 .comparison {
-  padding-bottom: 40px;
+  padding-bottom: 60px;
 
   &_main_links {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 32px;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     min-height: 300px;
 
     li {
       position: relative;
       height: 300px;
-      border: 1px solid #565C66;
-      transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
+      background: #0f0f0f;
+      transition: background 0.2s;
 
       &:hover {
-        transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
-        background-color: #3D4555;
-        box-shadow: 0px 12px 20px 0px rgba(0, 0, 0, 0.20), 0px 0px 20px 0px rgba(0, 0, 0, 0.10);
+        background: #141414;
       }
 
       a {
@@ -25,14 +25,22 @@
         left: 0;
         right: 0;
         bottom: 0;
-        color: #F1F3F5;
-        font-size: 22px;
-        font-weight: 500;
+        color: rgba(240, 237, 232, 0.5);
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
         text-decoration: none;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        gap: 12px;
+        transition: color 0.2s;
+
+        &:hover {
+          color: #f0ede8;
+        }
       }
     }
 
@@ -40,8 +48,9 @@
       height: 300px;
       background-image: url('/img/comparison-icon.png');
       background-repeat: no-repeat;
-      background-position: center center;
-      background-size: 300px
+      background-position: center;
+      background-size: 200px;
+      opacity: 0.15;
     }
   }
 
@@ -53,49 +62,56 @@
     padding-bottom: 10px;
 
     &::-webkit-scrollbar {
-      height: 8px;
+      height: 2px;
     }
 
     &::-webkit-scrollbar-track {
-      background-color: transparent;
+      background: transparent;
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: #9466FF;
-      border-radius: 3px;
+      background: rgba(184, 151, 63, 0.3);
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background-color: #70F;
+      background: #b8973f;
     }
 
     li {
-      padding: 10px;
+      padding: 10px 16px;
       position: relative;
-      border: 1px solid #565C66;
-      transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
+      background: #0f0f0f;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: background 0.2s, border-color 0.2s;
       min-width: max-content;
 
       &.active {
-        background-color: #3D4555;
+        background: #141414;
+        border-color: rgba(184, 151, 63, 0.3);
       }
 
       &:not(:last-child) {
-        margin-right: 10px;
-        margin-bottom: 10px;
+        margin-right: 6px;
+        margin-bottom: 6px;
       }
 
       &:hover {
-        transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
-        background-color: #3D4555;
+        background: #141414;
+        border-color: rgba(255, 255, 255, 0.1);
       }
     }
 
     a {
       display: block;
-      color: #F1F3F5;
-      font-size: 18px;
+      color: rgba(240, 237, 232, 0.5);
+      font-size: 13px;
+      letter-spacing: 0.3px;
       text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #f0ede8;
+      }
 
       &::before {
         content: '';
@@ -107,7 +123,7 @@
       }
 
       & span:first-child {
-        margin-right: 16px;
+        margin-right: 12px;
       }
     }
   }
@@ -119,141 +135,153 @@
     padding-bottom: 32px;
 
     &::-webkit-scrollbar {
-      height: 8px;
+      height: 2px;
     }
 
     &::-webkit-scrollbar-track {
-      background-color: transparent;
+      background: transparent;
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: #4a8c7e;
-      border-radius: 3px;
+      background: rgba(184, 151, 63, 0.3);
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background-color: #6aac9e;
+      background: #b8973f;
     }
 
     &__item {
       position: relative;
-      border: 1px solid #565C66;
-      padding: 15px;
-      min-width: 478px;
+      background: #0f0f0f;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      min-width: 460px;
 
       @media (max-width: 730px) {
-        min-width: 289px;
-        width: 289px;
+        min-width: 280px;
+        width: 280px;
       }
 
       &:not(:last-child) {
-        margin-right: 32px;
+        margin-right: 1px;
 
         @media (max-width: 730px) {
-          margin-right: 16px;
+          margin-right: 1px;
         }
       }
 
       &__delete {
         position: absolute;
-        right: 15px;
-        top: 15px;
-        height: 24px;
-        width: 24px;
+        right: 16px;
+        top: 16px;
+        height: 22px;
+        width: 22px;
 
         & span::before {
-          background-color: #A5A8AD;
+          background-color: rgba(240, 237, 232, 0.2);
           content: '';
           height: 100%;
           width: 100%;
           left: 0;
           position: absolute;
           top: 0;
-          transition: background-color 0.2s ease-in-out;
+          transition: background-color 0.2s;
           -webkit-mask: url(/img/trash.svg) no-repeat 50% 50%;
           mask: url(/img/trash.svg) no-repeat 50% 50%;
         }
 
         &:hover span::before {
-          transition: background-color 0.2s ease-in-out;
-          background-color: #FF0C0C;
+          background-color: #c0574a;
         }
       }
 
       &__cart {
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
         position: absolute;
         top: 150px;
-        right: 15px;
+        right: 16px;
 
         & span::before {
-          background-color: #A5A8AD;
+          background-color: rgba(240, 237, 232, 0.2);
           content: '';
           height: 100%;
           width: 100%;
           left: 0;
           position: absolute;
           top: 0;
-          transition: background-color 0.2s ease-in-out;
+          transition: background-color 0.2s;
           -webkit-mask: url(/img/cart-plus.svg) no-repeat 50% 50%;
           mask: url(/img/cart-plus.svg) no-repeat 50% 50%;
         }
 
         &:hover span::before {
-          transition: background-color 0.2s ease-in-out;
-          background-color: #26da72;
+          background-color: #b8973f;
         }
       }
 
       &__cart_added {
         &::before {
-          background-color: #26da72;
+          background-color: #b8973f;
           content: '';
           height: 100%;
           width: 100%;
           left: 0;
           position: absolute;
           top: 0;
-          transition: background-color 0.2s ease-in-out;
           -webkit-mask: url(/img/cart-checked.svg) no-repeat 50% 50%;
           mask: url(/img/cart-checked.svg) no-repeat 50% 50%;
         }
       }
 
       &__img {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
         text-align: center;
-        background: radial-gradient(52.53% 52.53% at 50% 47.47%, #333A47 0%, rgba(29, 37, 51, 0.00) 100%);
+        background: #0a0a0a;
+        border: 1px solid rgba(255, 255, 255, 0.04);
 
         img {
           object-fit: contain;
+          filter: saturate(0.8);
         }
       }
 
       &__inner_list {
         &__item {
-          border: 1px solid #565C66;
-          padding: 10px;
-          color: #F1F3F5;
-          font-size: 18px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+          padding: 12px 4px;
+          color: rgba(240, 237, 232, 0.7);
+          font-size: 13px;
           display: flex;
           align-items: center;
           justify-content: space-between;
+          gap: 12px;
+
+          &:last-child {
+            border-bottom: none;
+          }
 
           & span:first-child {
-            margin-right: 10px;
+            color: #6b6560;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-right: 8px;
+            flex-shrink: 0;
           }
 
           & span:last-child {
             text-align: end;
+            color: #f0ede8;
+            font-size: 13px;
           }
         }
       }
     }
   }
 }
-    
+
 .empty_bg {
   background-image: url('/img/empty-comparison-page.png');
 }

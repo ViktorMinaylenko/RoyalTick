@@ -38,12 +38,6 @@ const Footer = () => {
             </li>
             <li className='footer__socials__item'>
               <a
-                href='https://vk.com'
-                className='footer__socials__item__link'
-              />
-            </li>
-            <li className='footer__socials__item'>
-              <a
                 href='https://youtube.com'
                 className='footer__socials__item__link'
               />

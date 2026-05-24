@@ -2,9 +2,10 @@
   position: absolute;
   top: -6px;
   width: max-content;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background-color: #3d4555;
+  padding: 8px 12px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   z-index: 10;
 
   &__inner {
@@ -20,12 +21,14 @@
       width: 30px;
       background-image: url(/img/popup-arrow.svg);
       background-repeat: no-repeat;
-      background-position: center center;
+      background-position: center;
+      opacity: 0.3;
     }
   }
 
   &__text {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 14px;
+    color: rgba(240, 237, 232, 0.6);
+    font-size: 12px;
+    letter-spacing: 0.3px;
   }
 }

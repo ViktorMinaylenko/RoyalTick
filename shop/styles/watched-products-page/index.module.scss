@@ -1,28 +1,21 @@
 .watched_products {
-  padding-top: 40px;
+  padding-top: 48px;
 
   &__list {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 32px;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     width: 100%;
     margin-bottom: 60px;
 
     @media (max-width: 1150px) {
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-    }
-
-    @media (max-width: 800px) {
-      grid-gap: 24px;
-    }
-
-    @media (max-width: 620px) {
-      grid-gap: 18px;
     }
 
     @media (max-width: 460px) {
       grid-template-columns: 1fr;
     }
-}
+  }
 }

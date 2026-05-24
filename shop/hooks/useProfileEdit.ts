@@ -1,3 +1,4 @@
+'use client'
 import { Effect } from 'effector'
 import { useUnit } from 'effector-react'
 import { useEffect, useState } from 'react'

@@ -1,3 +1,4 @@
+'use client'
 import { useUnit } from 'effector-react'
 import { useEffect } from 'react'
 import { loadWatchedProducts } from '@/context/goods/index'

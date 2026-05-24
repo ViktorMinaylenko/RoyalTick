@@ -1,3 +1,4 @@
+'use client'
 import { MutableRefObject, useEffect, useRef } from 'react'
 
 export const useDebounceCallback = (delay = 100) => {

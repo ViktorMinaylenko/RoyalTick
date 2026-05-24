@@ -1,3 +1,4 @@
+'use client'
 import { useEffect } from 'react'
 import { useUnit } from 'effector-react'
 import { $isAuth } from '@/context/auth/state'

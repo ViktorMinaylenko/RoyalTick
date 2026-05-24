@@ -1,3 +1,4 @@
+'use client'
 import { useUnit } from 'effector-react'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'

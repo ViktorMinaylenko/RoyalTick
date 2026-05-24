@@ -1,3 +1,4 @@
+'use client'
 import { getWindowWidth } from '@/lib/utils/common'
 import { useEffect, useState } from 'react'
 

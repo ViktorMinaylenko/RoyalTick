@@ -1,6 +1,7 @@
 import { ICreateNotification } from "@/types/notification"
 
 
+
 export const createNotification = async ({
     db,
     userId,

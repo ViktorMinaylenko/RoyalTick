@@ -53,7 +53,7 @@ const Categories = () => {
                   className='transition-opacity opacity-0 duration'
                   onLoad={handleLoadingImageComplete}
                 />
-                <span>{translations[lang].main_page.category_classic}</span>
+                <span data-index='01'>{translations[lang].main_page.category_classic}</span>
               </Link>
               <div className={styles.categories__left}>
                 <div className={styles.categories__left__top}>
@@ -67,9 +67,7 @@ const Categories = () => {
                       className='transition-opacity opacity-0 duration'
                       onLoad={handleLoadingImageComplete}
                     />
-                    <span>
-                      {translations[lang].main_page.category_business}
-                    </span>
+                    <span data-index='02'>{translations[lang].main_page.category_business}</span>
                   </Link>
                   <Link
                     href='/catalog/premium'
@@ -81,7 +79,7 @@ const Categories = () => {
                       className='transition-opacity opacity-0 duration'
                       onLoad={handleLoadingImageComplete}
                     />
-                    <span>{translations[lang].main_page.category_premium}</span>
+                    <span data-index='03'>{translations[lang].main_page.category_premium}</span>
                   </Link>
                 </div>
                 <Link
@@ -94,7 +92,7 @@ const Categories = () => {
                     className='transition-opacity opacity-0 duration'
                     onLoad={handleLoadingImageComplete}
                   />
-                  <span>{translations[lang].main_page.category_sport}</span>
+                  <span data-index='04'>{translations[lang].main_page.category_sport}</span>
                 </Link>
               </div>
             </>

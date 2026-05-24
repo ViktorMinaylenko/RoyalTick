@@ -1,6 +1,28 @@
 .popup {
   position: relative;
 
+  &__header_actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__clear {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: rgba(192, 87, 74, 0.4);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    transition: color 0.15s;
+
+    &:hover {
+      color: #c0574a;
+    }
+  }
+
   &__btn {
     position: relative;
     width: 40px;
@@ -8,13 +30,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 17px;
     cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.2s;
+    transition: opacity 0.2s;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.06);
+      opacity: 0.7;
     }
   }
 
@@ -22,18 +43,18 @@
     position: absolute;
     top: 2px;
     right: 2px;
-    min-width: 16px;
-    height: 16px;
-    background: #7b2ff7;
-    color: #fff;
-    font-size: 9px;
+    min-width: 15px;
+    height: 15px;
+    background: #b8973f;
+    color: #0a0a0a;
+    font-size: 8px;
     font-weight: 800;
-    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 4px;
     line-height: 1;
+    letter-spacing: 0.3px;
   }
 
   &__wrapper {
@@ -41,14 +62,13 @@
     top: calc(100% + 16px);
     right: -20px;
     width: 360px;
-    background: #1a2128;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
+    background: #111111;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     padding: 0;
     z-index: 100;
     transform-origin: top right;
     overflow: hidden;
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
 
     @media (max-width: 480px) {
       width: 320px;
@@ -60,30 +80,27 @@
     position: absolute;
     top: -6px;
     right: 28px;
-    width: 12px;
-    height: 12px;
-    background: #1a2128;
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    width: 10px;
+    height: 10px;
+    background: #111111;
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     transform: rotate(45deg);
   }
 
   &__close {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     background-image: url(/img/close-small.svg);
     background-repeat: no-repeat;
     background-position: center;
-    opacity: 0.3;
+    opacity: 0.2;
     cursor: pointer;
     transition: opacity 0.2s;
-    z-index: 1;
+    flex-shrink: 0;
 
     &:hover {
-      opacity: 0.7;
+      opacity: 0.5;
     }
   }
 
@@ -91,27 +108,32 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 20px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 14px 16px 12px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   &__title {
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 700;
-    color: #e8e9ea;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(240, 237, 232, 0.4);
     margin: 0;
   }
 
   &__read_all {
-    font-size: 11px;
-    color: rgba(123, 47, 247, 0.7);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: rgba(184, 151, 63, 0.5);
     cursor: pointer;
     background: transparent;
     border: none;
     transition: color 0.15s;
 
     &:hover {
-      color: #a78bfa;
+      color: #b8973f;
     }
   }
 
@@ -120,22 +142,25 @@
     overflow-y: auto;
 
     &::-webkit-scrollbar {
-      width: 3px;
+      width: 2px;
     }
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
+
     &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.06);
     }
   }
 
   &__empty {
-    padding: 40px 20px;
+    padding: 48px 20px;
     text-align: center;
-    font-size: 13px;
-    color: rgba(232, 233, 234, 0.25);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(240, 237, 232, 0.15);
   }
 }
 
@@ -146,12 +171,14 @@
   &:last-child {
     border-bottom: none;
   }
+
   &:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
   }
 
   &_unread {
-    background: rgba(123, 47, 247, 0.04);
+    background: rgba(184, 151, 63, 0.03);
+    border-left: 1px solid rgba(184, 151, 63, 0.2);
   }
 
   &__link {
@@ -165,30 +192,33 @@
   }
 
   &__icon {
-    font-size: 20px;
+    font-size: 16px;
     line-height: 1;
     flex-shrink: 0;
     margin-top: 2px;
+    opacity: 0.7;
   }
 
   &__body {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
     min-width: 0;
   }
 
   &__title {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
-    color: #e8e9ea;
+    letter-spacing: 0.5px;
+    color: #f0ede8;
     line-height: 1.3;
   }
 
   &__text {
-    font-size: 12px;
-    color: rgba(232, 233, 234, 0.5);
-    line-height: 1.4;
+    font-size: 11px;
+    color: rgba(240, 237, 232, 0.4);
+    line-height: 1.5;
+    letter-spacing: 0.2px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -197,35 +227,17 @@
 
   &__date {
     font-size: 10px;
-    color: rgba(232, 233, 234, 0.2);
+    color: rgba(240, 237, 232, 0.15);
     margin-top: 2px;
+    letter-spacing: 0.3px;
   }
 
   &__dot {
-    width: 7px;
-    height: 7px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
-    background: #7b2ff7;
+    background: #b8973f;
     flex-shrink: 0;
     margin-top: 6px;
-  }
-
-  &__header_actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  &__clear {
-    font-size: 11px;
-    color: rgba(248, 113, 113, 0.5);
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    transition: color 0.15s;
-
-    &:hover {
-      color: #f87171;
-    }
   }
 }

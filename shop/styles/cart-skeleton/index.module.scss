@@ -6,26 +6,30 @@
 }
 
 .skeleton__item {
-  background-color: #2A323F;
-  overflow: hidden !important;
+  background: #141414;
+  overflow: hidden;
   padding: 0;
   height: 185px;
-  margin-bottom: 25px;
+  margin-bottom: 1px;
 
   @media (max-width: 530px) {
     height: 145px;
-    margin-bottom: 12px;
+    margin-bottom: 1px;
   }
 }
 
 .skeleton__item__light {
   height: 100%;
-  animation-duration: 1.6s;
-  background: linear-gradient(90deg, #333a47 25%, #464f61 50%, #333A47 75%);
+  animation-duration: 2s;
+  background: linear-gradient(
+    90deg,
+    #141414 25%,
+    #1c1c1c 50%,
+    #141414 75%
+  );
   background-size: 200% 100%;
-  animation: skeleton 2s infinite ease-in-out;
+  animation: skeleton 2.4s infinite ease-in-out;
 }
-
 
 @keyframes skeleton {
   0% {

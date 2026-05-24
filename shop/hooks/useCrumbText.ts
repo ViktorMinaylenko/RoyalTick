@@ -1,3 +1,4 @@
+'use client'
 import { useLang } from './useLang'
 
 export const useCrumbText = (initialText: string) => {

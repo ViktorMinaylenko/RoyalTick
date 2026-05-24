@@ -1,3 +1,4 @@
+'use client'
 import { $currentProduct } from '@/context/goods/state'
 import { useUnit } from 'effector-react'
 import { useState, useEffect, useMemo } from 'react'

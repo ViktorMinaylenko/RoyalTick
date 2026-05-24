@@ -1,6 +1,12 @@
 import { Db } from "mongodb"
 
-export type NotificationType = 'bid_on_lot' | 'bid_outbid' | 'new_message'
+export type NotificationType =
+    | 'bid_on_lot'
+    | 'bid_outbid'
+    | 'new_message'
+    | 'lot_restored'
+    | 'account_blocked'
+
 
 export interface INotification {
     _id: string
@@ -18,7 +24,7 @@ export interface INotification {
 export interface ICreateNotification {
     db: Db
     userId: any
-    type: 'bid_on_lot' | 'bid_outbid' | 'new_message'
+    type: 'bid_on_lot' | 'bid_outbid' | 'new_message' | 'lot_restored' | 'account_blocked'
     actorName: string
     lotTitle?: string
     bidAmount?: number

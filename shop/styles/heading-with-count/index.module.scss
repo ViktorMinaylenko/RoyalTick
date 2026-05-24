@@ -1,10 +1,14 @@
 .title {
   position: relative;
   display: inline-block;
-  color: #F1F3F5;
+  color: #f0ede8;
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 
   @media (max-width: 530px) {
-    font-size: 24px;
+    font-size: 16px;
     margin-bottom: 32px;
   }
 
@@ -12,17 +16,18 @@
     position: absolute;
     top: 0;
     right: -80px;
-    color: #A5A8AD;
-    font-size: 14px;
+    color: rgba(240, 237, 232, 0.2);
+    font-size: 12px;
     font-weight: 400;
+    letter-spacing: 1px;
 
     @media (max-width: 560px) {
       top: -10px;
     }
 
     @media (max-width: 530px) {
-      font-size: 13px;
-      right: -73px;
+      font-size: 11px;
+      right: -70px;
     }
   }
 }

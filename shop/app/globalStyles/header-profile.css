@@ -6,26 +6,27 @@
 
 .header-profile__arrow {
   position: absolute;
-  top: -8px;
+  top: -6px;
   right: 10px;
-  width: 14px;
-  height: 8px;
+  width: 12px;
+  height: 6px;
   background-image: url(/img/popup-arrow.svg);
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: center;
+  opacity: 0.15;
 }
 
 .header-profile__inner {
-  background-color: #3D4555;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.12);
-  padding: 0;
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  padding: 14px !important;
   margin: 0;
-  padding: 12px !important;
-  border-radius: 8px;
   position: absolute;
   top: 72px;
   right: -7px;
   transform-origin: top right;
+  min-width: 180px;
 }
 
 .header-profile__btn {
@@ -34,37 +35,39 @@
   left: 0;
   height: 24px;
   width: 24px;
-  border-radius: 50%;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .header-profile__btn img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  filter: saturate(0.8);
 }
 
 .header-profile__item:not(:last-child) {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .header-profile__item__btn {
   display: flex;
   align-items: center;
   text-decoration: none;
+  color: rgba(240, 237, 232, 0.35);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: color 0.2s;
 }
 
 .header-profile__item__btn__icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   margin-right: 10px;
-}
-
-.header-profile__item__btn{
-  color: #E8E9EA;
-  transition: color .2s ease-in-out;
+  opacity: 0.5;
 }
 
 .header-profile__item__btn:hover {
-  color: #4a8c7e;
-  transition: color .2s ease-in-out;
+  color: #b8973f;
 }

@@ -1,4 +1,4 @@
-import { createEffect, createEvent } from 'effector'
+import { createEvent } from 'effector'
 import { $notifications, $unreadCount } from './state'
 import { INotification } from '@/types/notification'
 

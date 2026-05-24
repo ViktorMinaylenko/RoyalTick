@@ -1,3 +1,4 @@
+'use client'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
 import { IProduct } from '@/types/common'

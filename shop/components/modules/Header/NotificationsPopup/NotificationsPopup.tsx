@@ -19,10 +19,9 @@ const NotificationsPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
         return (
             <div className={styles.popup} ref={ref}>
                 <button
-                    className={`btn-reset ${styles.popup__btn}`}
+                    className='btn-reset header__links__item__btn header__links__item__btn--notifications'
                     onMouseEnter={handleShow}
                 >
-                    🔔
                     {unreadCount > 0 && (
                         <span className={styles.popup__badge}>
                             {unreadCount > 9 ? '9+' : unreadCount}

@@ -1,3 +1,4 @@
+'use client'
 import { $comparison, $comparisonFromLs } from '@/context/comparison/state'
 import { useGoodsByAuth } from './useGoodsByAuth'
 

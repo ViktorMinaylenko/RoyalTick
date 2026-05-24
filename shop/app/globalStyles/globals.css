@@ -5,28 +5,27 @@
 body {
   font-family: Rostelecom Basis;
   font-weight: 400;
-  background-color: #1D2533;
-  color: #E8E9EA;
+  background-color: #0a0a0a;
+  color: #f0ede8;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 body::-webkit-scrollbar {
-  width: 8px;
+  width: 2px;
 }
 
 body::-webkit-scrollbar-track {
-  background-color: transparent;
+  background: transparent;
 }
 
 body::-webkit-scrollbar-thumb {
-  background-color: #4a8c7e;
-  border-radius: 3px;
+  background: rgba(184, 151, 63, 0.3);
 }
 
 body::-webkit-scrollbar-thumb:hover {
-  background-color: #6aac9e;
+  background: #b8973f;
 }
 
 .container {
@@ -68,11 +67,12 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .site-title {
-  margin: 0;
-  margin-bottom: 40px;
-  color: #E8E9EA;
-  font-size: 42px;
-  font-weight: 700;
+  margin: 0 0 40px;
+  color: #f0ede8;
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .header__search-overlay,
@@ -80,7 +80,7 @@ body::-webkit-scrollbar-thumb:hover {
 .size-table-overlay,
 .auth-overlay,
 .share-overlay {
-  background: #16181b;
+  background: #000;
   height: 100%;
   left: 0;
   opacity: 0;
@@ -96,7 +96,7 @@ body::-webkit-scrollbar-thumb:hover {
 .size-table-overlay.overlay-active,
 .auth-overlay.overlay-active,
 .share-overlay.overlay-active {
-  opacity: 0.6;
+  opacity: 0.75;
   visibility: visible;
 }
 
@@ -112,7 +112,8 @@ body::-webkit-scrollbar-thumb:hover {
   z-index: 5;
 }
 
-.auth-overlay.overlay-active, .size-table-overlay.overlay-active {
+.auth-overlay.overlay-active,
+.size-table-overlay.overlay-active {
   z-index: 100;
 }
 
@@ -137,54 +138,64 @@ body::-webkit-scrollbar-thumb:hover {
   display: block;
   position: absolute;
   cursor: pointer;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background-color: #4a8c7e;
+  width: 34px;
+  height: 34px;
+  background: rgba(184, 151, 63, 0.15);
+  border: 1px solid rgba(184, 151, 63, 0.4);
   left: 125px;
   top: 45%;
   background-image: url('/img/plus-big.svg');
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: center;
   z-index: 1;
+  transition: background 0.2s;
+}
+
+.swiper-slide-active .hero-slide-plus:hover {
+  background-color: rgba(184, 151, 63, 0.25);
 }
 
 .swiper-slide-active .hero-slide-plus::after {
   content: '';
   position: absolute;
-  width: 45px;
-  border-radius: 50%;
-  height: 45px;
-  border: 2px solid #6aac9e;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(184, 151, 63, 0.2);
   left: -5px;
   top: -5px;
 }
 
 .sizes-table-btn {
-  color: #16D9A6;
-  font-size: 14px;
+  color: rgba(184, 151, 63, 0.7);
+  font-size: 13px;
   text-decoration-line: underline;
+  transition: color 0.2s;
+}
+
+.sizes-table-btn:hover {
+  color: #b8973f;
 }
 
 .counter {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  border-radius: 24px;
-  background-color: rgba(255, 255, 255, 0.06);
-  min-height: 45px;
+  padding: 10px 14px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 44px;
 }
 
 .counter button:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   pointer-events: none;
 }
 
 .counter button {
   position: relative;
-  height: 22px;
-  width: 24px;
+  height: 20px;
+  width: 22px;
+  cursor: pointer;
 }
 
 .counter button::before {
@@ -194,8 +205,8 @@ body::-webkit-scrollbar-thumb:hover {
   width: 100%;
   top: 0;
   left: 0;
-  background-color: #fff;
-  transition: background-color 0.2s ease-in-out;
+  background-color: rgba(240, 237, 232, 0.3);
+  transition: background-color 0.2s;
 }
 
 .counter button:first-child:before {
@@ -209,13 +220,12 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .counter button:hover::before {
-  transition: background-color 0.2s ease-in-out;
-  background-color: #4a8c7e;
+  background-color: #b8973f;
 }
 
 .counter span {
-  color: rgba(255, 255, 255, 0.90);
-  font-size: 16px;
+  color: rgba(240, 237, 232, 0.6);
+  font-size: 14px;
   font-weight: 400;
 }
 
@@ -224,9 +234,9 @@ body::-webkit-scrollbar-thumb:hover {
   position: absolute;
   top: 9px;
   right: 2px;
-  width: 8px;
-  height: 8px;
-  background-color: #FF0C0C;
+  width: 6px;
+  height: 6px;
+  background-color: #b8973f;
   border-radius: 50%;
 }
 
@@ -266,7 +276,7 @@ body::-webkit-scrollbar-thumb:hover {
 .swiper-slide-active .slide-popup {
   opacity: 1;
   visibility: visible;
-  transition: opacity .2s ease-in-out, visibility .2s ease-in-out;
+  transition: opacity 0.2s, visibility 0.2s;
 }
 
 @font-face {
@@ -298,14 +308,17 @@ body::-webkit-scrollbar-thumb:hover {
   padding-right: 8px;
 }
 
-.catalog-pagination-prev.disabled, .catalog-pagination-next.disabled {
+.catalog-pagination-prev.disabled,
+.catalog-pagination-next.disabled {
   display: none;
 }
 
 .catalog-pagination-item.selected {
-  background-color: #4a8c7e;
+  background: rgba(184, 151, 63, 0.1);
+  border: 1px solid rgba(184, 151, 63, 0.3);
+  color: #b8973f;
 }
 
 .catalog-pagination-item:hover.selected a {
-  background-color: #4a8c7e;
+  color: #b8973f;
 }

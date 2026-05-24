@@ -15,3 +15,8 @@ export const profileSliderSettings = {
     autoplay: false,
     arrows: false,
 }
+
+export const LOTS_PER_PAGE = 12
+export const AUCTION_CATEGORIES = ['watches', 'straps', 'boxes', 'care']
+export const AUCTION_CONDITIONS = ['new', 'like_new', 'good', 'used', 'for_parts']
+export const LOT_CREATION_FEE = 2

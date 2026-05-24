@@ -1,22 +1,22 @@
 .favorites {
-  padding-bottom: 20px;
+  padding-bottom: 40px;
 
-&__container {
-  min-height: 605px;
-}
+  &__container {
+    min-height: 605px;
+  }
 
   &__list {
     &__item {
       display: flex;
       align-items: flex-start;
       position: relative;
-      padding-bottom: 25px;
-      border-bottom: 1px solid #2A323F;
-      margin-bottom: 25px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 28px;
 
       @media (max-width: 485px) {
-        padding-bottom: 12px;
-        margin-bottom: 12px;
+        padding-bottom: 14px;
+        margin-bottom: 14px;
         align-items: stretch;
       }
 
@@ -24,64 +24,61 @@
         position: absolute;
         right: 0;
         top: 0;
-        height: 24px;
-        width: 24px;
+        height: 22px;
+        width: 22px;
 
         & span::before {
-          background-color: #A5A8AD;
+          background-color: rgba(240, 237, 232, 0.2);
           content: '';
           height: 100%;
           width: 100%;
           left: 0;
           position: absolute;
           top: 0;
-          transition: background-color 0.2s ease-in-out;
+          transition: background-color 0.2s;
           -webkit-mask: url(/img/trash.svg) no-repeat 50% 50%;
           mask: url(/img/trash.svg) no-repeat 50% 50%;
         }
 
         &:hover span::before {
-          transition: background-color 0.2s ease-in-out;
-          background-color: #FF0C0C;
+          background-color: #c0574a;
         }
       }
 
       &__cart {
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
         position: absolute;
-        bottom: 25px;
+        bottom: 28px;
         right: 0;
 
         & span::before {
-          background-color: #A5A8AD;
+          background-color: rgba(240, 237, 232, 0.2);
           content: '';
           height: 100%;
           width: 100%;
           left: 0;
           position: absolute;
           top: 0;
-          transition: background-color 0.2s ease-in-out;
+          transition: background-color 0.2s;
           -webkit-mask: url(/img/cart-plus.svg) no-repeat 50% 50%;
           mask: url(/img/cart-plus.svg) no-repeat 50% 50%;
         }
 
         &:hover span::before {
-          transition: background-color 0.2s ease-in-out;
-          background-color: #26da72;
+          background-color: #b8973f;
         }
       }
 
       &__cart_added {
         &::before {
-          background-color: #26da72;
+          background-color: #b8973f;
           content: '';
           height: 100%;
           width: 100%;
           left: 0;
           position: absolute;
           top: 0;
-          transition: background-color 0.2s ease-in-out;
           -webkit-mask: url(/img/cart-checked.svg) no-repeat 50% 50%;
           mask: url(/img/cart-checked.svg) no-repeat 50% 50%;
         }
@@ -89,7 +86,8 @@
 
       &__img {
         margin-right: 32px;
-        background: radial-gradient(52.53% 52.53% at 50% 47.47%, #4E5D77 0%, rgba(42, 50, 63, 0.00) 100%), #2A323F;
+        background: #0a0a0a;
+        border: 1px solid rgba(255, 255, 255, 0.04);
 
         @media (max-width: 620px) {
           margin-right: 14px;
@@ -97,6 +95,7 @@
 
         img {
           object-fit: contain;
+          filter: saturate(0.8);
         }
       }
 
@@ -112,26 +111,30 @@
 
           @media (max-width: 620px) {
             margin-right: 0;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
           }
         }
 
         &__name {
-          color: #D9D9D9;
-          font-size: 16px;
-          font-weight: 700;
+          color: #f0ede8;
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.2px;
         }
 
         &__size {
-          color: #D9D9D9;
-          font-size: 16px;
-          font-weight: 400;
+          color: rgba(240, 237, 232, 0.4);
+          font-size: 12px;
+          font-weight: 500;
+          letter-spacing: 0.8px;
+          text-transform: uppercase;
         }
 
         &__price {
-          color: #E8E9EA;
-          font-size: 16px;
-          font-weight: 500;
+          color: #b8973f;
+          font-size: 15px;
+          font-weight: 600;
+          letter-spacing: 0.3px;
         }
       }
     }

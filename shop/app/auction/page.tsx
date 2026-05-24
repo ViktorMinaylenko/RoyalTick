@@ -1,7 +1,11 @@
-import AuctionPage from '@/components/templates/AuctionPage/AuctionPage'
+'use client'
+import dynamic from 'next/dynamic'
 
-const Auction = () => {
-    return <AuctionPage />
-}
+const AuctionPage = dynamic(
+    () => import('@/components/templates/AuctionPage/AuctionPage'),
+    { ssr: false, loading: () => null }
+)
+
+const Auction = () => <AuctionPage />
 
 export default Auction
