@@ -9,6 +9,7 @@ import '@/context/favorites/init'
 import '@/context/user/init'
 import '@/context/order/init'
 import '@/context/profile/init'
+import '@/context/passwordRestore/init'
 import { useUnit } from 'effector-react'
 import {
   closeQuickViewModal,

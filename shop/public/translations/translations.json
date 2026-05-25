@@ -678,6 +678,13 @@
       "bid_outbid_text": "outbid you on",
       "new_message_text": "sent a message in chat for",
       "clear_all": "Clear all"
+    },
+    "password_restore_page": {
+      "password_restore": "Password restore",
+      "enter_your_email": "Enter your Email",
+      "we_sent_code": "We sent the code to",
+      "creaete_pasword": "Create a new password",
+      "repeat_pasword": "Repeat pasword"
     }
   },
   "ua": {
@@ -1358,6 +1365,13 @@
       "bid_outbid_text": "перебив вашу ставку на",
       "new_message_text": "написав у чат по лоту",
       "clear_all": "Очистити"
+    },
+    "password_restore_page": {
+      "password_restore": "Відновлення пароля",
+      "enter_your_email": "Введіть вашу електронну пошту",
+      "we_sent_code": "Ми надіслали код на",
+      "creaete_pasword": "Створіть новий пароль",
+      "repeat_pasword": "Повторіть пароль"
     }
   }
 }
