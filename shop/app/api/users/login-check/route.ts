@@ -6,6 +6,7 @@ import {
   parseJwt,
 } from '@/lib/utils/api-routes'
 import { IUser } from '@/types/user'
+import { corsHeaders } from '@/constants/corsHeaders'
 
 export async function GET(req: Request) {
   try {
@@ -16,7 +17,7 @@ export async function GET(req: Request) {
     )
 
     if (validatedTokenResult.status !== 200) {
-      return NextResponse.json(validatedTokenResult)
+      return NextResponse.json(validatedTokenResult, corsHeaders)
     }
 
     const userData = parseJwt(token as string)
@@ -49,7 +50,7 @@ export async function GET(req: Request) {
       followingCount: (user.following ?? []).length,
       isBlocked: user.isBlocked ?? false,
       blockReason: user.blockReason ?? null,
-    })
+    }, corsHeaders)
   } catch (error) {
     return NextResponse.json({
       status: 500,
@@ -59,3 +60,8 @@ export async function GET(req: Request) {
 }
 
 export const dynamic = 'force-dynamic'
+
+
+export async function OPTIONS() {
+  return new NextResponse(null, { ...corsHeaders, status: 200 })
+}

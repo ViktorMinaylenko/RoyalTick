@@ -1,4 +1,11 @@
-import { Datagrid, Identifier, List, NumberField, RaRecord, TextField } from "react-admin";
+import {
+  Datagrid,
+  Identifier,
+  List,
+  NumberField,
+  RaRecord,
+  TextField,
+} from "react-admin";
 
 export const GoodsList = () => {
   const handleRowClick = (
@@ -10,8 +17,6 @@ export const GoodsList = () => {
 
     return "show";
   };
-
-  
 
   return (
     <List>

@@ -7,6 +7,7 @@ import {
   generateTokens,
   getDbAndReqBody,
 } from '@/lib/utils/api-routes'
+import { corsHeaders } from '@/constants/corsHeaders'
 
 export async function POST(req: Request) {
   try {
@@ -20,23 +21,27 @@ export async function POST(req: Request) {
       logger.warn({ email: reqBody.email }, 'Login failed: user does not exist')
       return NextResponse.json({
         warningMessage: 'Користувача не існує',
-      })
+      }, corsHeaders)
     }
 
     if (!bcrypt.compareSync(reqBody.password, user.password)) {
       logger.warn({ email: reqBody.email }, 'Login failed: invalid password')
       return NextResponse.json({
         warningMessage: 'Невірний логін або пароль!',
-      })
+      }, corsHeaders)
     }
 
     const tokens = generateTokens(user.name, reqBody.email)
 
     logger.info({ email: reqBody.email }, 'User logged in successfully')
-    return NextResponse.json(tokens)
+    return NextResponse.json({...tokens, role: user?.role, username: user.name}, corsHeaders)
 
   } catch (error) {
     logger.error(error, 'Unexpected error during login')
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 })
   }
+}
+
+export async function OPTIONS(){
+  return new NextResponse(null, {...corsHeaders, status: 200})
 }

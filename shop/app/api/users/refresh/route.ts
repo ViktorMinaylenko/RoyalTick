@@ -7,6 +7,7 @@ import {
   generateTokens,
 } from '@/lib/utils/api-routes'
 import { NextResponse } from 'next/server'
+import { corsHeaders } from '@/constants/corsHeaders'
 
 export async function POST(req: Request) {
   try {
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
       )
 
       if ((error as unknown as VerifyErrors)?.name === 'TokenExpiredError') {
-        return NextResponse.json(tokens)
+        return NextResponse.json(tokens, corsHeaders)
       }
 
       if (error) {
@@ -60,17 +61,23 @@ export async function POST(req: Request) {
           message: 'Unauthorized',
           status: 401,
           error,
-        })
+        },
+          corsHeaders
+        )
       }
 
-      return NextResponse.json({ accessToken, refreshToken })
+      return NextResponse.json({ accessToken, refreshToken }, corsHeaders)
     } else {
       return NextResponse.json({
         message: 'jwt is required',
         status: 404,
-      })
+      }, corsHeaders)
     }
   } catch (error) {
     throw new Error((error as Error).message)
   }
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, { ...corsHeaders, status: 200 })
 }
