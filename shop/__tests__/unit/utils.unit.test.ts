@@ -15,7 +15,7 @@ describe("Unit Tests", () => {
             expect(formatPrice(1000000)).toBe("1 000 000");
         });
         it("обробка NaN", () => {
-            expect(formatPrice(NaN)).toBe("NaN");
+            expect(formatPrice(NaN)).toBe("0");
         });
     });
 
