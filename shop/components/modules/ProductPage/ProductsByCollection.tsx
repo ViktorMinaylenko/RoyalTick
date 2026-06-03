@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import AllLink from '@/components/elements/AllLink/AllLink'
 import { basePropsForMotion } from '@/constants/motion'
 import styles from '@/styles/product/index.module.scss'
@@ -13,10 +13,11 @@ import { IProduct } from '@/types/common'
 const ProductsByCollection = ({ collection }: { collection: string }) => {
     const { title, capitalizedCollection, spinner, products } =
         useProductsByCollection(collection)
-    const currentCategory =
-        allowedCollectionsCategories[
-        Math.floor(Math.random() * allowedCollectionsCategories.length)
+    const [currentCategory] = useState(
+        () => allowedCollectionsCategories[
+            Math.floor(Math.random() * allowedCollectionsCategories.length)
         ]
+    )
 
     useEffect(() => {
         loadProductsByFilter({

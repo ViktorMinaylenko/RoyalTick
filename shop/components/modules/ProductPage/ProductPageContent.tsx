@@ -25,10 +25,6 @@ const ProductPageContent = () => {
     const product = useUnit($currentProduct)
     const { lang, translations } = useLang()
 
-    if (!product?._id || !product?.price) {
-        return null
-    }
-
     const {
         handleAddProductToFavorites,
         addToFavoritesSpinner,
@@ -65,6 +61,10 @@ const ProductPageContent = () => {
             ])
         )
     }, [product._id, product.category])
+
+    if (!product?._id || !product?.price) {
+        return null
+    }
 
 
     const handleProductShare = () => {

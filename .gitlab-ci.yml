@@ -138,8 +138,7 @@ shop_lint:
   script:
     - cd shop
     - npm ci
-    - npx eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=100 --ignore-pattern node_modules --ignore-pattern .next
-  allow_failure: true
+    - npx eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=300 --ignore-pattern node_modules --ignore-pattern .next
   rules:
     - if: '$CI_COMMIT_BRANCH'
 

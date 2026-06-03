@@ -360,7 +360,7 @@ test.describe('RoyalTick E2E Flows', () => {
         
         // Перевіряємо наявність заголовка кошика або тексту про пустий кошик
         const hasCartContent = pageContent?.includes('кошик') || pageContent?.includes('Cart') || 
-                               pageContent?.includes('Кошик') || pageContent?.length! > 100;
+            pageContent?.includes('Кошик') || (pageContent?.length ?? 0) > 100;
         expect(hasCartContent).toBeTruthy();
     });
 
