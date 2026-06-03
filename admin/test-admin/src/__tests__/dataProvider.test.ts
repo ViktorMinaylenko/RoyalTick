@@ -82,7 +82,7 @@ describe("dataProvider", () => {
     await dataProvider.deleteMany("goods", { ids: ["1", "2"] });
 
     expect(mockedApi.delete).toHaveBeenCalledWith(
-      expect.stringContaining("ids=%5B%221%22%2C%222%22%5D"),
+      expect.stringContaining('ids=["1","2"]'),
     );
   });
 

@@ -1,5 +1,3 @@
- 
-/* eslint-disable prettier/prettier */
 'use client'
 import { useUnit } from 'effector-react'
 import { motion } from 'framer-motion'

@@ -1,5 +1,4 @@
 'use client'
-/* eslint-disable prettier/prettier */
 import { capitalizeFirstLetter } from '@/lib/utils/common'
 import { useLang } from './useLang'
 import { useUnit } from 'effector-react'
