@@ -1,0 +1,94 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceParticipantBorderColor #555555
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceLifeLineBorderColor #888888
+skinparam sequenceBoxBorderColor #888888
+skinparam sequenceBoxBackgroundColor #F8F8F8
+skinparam ArrowFontSize 10
+skinparam noteBorderColor #888888
+skinparam noteBackgroundColor #FFFDE7
+skinparam actorBorderColor #555555
+skinparam actorBackgroundColor #FFFFFF
+skinparam databaseBorderColor #555555
+skinparam databaseBackgroundColor #F0F0F0
+skinparam ParticipantPadding 120
+skinparam BoxPadding 80
+
+title Діаграма послідовності: завершення торгів та приватний чат
+
+actor "Продавець  (Owner)" as OWNER
+actor "Переможець  (Winner)" as WINNER
+participant "Next.js  API" as API
+database "MongoDB" as DB
+
+API -> DB: знайти лоти з endDate < now і статусом active
+DB --> API: список завершених лотів
+API -> DB: визначити переможця (остання ставка у bids[])
+API -> DB: insertOne у chats (+ вітальне повідомлення від продавця)
+API -> DB: lots.updateOne  (status → reserved)
+API --> OWNER: сповіщення — лот завершено
+API --> WINNER: сповіщення — ви перемогли
+
+WINNER -> API: GET /api/chats/[id]  Authorization: Bearer JWT
+API -> DB: findOne chats
+API -> DB: позначити повідомлення як isRead: true
+DB --> API: документ чату
+API --> WINNER: { status: 200, chat }
+
+OWNER -> API: GET /api/chats/[id]  Authorization: Bearer JWT
+API -> DB: updateOne  (unreadForOwner: false)
+DB --> API: документ чату
+API --> OWNER: { status: 200, chat }
+
+note over WINNER, OWNER: Чат автоматично оновлюється кожні 3 секунди через setInterval на клієнті
+
+loop Обмін повідомленнями
+  WINNER -> API: POST /api/chats/[id]/message  { text }
+  API -> DB: очистити deletedFor: []
+  API -> DB: push нове повідомлення у messages[]
+  API -> DB: createNotification  (new_message → ownerId)
+  API --> WINNER: { status: 200, chat }
+  API --> OWNER: сповіщення new_message
+
+  OWNER -> API: POST /api/chats/[id]/message  { text }
+  API -> DB: push нове повідомлення у messages[]
+  API -> DB: createNotification  (new_message → winnerId)
+  API --> OWNER: { status: 200, chat }
+  API --> WINNER: сповіщення new_message
+end
+
+alt Виникла суперечка між сторонами
+  WINNER -> API: POST /api/chats/[id]/invite-moderator
+  API -> DB: updateOne  (moderatorRequested: true)
+  API --> WINNER: { status: 200, chat }
+  note over API: Модератор отримує повний доступ до історії чату
+end
+
+OWNER -> API: POST /api/chats/[id]/complete
+API -> DB: updateOne  (dealCompletedByOwner: true)
+API --> OWNER: { status: 200 }
+
+WINNER -> API: POST /api/chats/[id]/complete
+API -> DB: updateOne  (dealCompletedByWinner: true)
+
+alt Обидва учасники підтвердили угоду
+  API -> DB: chats.updateOne  (status → completed)
+  API -> DB: lots.updateOne  (status → completed)
+  API --> WINNER: { status: 200, chat }
+  API --> OWNER: { status: 200, chat }
+end
+
+OWNER -> API: POST /api/chats/[id]/rate  { rating, comment }
+API -> DB: updateOne users  (buyerRating + buyerReviews)
+API -> DB: updateOne chats  (ownerRatedBuyer: true)
+API --> OWNER: { status: 200 }
+
+WINNER -> API: POST /api/chats/[id]/rate  { rating, comment }
+API -> DB: updateOne users  (sellerRating + sellerReviews)
+API -> DB: updateOne chats  (winnerRatedSeller: true)
+API --> WINNER: { status: 200 }
+@enduml

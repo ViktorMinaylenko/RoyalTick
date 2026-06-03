@@ -1,0 +1,214 @@
+@startuml
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #555555
+skinparam classArrowColor #555555
+skinparam classHeaderBackgroundColor #E8E8E8
+skinparam classFontStyle bold
+skinparam classFontSize 13
+skinparam padding 8
+skinparam nodesep 30
+skinparam ranksep 40
+skinparam roundcorner 5
+
+hide stereotype
+
+title Діаграма класів доменних моделей RoyalTick
+
+class User {
+  _id : String
+  name : String
+  email : String
+  password : String
+  image : String
+  role : String
+  balance : Number
+  sellerRating : Number
+  buyerRating : Number
+  isBlocked : Boolean
+  isVerified : Boolean
+  verifiedAt : String
+  followers : String[]
+  following : String[]
+}
+
+class Review {
+  fromUserId : String
+  fromUserName : String
+  rating : Number
+  comment : String
+  lotTitle : String
+  createdAt : String
+}
+
+class EmailCode {
+  _id : String
+  code : String
+  oldEmail : String
+  newEmail : String
+}
+
+class Notification {
+  _id : String
+  userId : String
+  type : String
+  actorName : String
+  lotTitle : String
+  bidAmount : Number
+  isRead : Boolean
+  createdAt : String
+}
+
+class Product {
+  _id : String
+  type : String
+  category : String
+  name : String
+  price : Number
+  description : String
+  vendorCode : String
+  inStock : Number
+  isBestseller : Boolean
+  isNew : Boolean
+  characteristics : Map
+  sizes : Map
+}
+
+class Image {
+  _id : String
+  imgId : String
+  title : String
+  src : String
+  path : String
+}
+
+class CartItem {
+  _id : String
+  userId : String
+  productId : String
+  name : String
+  size : String
+  count : Number
+  price : String
+  totalPrice : String
+  category : String
+}
+
+class FavoriteItem {
+  _id : String
+  userId : String
+  productId : String
+  name : String
+  size : String
+  price : Number
+  category : String
+}
+
+class ComparisonItem {
+  _id : String
+  userId : String
+  productId : String
+  name : String
+  price : String
+  category : String
+  characteristics : Map
+}
+
+class AuctionLot {
+  _id : String
+  title : String
+  category : String
+  saleType : String
+  startPrice : Number
+  currentPrice : Number
+  bidStep : Number
+  buyNowPrice : Number
+  startDate : String
+  endDate : String
+  status : String
+  userId : String
+}
+
+class Bid {
+  userId : String
+  userName : String
+  amount : Number
+  createdAt : String
+}
+
+class Chat {
+  _id : String
+  lotId : String
+  winnerId : String
+  ownerId : String
+  status : String
+  dealCompletedByOwner : Boolean
+  dealCompletedByWinner : Boolean
+  ownerRatedBuyer : Boolean
+  winnerRatedSeller : Boolean
+}
+
+class Message {
+  _id : String
+  senderId : String
+  text : String
+  createdAt : String
+  isRead : Boolean
+}
+
+class Topic {
+  _id : String
+  title : String
+  body : String
+  category : String
+  tags : String[]
+  userId : String
+  views : Number
+  likes : String[]
+  createdAt : String
+}
+
+class TopicMessage {
+  _id : String
+  userId : String
+  text : String
+  replyToId : String
+  createdAt : String
+}
+
+Review -[hidden]down- EmailCode
+EmailCode -[hidden]down- Notification
+
+Product -[hidden]down- Image
+
+CartItem -[hidden]down- FavoriteItem
+FavoriteItem -[hidden]down- ComparisonItem
+
+AuctionLot -[hidden]down- Bid
+
+Chat -[hidden]down- Message
+Message -[hidden]down- Topic
+Topic -[hidden]down- TopicMessage
+
+User "1" *-- "*" Review : owns
+User "1" --> "*" EmailCode : issues
+User "1" --> "*" Notification : receives
+User "1" --> "*" AuctionLot : lists
+User "1" --> "*" Topic : authors
+User "1" o-- "*" CartItem
+User "1" o-- "*" FavoriteItem
+User "1" o-- "*" ComparisonItem
+
+Product "1" o-- "*" CartItem
+Product "1" o-- "*" FavoriteItem
+Product "1" o-- "*" ComparisonItem
+Product "1" --> "*" Image
+
+AuctionLot "1" *-- "*" Bid
+AuctionLot "1" --> "0..1" Chat
+Chat "1" *-- "*" Message
+Topic "1" *-- "*" TopicMessage
+@enduml

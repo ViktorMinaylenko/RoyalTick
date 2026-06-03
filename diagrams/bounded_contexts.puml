@@ -1,0 +1,57 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam componentStyle rectangle
+skinparam padding 10
+skinparam nodesep 12
+skinparam ranksep 16
+skinparam ArrowColor #555555
+skinparam ArrowFontSize 10
+skinparam packageBorderThickness 1.5
+skinparam packageFontSize 12
+skinparam packageFontStyle bold
+
+together {
+  package "Identity" as ID #E8E8FF {
+    [User · JWT\nbcrypt · Верифікація\nПрофіль] as ID_C #C0C0F0
+  }
+
+  package "Catalog" as CAT #E8F4E8 {
+    [Watch · Strap\nBox · Care\nПошук · Фільтр] as CAT_C #A0D8A0
+  }
+
+  package "Shopping" as SHOP #FFF8E0 {
+    [Cart · Order\nPromoCode\nWayForPay\nNova Poshta] as SHOP_C #FFE090
+  }
+}
+
+together {
+  package "Auction" as AUC #FFE8E8 {
+    [AuctionLot · Bid\nChat · Message\nРейтинг угод] as AUC_C #F0B0B0
+  }
+
+  package "Community" as COM #FFF0E8 {
+    [Topic · Comment\nReview · Followers\nFavorites · Comparison] as COM_C #F0C8A0
+  }
+
+  package "Notification" as NOTIF #F0F0F0 {
+    [email · push\n(пасивний\nконтекст)] as NOTIF_C #C8C8C8
+  }
+}
+
+ID   -down-> AUC    : userId\nверифікація
+ID   -down-> COM    : userId
+ID   -right-> CAT   : userId
+ID   -right-> SHOP  : userId
+ID   -down-> NOTIF  : події акаунту
+
+CAT  -right-> SHOP  : дані товару
+CAT  -down-> AUC    : дані лота
+
+AUC  -right-> NOTIF  : нова ставка\nкінець торгів
+AUC  -down-> SHOP    : переможець
+
+SHOP -right-> NOTIF  : статус замовлення
+COM  -right-> NOTIF  : активність
+@enduml

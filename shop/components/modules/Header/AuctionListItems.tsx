@@ -13,7 +13,7 @@ const AuctionListItems = ({ handleCloseMenu }: { handleCloseMenu: () => void }) 
                     className='nav-menu__accordion__item__link nav-menu__accordion__item__title'
                     onClick={handleCloseMenu}
                 >
-                    {translations[lang].main_menu.auction}
+                    {t.main_menu.auction}
                 </Link>
             </li>
 
@@ -23,7 +23,17 @@ const AuctionListItems = ({ handleCloseMenu }: { handleCloseMenu: () => void }) 
                     className='nav-menu__accordion__item__link'
                     onClick={handleCloseMenu}
                 >
-                    {t.main_menu.community || 'Спільнота'}
+                    {t.main_menu.community}
+                </Link>
+            </li>
+
+            <li className='nav-menu__accordion__item'>
+                <Link
+                    href='/auction/rules'
+                    className='nav-menu__accordion__item__link'
+                    onClick={handleCloseMenu}
+                >
+                    {t.main_menu.rules}
                 </Link>
             </li>
         </>

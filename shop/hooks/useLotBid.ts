@@ -1,9 +1,12 @@
 'use client'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
-import { isUserAuth, handleopenAuthModal } from '@/lib/utils/common'
+import { isUserAuth, handleopenAuthModal, addOverflowHiddenToBody } from '@/lib/utils/common'
 import { useLang } from '@/hooks/useLang'
 import { ILot } from '@/types/lots'
+import { openVerificationModal } from '@/context/modals'
+import { $user } from '@/context/user/state'
+import { useUnit } from 'effector-react'
 
 export const useLotBid = (
     lotId: string,
@@ -12,6 +15,7 @@ export const useLotBid = (
 ) => {
     const { lang, translations } = useLang()
     const t = (translations[lang] as any).auction
+    const currentUser = useUnit($user)
     const [bidAmount, setBidAmount] = useState(0)
     const [bidSpinner, setBidSpinner] = useState(false)
 
@@ -22,6 +26,12 @@ export const useLotBid = (
     const handleBid = async () => {
         if (!isUserAuth()) { handleopenAuthModal(); return }
         if (!lot) return
+
+        if (!currentUser?.isVerified) {
+            addOverflowHiddenToBody()
+            openVerificationModal()
+            return
+        }
 
         const auth = JSON.parse(localStorage.getItem('auth') as string)
         setBidSpinner(true)

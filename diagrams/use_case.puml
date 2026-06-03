@@ -1,0 +1,94 @@
+@startuml
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam actorStyle awesome
+skinparam usecaseBorderColor #444444
+skinparam usecaseBackgroundColor #FFFFFF
+skinparam actorBorderColor #444444
+skinparam actorBackgroundColor #FFFFFF
+skinparam ArrowColor #666666
+skinparam packageBorderColor #444444
+skinparam packageBackgroundColor #F5F5F5
+skinparam packageFontStyle bold
+skinparam nodesep 6
+skinparam ranksep 28
+
+title Діаграма варіантів використання платформи RoyalTick
+
+actor "Гість" as G
+actor "Зареєстрований\nкористувач" as U
+actor "Верифікований\nкористувач" as V
+actor "Модератор" as M
+actor "Адміністратор" as A
+
+U -|> G
+V -|> U
+
+rectangle "Платформа RoyalTick" {
+
+  package "Загальний доступ та акаунт" as P1 {
+    usecase "Переглядати каталог" as UC1
+    usecase "Шукати та фільтрувати" as UC2
+    usecase "Переглядати лоти" as UC3
+    usecase "Реєстрація / Вхід\n(email або Google)" as UC4
+    usecase "Редагування профілю\nта відновлення пароля" as UC5
+    usecase "Верифікація акаунту\n(телефон + картка)" as UC6
+  }
+
+  package "Каталог, замовлення та спільнота" as P2 {
+    usecase "Кошик та замовлення" as UC7
+    usecase "Обране та порівняння" as UC8
+    usecase "Застосування промокоду" as UC9
+    usecase "Створювати теми та коментарі" as UC10
+    usecase "Підписуватись на користувачів" as UC11
+  }
+
+  package "Аукціон" as P3 {
+    usecase "Виставити лот" as UC12
+    usecase "Робити ставки" as UC13
+    usecase "Купити зараз" as UC14
+    usecase "Приватний чат після угоди" as UC15
+    usecase "Оцінити учасника угоди" as UC16
+  }
+
+  package "Модерація та адміністрування" as P4 {
+    usecase "Модерувати контент" as UC17
+    usecase "Обробляти скарги" as UC18
+    usecase "Арбітраж у чаті" as UC19
+    usecase "Блокувати порушників" as UC20
+    usecase "CRUD каталогу" as UC21
+    usecase "Управляти користувачами" as UC22
+  }
+}
+
+G --> UC1
+G --> UC2
+G --> UC3
+
+U --> UC4
+U --> UC5
+U --> UC6
+U --> UC7
+U --> UC8
+U --> UC9
+U --> UC10
+U --> UC11
+U --> UC12
+
+V --> UC13
+V --> UC14
+V --> UC15
+V --> UC16
+
+M --> UC17
+M --> UC18
+M --> UC19
+M --> UC20
+
+A --> UC21
+A --> UC22
+A --> UC17
+A --> UC20
+@enduml

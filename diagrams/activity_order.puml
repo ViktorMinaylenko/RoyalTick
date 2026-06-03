@@ -1,0 +1,91 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam ActivityBorderColor #555555
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityArrowColor #555555
+skinparam ActivityDiamondBackgroundColor #F5F5F5
+skinparam ActivityDiamondBorderColor #555555
+skinparam PartitionBorderColor #888888
+skinparam PartitionBackgroundColor #F8F8F8
+skinparam ArrowFontSize 10
+
+title Діаграма активності: пошук товару та оформлення замовлення
+
+|Користувач|
+start
+fork
+  :Відкриває каталог;
+  :Обирає фільтри\n(категорія, ціна,\nрозмір, колір, сорт);
+  |Система|
+  :GET /api/goods\n(динамічний фільтр MongoDB);
+  :Повертає список товарів;
+fork again
+  |Користувач|
+  :Вводить запит у пошук\n(мін. 2 символи);
+  |Система|
+  :GET /api/goods/search\n(regex по всіх колекціях);
+  :Повертає до 12 результатів;
+end fork
+
+|Користувач|
+:Відкриває картку товару;
+:Обирає розмір (якщо потрібно);
+:Натискає «Додати до кошика»;
+
+|Система|
+if (Користувач авторизований?) then (ні)
+  :Зберігає товар\nу localStorage;
+else (так)
+  if (Товар вже є в кошику\nз таким розміром?) then (так)
+    :PATCH /api/cart/update\n(збільшує кількість);
+  else (ні)
+    :POST /api/cart/add\n(новий запис у cart);
+  endif
+endif
+
+|Користувач|
+:Переходить до кошика;
+:Змінює кількість\n(опційно);
+
+|Система|
+:PATCH /api/cart/update;
+
+|Користувач|
+:Натискає «Оформити замовлення»;
+if (Авторизований?) then (ні)
+  :Перенаправлення\nна сторінку входу;
+  :Авторизація;
+endif
+:Заповнює форму\n(ім'я, прізвище,\nтелефон, email);
+:Обирає спосіб доставки;
+
+if (Нова Пошта?) then (так)
+  :Обирає відділення\nна карті TomTom;
+else (кур'єр або самовивіз)
+  :Вводить адресу;
+endif
+
+:Підтверджує замовлення;
+
+|Система|
+:POST /api/payment\n(формує дані + HMAC-MD5 підпис);
+:Передає дані до WayForPay;
+
+|Користувач|
+:Оплачує на сторінці WayForPay;
+
+|Система|
+if (Оплата успішна?) then (так)
+  :POST /api/success-callback\n(підтвердження від WayForPay);
+  :Надсилає email\nчерез Nodemailer;
+  :Очищає кошик\n(DELETE /api/cart/clear);
+  :Перенаправляє\nна сторінку успіху;
+else (ні)
+  :Повертає на сторінку\nзамовлення з помилкою;
+endif
+
+|Користувач|
+stop
+@enduml

@@ -33,6 +33,7 @@ import { $openAuthPopup } from '@/context/auth/state'
 import { usePathname } from 'next/dist/client/components/navigation'
 import router from 'next/router'
 import { loginCheckFx } from '@/context/user'
+import VerificationModal from '@/components/modules/VerificationModal/VerificationModal'
 
 
 const PagesLayout = ({ children }: { children: React.ReactNode }) => {
@@ -105,6 +106,7 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
           className={`auth-overlay ${openAuthModal ? 'overlay-active' : ''}`}
           onClick={handlecloseAuthModal}
         />
+        
 
         {cookieAlertOpen && (
           <motion.div
@@ -118,6 +120,7 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
         )}
 
         <Toaster position='top-center' reverseOrder={false} />
+        <VerificationModal /> 
       </body>
     </html>
   )

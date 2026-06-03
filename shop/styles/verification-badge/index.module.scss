@@ -1,0 +1,26 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0 16px;
+  height: 32px;
+  border: 1px solid;
+
+  svg { font-size: 12px; }
+
+  &_verified {
+    color: #b8973f;
+    border-color: rgba(184, 151, 63, 0.3);
+    background: rgba(184, 151, 63, 0.08);
+  }
+
+  &_unverified {
+    color: #c0574a;
+    border-color: rgba(192, 87, 74, 0.4);
+    background: rgba(192, 87, 74, 0.08);
+  }
+}

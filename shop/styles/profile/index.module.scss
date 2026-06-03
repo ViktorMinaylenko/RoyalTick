@@ -990,3 +990,28 @@
     }
   }
 }
+
+.profile__verification {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  &__btn {
+    height: 32px;
+    padding: 0 16px;
+    background: transparent;
+    border: 1px solid #b8973f;
+    color: #b8973f;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(184, 151, 63, 0.08);
+    }
+  }
+}

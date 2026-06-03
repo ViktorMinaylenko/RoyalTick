@@ -1,0 +1,73 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceParticipantBorderColor #555555
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceLifeLineBorderColor #888888
+skinparam sequenceBoxBorderColor #888888
+skinparam sequenceBoxBackgroundColor #F8F8F8
+skinparam ArrowFontSize 10
+skinparam noteBorderColor #888888
+skinparam noteBackgroundColor #FFFDE7
+skinparam actorBorderColor #555555
+skinparam actorBackgroundColor #FFFFFF
+skinparam databaseBorderColor #555555
+skinparam databaseBackgroundColor #F0F0F0
+skinparam ParticipantPadding 80
+skinparam BoxPadding 60
+
+title Діаграма послідовності: оформлення замовлення та обробка платежу
+
+actor "Користувач" as USER
+participant "Next.js  API" as API
+participant "WayForPay" as WFP
+database "MongoDB" as DB
+participant "Nodemailer" as MAIL
+
+USER -> API: GET /api/cart  (Authorization: Bearer JWT)
+API -> DB: find cart (userId)
+DB --> API: масив позицій кошика
+API --> USER: { status: 200, items }
+
+loop Редагування кошика
+  USER -> API: PATCH /api/cart/update  { count }
+  API -> DB: updateOne cart  ($set: { count })
+  API --> USER: { status: 204 }
+end
+
+USER -> API: GET Nova Poshta відділення\n(TomTom Maps API)
+API --> USER: список відділень на карті
+USER -> USER: обирає відділення\nта заповнює контактні дані\n(ім'я, прізвище, телефон, email)
+
+USER -> API: POST /api/payment\n{ amount, orderDetails, cartItems }
+note over API: Перевірка JWT
+API -> API: генерує orderReference\n= order_{timestamp}
+API -> API: формує рядок підпису\nта підписує HMAC-MD5
+API --> USER: { result: paymentData\n(merchantAccount, signature,\norderReference, amount...) }
+
+USER -> WFP: редирект на платіжну\nсторінку WayForPay
+note over USER, WFP: Користувач вводить\nдані картки на сторінці WayForPay
+
+
+alt Оплата успішна
+  WFP -> API: POST /api/success-callback\n(transactionStatus, orderReference, amount)
+  API -> API: генерує підпис відповіді\nHMAC-MD5
+  API --> WFP: { orderReference, status: accept,\ntime, signature }
+
+  API -> MAIL: POST /api/payment/notify\n{ email, orderReference, amount,\norderDetails, cartItems }
+  MAIL --> USER: email підтвердження замовлення\n(склад, деталі доставки, сума)
+
+  API -> DB: DELETE /api/cart/clear\n(видалити всі позиції userId)
+  DB --> API: { status: 204 }
+
+  WFP -> USER: редирект назад на сайт
+  API --> USER: сторінка успішного замовлення
+
+else Оплата відхилена
+  WFP -> API: POST /api/success-callback\n(transactionStatus: Declined)
+  WFP -> USER: редирект назад на сайт
+  API --> USER: повідомлення про помилку оплати
+end
+@enduml

@@ -118,36 +118,39 @@ const Header = () => {
   }, [])
 
   useEffect(() => {
-    if (isAuth) {
-      const auth = JSON.parse(localStorage.getItem('auth') as string)
-      const cartFromLS = JSON.parse(localStorage.getItem('cart') as string)
-      const favoritesFromLS = JSON.parse(
-        localStorage.getItem('favorites') as string
-      )
-      const comparisonFromLS = JSON.parse(
-        localStorage.getItem('comparison') as string
-      )
+    if (!isAuth) return
 
-      if (cartFromLS && Array.isArray(cartFromLS)) {
-        addProductsFromLSToCart({
-          jwt: auth.accessToken,
-          cartItems: cartFromLS,
-        })
-      }
+    const auth = JSON.parse(localStorage.getItem('auth') as string)
 
-      if (favoritesFromLS && Array.isArray(favoritesFromLS)) {
-        addProductsFromLSToFavorites({
-          jwt: auth.accessToken,
-          favoriteItems: favoritesFromLS,
-        })
-      }
+    if (!auth?.accessToken) return
 
-      if (comparisonFromLS && Array.isArray(comparisonFromLS)) {
-        addItemsFromLSToComparison({
-          jwt: auth.accessToken,
-          comparisonItems: comparisonFromLS,
-        })
-      }
+    const cartFromLS = JSON.parse(localStorage.getItem('cart') as string)
+    const favoritesFromLS = JSON.parse(
+      localStorage.getItem('favorites') as string
+    )
+    const comparisonFromLS = JSON.parse(
+      localStorage.getItem('comparison') as string
+    )
+
+    if (cartFromLS && Array.isArray(cartFromLS) && cartFromLS.length) {
+      addProductsFromLSToCart({
+        jwt: auth.accessToken,
+        cartItems: cartFromLS,
+      })
+    }
+
+    if (favoritesFromLS && Array.isArray(favoritesFromLS) && favoritesFromLS.length) {
+      addProductsFromLSToFavorites({
+        jwt: auth.accessToken,
+        favoriteItems: favoritesFromLS,
+      })
+    }
+
+    if (comparisonFromLS && Array.isArray(comparisonFromLS) && comparisonFromLS.length) {
+      addItemsFromLSToComparison({
+        jwt: auth.accessToken,
+        comparisonItems: comparisonFromLS,
+      })
     }
   }, [isAuth])
 

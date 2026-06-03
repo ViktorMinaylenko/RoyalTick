@@ -1,0 +1,56 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceParticipantBorderColor #555555
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceLifeLineBorderColor #888888
+skinparam ArrowFontSize 10
+skinparam ParticipantPadding 60
+skinparam BoxPadding 40
+skinparam actorBorderColor #555555
+skinparam databaseBorderColor #555555
+skinparam databaseBackgroundColor #F0F0F0
+
+autonumber
+
+title Діаграма кооперацій: взаємодія компонентів при обробці аукціонної угоди
+
+actor "Користувач" as USER
+participant "Auction\nComponent" as AC
+participant "Bid\nController" as BC
+participant "Finalize\nService" as FS
+participant "Chat\nController" as CC
+participant "Rating\nController" as RC
+participant "Notification\nService" as NS
+database "MongoDB" as DB
+
+USER -> AC: відкриває сторінку аукціону
+AC -> FS: запуск фіналізації\n(POST /auction/lots/finalize)
+FS -> DB: пошук завершених лотів\n(endDate < now, status=active)
+DB --> FS: список лотів з ставками
+FS -> DB: створення чату\n(lots → chats, welcome message)
+FS -> DB: зміна статусу лота\n(status → reserved)
+
+USER -> BC: розміщення ставки\n(POST /auction/lots/[id]/bid)
+BC -> DB: перевірка лота\n(status, endDate, isBlocked)
+BC -> DB: оновлення currentPrice\nта push нової ставки
+BC -> NS: сповіщення продавцю\n(bid_on_lot)
+BC -> NS: сповіщення попередньому\nлідеру (bid_outbid)
+NS -> DB: збереження сповіщень\nу notifications
+
+USER -> CC: відправка повідомлення\n(POST /chats/[id]/message)
+CC -> DB: push message у messages[]
+CC -> NS: сповіщення одержувачу\n(new_message)
+
+USER -> CC: підтвердження угоди\n(POST /chats/[id]/complete)
+CC -> DB: updateOne\n(dealCompletedByOwner/Winner)
+CC -> DB: chats (status → completed)
+CC -> DB: lots (status → completed)
+
+USER -> RC: виставлення оцінки\n(POST /chats/[id]/rate)
+RC -> DB: updateOne users\n(sellerRating / buyerRating)
+RC -> DB: push review у\nsellerReviews / buyerReviews
+RC -> DB: updateOne chats\n(ownerRatedBuyer / winnerRatedSeller)
+@enduml

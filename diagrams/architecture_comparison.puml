@@ -1,0 +1,85 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam componentStyle rectangle
+skinparam padding 8
+skinparam nodesep 15
+skinparam ranksep 20
+skinparam ArrowColor #666666
+skinparam NoteBackgroundColor #F9F9F9
+skinparam NoteBorderColor #AAAAAA
+skinparam packageBorderThickness 2
+
+title Порівняльний аналіз архітектурних стратегій
+
+package "1. Класичний моноліт" as M #FFE8E8 {
+  rectangle " Інтерфейс " as ui1 #FFBBBB
+  rectangle " Каталог " as cat1 #FFBBBB
+  rectangle " Аукціон " as auc1 #FFBBBB
+  rectangle " Замовлення " as ord1 #FFBBBB
+  rectangle " Авторизація " as auth1 #FFBBBB
+  database "Спільна БД" as mdb #FFCCCC
+  ui1 -[hidden]-> cat1
+  cat1 -[hidden]-> auc1
+  auc1 -[hidden]-> ord1
+  ord1 -[hidden]-> auth1
+  auth1 --> mdb
+}
+note right of M
+  <color:red>✗</color> Зміна будь-якого модуля
+  перебудовує весь застосунок
+  <color:red>✗</color> Масштабування лише цілком
+end note
+
+package "2. Мікросервісна архітектура" as S #FFF5DD {
+  component [Сервіс каталогу] as sc #FFE090
+  component [Сервіс аукціону] as sa #FFE090
+  component [Сервіс замовлень] as so #FFE090
+  component [Сервіс спільноти] as ss #FFE090
+  database "БД 1" as db1 #FFE8A0
+  database "БД 2" as db2 #FFE8A0
+  database "БД 3" as db3 #FFE8A0
+  database "БД 4" as db4 #FFE8A0
+  sc --> db1
+  sa --> db2
+  so --> db3
+  ss --> db4
+  sc -[hidden]-> sa
+  sa -[hidden]-> so
+  so -[hidden]-> ss
+}
+note right of S
+  <color:red>✗</color> Складна інфраструктура
+  <color:red>✗</color> Важко розробляти і тестувати
+  на початковому етапі
+end note
+
+package "3. Модульний моноліт — RoyalTick  ✓" as R #E6F4E6 {
+  rectangle "Next.js 15 — єдиний застосунок" as app #B8DDB8 {
+    component [Identity] as rid #90C890
+    component [Catalog] as rcat #90C890
+    component [Auction] as rauc #90C890
+    component [Shopping] as rshop #90C890
+    component [Community] as rcom #90C890
+    component [Notification] as rnotif #90C890
+    rid -[hidden]-> rcat
+    rcat -[hidden]-> rauc
+    rauc -[hidden]-> rshop
+    rshop -[hidden]-> rcom
+    rcom -[hidden]-> rnotif
+  }
+  component [React Admin] as radmin #90C890
+  database "MongoDB Atlas" as rdb #90C890
+  app --> rdb
+  radmin --> app : API
+}
+note right of R
+  <color:green>✓</color> Одне розгортання
+  <color:green>✓</color> Чіткий поділ на модулі
+  <color:green>✓</color> Легко розширювати
+end note
+
+M -[hidden]-> S
+S -[hidden]-> R
+@enduml

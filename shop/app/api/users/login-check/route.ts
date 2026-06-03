@@ -50,6 +50,8 @@ export async function GET(req: Request) {
       followingCount: (user.following ?? []).length,
       isBlocked: user.isBlocked ?? false,
       blockReason: user.blockReason ?? null,
+      isVerified: user.isVerified ?? false,
+      verifiedAt: user.verifiedAt ?? null,
     }, corsHeaders)
   } catch (error) {
     return NextResponse.json({

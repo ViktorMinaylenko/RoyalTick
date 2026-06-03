@@ -1,0 +1,96 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam ActivityBorderColor #555555
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityArrowColor #555555
+skinparam ActivityDiamondBackgroundColor #F5F5F5
+skinparam ActivityDiamondBorderColor #555555
+skinparam PartitionBorderColor #888888
+skinparam PartitionBackgroundColor #F8F8F8
+skinparam ArrowFontSize 10
+
+title Діаграма активності: взаємодія зі спільнотою
+
+|Користувач|
+start
+:Відкриває розділ спільноти;
+:Переглядає список тем\n(фільтр за категорією);
+
+|Система|
+:GET /api/community\n(pagination + category filter);
+:Повертає список тем;
+
+|Користувач|
+:Відкриває тему;
+
+|Система|
+if (Користувач авторизований?) then (так)
+  :Перевіряє чи переглядав раніше\n(viewedBy масив);
+  if (Вже переглядав?) then (ні)
+    :+1 перегляд\n+ userId → viewedBy;
+  else (так)
+    :Перегляд не рахується;
+  endif
+else (ні)
+  :Перегляд не рахується;
+endif
+:Завантажує тему з коментарями;
+
+|Користувач|
+:Читає тему та коментарі;
+
+fork
+  :Хоче створити тему;
+  if (Авторизований?) then (ні)
+    :Перенаправлення\nна сторінку входу;
+    :Авторизація;
+  endif
+  :Заповнює форму\n(заголовок, текст,\nкатегорія, теги);
+  :Завантажує фото\n(до 4 штук);
+  |Система|
+  :Завантаження фото\nна Cloudinary;
+  :POST /api/community\n(перевірка JWT);
+  if (Поля заповнені?) then (так)
+    :Зберігає тему\nв topics;
+    :Повертає нову тему;
+  else (ні)
+    :Помилка 400\n"Заповніть всі поля";
+  endif
+fork again
+  |Користувач|
+  :Хоче залишити коментар;
+  if (Авторизований?) then (ні)
+    :Перенаправлення\nна сторінку входу;
+    :Авторизація;
+  endif
+  :Вводить текст коментаря;
+  :Обирає відповідь\nна коментар (опційно);
+  |Система|
+  :POST /api/community/[id]/message\n(перевірка JWT);
+  if (Текст не порожній?) then (так)
+    :Додає повідомлення\nу messages теми;
+    :Повертає оновлену тему;
+  else (ні)
+    :Помилка 400\n"Порожнє повідомлення";
+  endif
+fork again
+  |Користувач|
+  :Натискає лайк;
+  if (Авторизований?) then (ні)
+    :Перенаправлення\nна сторінку входу;
+  endif
+  |Система|
+  :POST /api/community/[id]/like\n(перевірка JWT);
+  if (Вже лайкнув?) then (так)
+    :Видаляє userId\nз масиву likes;
+  else (ні)
+    :Додає userId\nдо масиву likes;
+  endif
+  :Повертає новий\nлічильник лайків;
+end fork
+
+|Користувач|
+stop
+@enduml

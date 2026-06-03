@@ -19,3 +19,10 @@ export const openMapModal = modals.createEvent()
 export const closeMapModal = modals.createEvent()
 export const openNovaPoshtaMapModal = modals.createEvent()
 export const closeNovaPoshtaMapModal = modals.createEvent()
+export const openVerificationModal = modals.createEvent()
+export const closeVerificationModal = modals.createEvent()
+
+export const $openVerificationModal = modals
+    .createStore(false)
+    .on(openVerificationModal, () => true)
+    .on(closeVerificationModal, () => false)

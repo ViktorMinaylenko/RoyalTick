@@ -18,6 +18,8 @@ export interface IUser {
     following: string[]
     isBlocked: boolean
     blockReason: string | null
+    isVerified?: boolean
+    verifiedAt?: string | null
 }
 
 export interface IUserGeolocation{

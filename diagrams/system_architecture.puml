@@ -1,0 +1,89 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam componentStyle rectangle
+skinparam padding 8
+skinparam nodesep 25
+skinparam ranksep 30
+skinparam ArrowColor #555555
+skinparam ArrowFontSize 10
+skinparam ActorBorderColor #333333
+skinparam ActorBackgroundColor #FFFFFF
+skinparam ActorFontSize 12
+
+title Архітектурна схема вебплатформи RoyalTick
+
+actor "Користувач" as USER
+actor "Модератор" as MOD
+actor "Адміністратор" as ADMIN_ACTOR
+
+package "Браузер" as CLIENT #EEF4FF {
+  rectangle "SSR-сторінки\n(каталог, товари, лоти)" as SSR #C8D8FF
+  rectangle "CSR-компоненти\n(кошик, профіль,\nставки, модалки)" as CSR #C8D8FF
+}
+
+package "React Admin\n(окремий Vite-застосунок)" as ADMIN_APP #FFF5DD {
+  component [Управління\nкаталогом і юзерами] as ADMUI #FFE090
+}
+
+package "Next.js 15 — App Router (Full-Stack)" as NEXT #E6F4E6 {
+
+  rectangle "Server Components\n+ Page Routes" as PAGES #A8D8A8
+
+  package "API Routes" as API #B8E8B8 {
+    component [/api/users\n/api/auth] as RAUTH #90C890
+    component [/api/goods\n/api/admin] as RCAT #90C890
+    component [/api/auction\n/api/chats] as RAUC #90C890
+    component [/api/cart\n/api/payment] as RSHOP #90C890
+    component [/api/community\n/api/notifications\n/api/moderator] as RCOM #90C890
+  }
+
+  rectangle "Middleware\n(JWT перевірка + ролі)" as MW #90C890
+}
+
+database "MongoDB Atlas" as MONGO #D6EAD6
+
+package "Зовнішні сервіси" as EXT #F5F0FF {
+  package "Платежі" as PAY #EDE0FF {
+    component [WayForPay] as WFP #D8C8FF
+  }
+  package "Карти та геолокація" as MAPS #EDE0FF {
+    component [TomTom Maps API\n(карта відділень)] as TT #D8C8FF
+    component [Geoapify\n(геокодування адрес)] as GEO #D8C8FF
+  }
+  package "Інші сервіси" as OTHER #EDE0FF {
+    component [Firebase Auth\n(Google OAuth)] as FB #D8C8FF
+    component [Nodemailer\n(email)] as MAIL #D8C8FF
+    component [Nova Poshta API\n(доставка)] as NP #D8C8FF
+    component [Cloudinary\n(зображення)] as CLOUD #D8C8FF
+  }
+}
+
+USER --> CLIENT : переглядає сайт
+MOD --> CLIENT : модерує контент
+ADMIN_ACTOR --> ADMIN_APP : керує панеллю
+
+SSR <--> PAGES : HTML
+CSR <--> API : JSON / REST
+
+PAGES --> API
+API --> MW : кожен запит
+MW --> RAUTH
+MW --> RCAT
+MW --> RAUC
+MW --> RSHOP
+MW --> RCOM
+
+ADMUI --> API : REST API
+
+API --> MONGO : read / write
+
+RSHOP --> WFP : оплата
+RAUTH --> FB : OAuth 2.0
+RAUTH --> MAIL : листи
+RSHOP --> NP : розрахунок доставки
+RSHOP --> TT : карта відділень
+RSHOP --> GEO : геокодування
+RCAT --> CLOUD : зберігання фото
+@enduml

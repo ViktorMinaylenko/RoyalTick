@@ -1,0 +1,84 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam componentStyle rectangle
+skinparam padding 10
+skinparam nodesep 14
+skinparam ranksep 24
+skinparam ArrowColor #555555
+skinparam ArrowFontSize 10
+skinparam packageBorderThickness 1.5
+skinparam packageFontSize 12
+skinparam packageFontStyle bold
+
+package "Шар 4 — Зовнішня інфраструктура" as L4 #F0F0F0 {
+  together {
+    [Браузер\n(Next.js 15)] as BR #CCCCCC
+    [MongoDB\nAtlas] as MDB #CCCCCC
+    [Firebase\nAuth] as FB #CCCCCC
+    [React Admin\n(Vite SPA)] as RA #CCCCCC
+    [WayForPay\nNodemailer\nCloudinary\nNova Poshta\nTomTom] as EXT #CCCCCC
+  }
+}
+
+package "Шар 3 — Адаптери інтерфейсів" as L3 #D8D0F0 {
+  together {
+    [React Components\n(Views)] as RC #B0A8E0
+    [lib / utils\n(Repositories)] as REPO #B0A8E0
+    [API Routes\n(Controllers)] as APIR #B0A8E0
+    [Effector + Hooks\n(Presenters)] as EF #B0A8E0
+  }
+}
+
+package "Шар 2 — Бізнес-логіка (Use Cases)" as L2 #D0EDD0 {
+  together {
+    [Каталог\n(пошук, фільтр)] as UC1 #90C890
+    [Авторизація\n(JWT · OAuth)] as UC2 #90C890
+    [Кошик /\nЗамовлення] as UC3 #90C890
+    [Аукціон\n(ставки · чати)] as UC4 #90C890
+    [Спільнота\n(теми · відгуки)] as UC5 #90C890
+    [Сповіщення\n(email · push)] as UC6 #90C890
+  }
+}
+
+package "Шар 1 — Сутності домену (Entities)" as L1 #FFFACC {
+  together {
+    [Watch · Strap\nBox · Care · Image] as E1 #FFE060
+    [User · Followers\nBalance · Rating] as E2 #FFE060
+    [AuctionLot · Bid\nChat · Message] as E3 #FFE060
+    [Order · Cart\nPromoCode] as E4 #FFE060
+    [Topic · Comment\nReview · Notification\nFavorites] as E5 #FFE060
+  }
+}
+
+FB   --> APIR : OAuth
+RA   --> APIR : HTTP + JWT
+BR   --> RC
+BR   --> APIR
+MDB  --> REPO
+EXT  --> APIR
+
+RC   --> UC1
+RC   --> UC2
+RC   --> UC3
+RC   --> UC4
+EF   --> UC2
+EF   --> UC3
+APIR --> UC1
+APIR --> UC2
+APIR --> UC3
+APIR --> UC4
+APIR --> UC5
+APIR --> UC6
+REPO --> UC1
+REPO --> UC4
+REPO --> UC5
+
+UC1 --> E1
+UC2 --> E2
+UC3 --> E4
+UC4 --> E3
+UC5 --> E5
+UC6 --> E5
+@enduml

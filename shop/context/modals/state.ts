@@ -40,3 +40,5 @@ export const $mapModal = modals
 export const $novaPoshtaMapModal = modals.createStore(false)
     .on(openNovaPoshtaMapModal, () => true)
     .on(closeNovaPoshtaMapModal, () => false)
+
+export { $openVerificationModal } from "."

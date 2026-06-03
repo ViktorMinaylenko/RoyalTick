@@ -1,0 +1,59 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam nodeBorderColor #444444
+skinparam nodeBackgroundColor #F5F5F5
+skinparam nodeFontStyle bold
+skinparam componentBorderColor #444444
+skinparam componentBackgroundColor #FFFFFF
+skinparam databaseBorderColor #444444
+skinparam databaseBackgroundColor #FFFFFF
+skinparam ArrowColor #444444
+skinparam ArrowFontSize 10
+skinparam padding 10
+
+title Діаграма розгортання платформи RoyalTick
+
+together {
+  node "Покупець" as USER
+  node "Адміністратор" as ADMIN_USER
+}
+
+node "Vercel: royaltick-shop" as VERCEL_SHOP {
+  component "SSR сторінки\n(каталог, аукціон,\nспільнота)" as SSR
+  component "API Routes\n(/api/goods, /api/auction\n/api/cart, /api/chats\n/api/payment, /api/users)" as API
+}
+
+node "Vercel: admin-watches" as VERCEL_ADMIN {
+  component "React Admin SPA\n(Vite, порт 443)" as SPA
+}
+
+node "MongoDB Atlas\n(Хмарна БД)" as MONGO_NODE {
+  database "watches · straps\nboxes · care · lots\nchats · users · cart\nfavorites · topics\nnotifications..." as DB
+}
+
+node "Зовнішні API" as EXTERNAL {
+  component "Платежі\nWayForPay · LiqPay" as PAYMENT
+  component "Медіа та геодані\nCloudinary · TomTom\nGeoapify · Nova Poshta" as MEDIA
+  component "Авторизація та пошта\nFirebase Auth · Nodemailer" as AUTH
+}
+
+node "GitLab CI/CD" as GITLAB {
+  component "build → test → lint\n→ docker → deploy" as PIPE
+}
+
+USER --> SSR : HTTPS
+ADMIN_USER --> SPA : HTTPS
+
+SSR --> API : internal
+API --> DB : MongoDB\nDriver
+SPA --> API : REST запити
+
+API --> PAYMENT : HTTP
+API --> MEDIA : HTTP
+API --> AUTH : OAuth / SMTP
+
+GITLAB --> VERCEL_SHOP : auto deploy\n(main branch)
+GITLAB --> VERCEL_ADMIN : auto deploy\n(main branch)
+@enduml

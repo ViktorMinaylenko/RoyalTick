@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import styles from '@/styles/user-page/index.module.scss'
+import VerificationBadge from '@/components/elements/VerificationBadge/VerificationBadge'
 
 const EMOJIS = ['😠', '😕', '😐', '🙂', '😄']
 
@@ -183,6 +184,7 @@ const UserPage = () => {
                         <div className={styles.user_page__info}>
                             <span className={styles.user_page__badge}>RoyalTick Member</span>
                             <h1 className={styles.user_page__name}>{userData.name}</h1>
+                            <VerificationBadge isVerified={!!userData.isVerified} />
 
                             <div className={styles.user_page__stats}>
                                 <div className={styles.user_page__stat}>

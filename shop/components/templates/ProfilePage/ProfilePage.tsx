@@ -15,7 +15,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useUserLogout } from '@/hooks/useLogout'
 import { useEffect, useState } from 'react'
-import { formatPrice } from '@/lib/utils/common'
+import { addOverflowHiddenToBody, formatPrice } from '@/lib/utils/common'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { useSearchParams } from 'next/navigation'
@@ -23,6 +23,8 @@ import { loginCheck } from '@/context/user'
 import { IReview } from '@/types/review'
 import { IUserLot } from '@/types/lots'
 import ProfileLotsSlider from '@/components/modules/ProfilePage/ProfileLotsSlider'
+import { openVerificationModal } from '@/context/modals'
+import VerificationBadge from '@/components/elements/VerificationBadge/VerificationBadge'
 
 const EMOJIS = ['😠', '😕', '😐', '🙂', '😄']
 
@@ -43,6 +45,11 @@ const ProfilePage = () => {
     const [completedLots, setCompletedLots] = useState<IUserLot[]>([])
     const [bidLots, setBidLots] = useState<IUserLot[]>([])
     const searchParams = useSearchParams()
+
+    const handleOpenVerification = () => {
+        addOverflowHiddenToBody()
+        openVerificationModal()
+    }
 
     useEffect(() => {
         const topupStatus = searchParams.get('topup')
@@ -281,7 +288,17 @@ const ProfilePage = () => {
                                 </div>
                             </div>
                         </div>
-
+                        <div className={styles.profile__verification}>
+                            <VerificationBadge isVerified={!!user.isVerified} />
+                            {!user.isVerified && (
+                                <button
+                                    className={`btn-reset ${styles.profile__verification__btn}`}
+                                    onClick={handleOpenVerification}
+                                >
+                                    Верифікувати акаунт
+                                </button>
+                            )}
+                        </div>
                         <div className={styles.profile__stats}>
                             <div className={styles.profile__stat_card}>
                                 <span className={styles.profile__stat_icon}>👥</span>

@@ -23,6 +23,8 @@ export async function GET(
                     isBlocked: 1,
                     blockReason: 1,
                     blockedAt: 1,
+                    isVerified: 1,
+                    verifiedAt: 1,
                 }
             }
         )
@@ -52,6 +54,8 @@ export async function GET(
                 sellerReviews: user.sellerReviews ?? [],
                 isBlocked: user.isBlocked ?? false,
                 blockReason: user.blockReason ?? null,
+                isVerified: user.isVerified ?? false,
+                verifiedAt: user.verifiedAt ?? null,
             },
             activeLots,
         }, corsHeaders)

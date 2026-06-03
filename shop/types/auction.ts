@@ -127,3 +127,12 @@ export interface IPropsDeleteChatModal {
     onClose: () => void
     onConfirm: () => void
 }
+
+export interface IPropsBadge {
+    isVerified: boolean
+    showText?: boolean
+}
+
+export interface IPropsRules {
+    t: Record<string, string>
+}

@@ -1,0 +1,110 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam ActivityBorderColor #555555
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityArrowColor #555555
+skinparam ActivityDiamondBackgroundColor #F5F5F5
+skinparam ActivityDiamondBorderColor #555555
+skinparam PartitionBorderColor #888888
+skinparam PartitionBackgroundColor #F8F8F8
+skinparam ArrowFontSize 10
+
+title Діаграма активності: виставлення лота та аукціонні торги
+
+|Користувач|
+start
+:Відкриває сторінку аукціону;
+
+|Система|
+fork
+  :POST /api/auction/lots/finalize\n(завершує лоти з вичерпаним часом);
+  if (Є ставки?) then (так)
+    :Визначає переможця\n(остання ставка);
+    :Статус лота → reserved;
+    :Створює чат\nз вітальним повідомленням;
+  else (ні)
+    :Лот залишається активним;
+  endif
+fork again
+  :POST /api/auction/lots/restore-inactive\n(перевіряє неактивні чати > 3 днів);
+  if (Переможець не відповів?) then (так)
+    :Блокує акаунт переможця;
+    :Повертає лот в аукціон\n(+7 днів таймер);
+    :Сповіщення обом\nучасникам;
+  endif
+end fork
+
+:GET /api/auction/lots\n(завантажує список лотів\nз фільтрами та сортуванням);
+
+|Користувач|
+fork
+  :Хоче виставити лот;
+  if (Авторизований?) then (ні)
+    :Перенаправлення\nна сторінку входу;
+    :Авторизація;
+  endif
+  |Система|
+  if (Баланс >= комісія\nза розміщення?) then (ні)
+    :Помилка 402\n"Недостатньо коштів";
+    stop
+  endif
+  if (Акаунт заблоковано?) then (так)
+    :Помилка 403\n"Акаунт заблоковано";
+    stop
+  endif
+  |Користувач|
+  :Заповнює форму\n(назва, опис, категорія,\nціна, крок, таймер,\nдоставка);
+  :Завантажує фото\n(головне + до 4 додаткових);
+  |Система|
+  :Завантаження фото\nна Cloudinary;
+  :POST /api/auction/lots\n(перевірка JWT);
+  if (Всі поля заповнені?) then (так)
+    :Зберігає лот у lots\n(status: active, bids: []);
+    :Списує комісію\nз балансу продавця;
+    :Повертає новий лот;
+  else (ні)
+    :Помилка 400\n"Заповніть всі поля";
+  endif
+
+fork again
+  |Користувач|
+  :Переглядає лот\nу каталозі аукціону;
+  :Вводить суму ставки;
+  |Система|
+  :POST /api/auction/lots/[id]/bid\n(перевірка JWT);
+  if (Токен валідний?) then (ні)
+    :Помилка 401;
+    stop
+  endif
+  if (Статус лота active?) then (ні)
+    :Помилка 400\n"Аукціон завершено";
+    stop
+  endif
+  if (Таймер не вийшов?) then (ні)
+    :Помилка 400\n"Час вийшов";
+    stop
+  endif
+  if (Акаунт не заблоковано?) then (ні)
+    :Помилка 403;
+    stop
+  endif
+  if (Не власний лот?) then (ні)
+    :Помилка 403\n"Не можна ставити\nна власний лот";
+    stop
+  endif
+  if (Сума >= currentPrice\n+ bidStep?) then (так)
+    :Додає ставку у bids;
+    :Оновлює currentPrice;
+    :Сповіщення продавцю\n(bid_on_lot);
+    :Сповіщення попередньому\nлідеру (bid_outbid);
+    :Повертає оновлений лот;
+  else (ні)
+    :Помилка 400\n"Мінімальна ставка: X ₴";
+  endif
+end fork
+
+|Користувач|
+stop
+@enduml
