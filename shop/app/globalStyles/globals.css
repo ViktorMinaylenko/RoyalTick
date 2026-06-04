@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+a {
+    color: #b8973f;
+}
+
 body {
   font-family: Rostelecom Basis;
   font-weight: 400;

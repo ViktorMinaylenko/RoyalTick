@@ -91,4 +91,9 @@
     width: calc(100% + 40px);
     text-align: center;
   }
+
+  .cookie-popup__text a {
+    color: #b8973f !important;
+    text-decoration: underline;
+}
 }

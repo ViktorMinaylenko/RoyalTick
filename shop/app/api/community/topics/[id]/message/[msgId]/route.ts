@@ -4,32 +4,12 @@ import clientPromise from '@/lib/mongodb'
 import { getDbAndReqBody, isValidAccessToken, parseJwt, findUserByEmail } from '@/lib/utils/api-routes'
 import { ObjectId } from 'mongodb'
 
-export async function GET(
-    req: Request,
-    { params }: { params: Promise<{ id: string }> }
-) {
-    try {
-        const { id } = await params
-        const { db } = await getDbAndReqBody(clientPromise, null)
-
-        const topic = await db.collection('topics').findOne({ _id: new ObjectId(id) })
-
-        if (!topic) {
-            return NextResponse.json({ message: 'Тему не знайдено', status: 404 }, corsHeaders)
-        }
-
-        return NextResponse.json({ status: 200, topic }, corsHeaders)
-    } catch (error) {
-        return NextResponse.json({ message: (error as Error).message, status: 500 }, corsHeaders)
-    }
-}
-
 export async function DELETE(
     req: Request,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ id: string; msgId: string }> }
 ) {
     try {
-        const { id } = await params
+        const { id, msgId } = await params
         const token = req.headers.get('authorization')?.split(' ')[1]
         const validatedTokenResult = await isValidAccessToken(token)
         if (validatedTokenResult.status !== 200) {
@@ -48,11 +28,21 @@ export async function DELETE(
             return NextResponse.json({ message: 'Тему не знайдено', status: 404 }, corsHeaders)
         }
 
-        await db.collection('topics').deleteOne({ _id: new ObjectId(id) })
+        const message = topic.messages?.find(
+            (m: any) => String(m._id) === msgId
+        )
+        if (!message) {
+            return NextResponse.json({ message: 'Повідомлення не знайдено', status: 404 }, corsHeaders)
+        }
+
+        await db.collection('topics').updateOne(
+            { _id: new ObjectId(id) },
+            { $pull: { messages: { _id: new ObjectId(msgId) } } } as any
+        )
 
         await db.collection('notifications').insertOne({
-            userId: topic.userId,
-            type: 'topic_deleted',
+            userId: message.userId,
+            type: 'message_deleted',
             actorName: moderator.name,
             topicTitle: topic.title,
             reason: reqBody?.reason || null,
@@ -62,7 +52,8 @@ export async function DELETE(
             href: '/community',
         })
 
-        return NextResponse.json({ status: 200 }, corsHeaders)
+        const updated = await db.collection('topics').findOne({ _id: new ObjectId(id) })
+        return NextResponse.json({ status: 200, topic: updated }, corsHeaders)
     } catch (error) {
         return NextResponse.json({ message: (error as Error).message, status: 500 }, corsHeaders)
     }

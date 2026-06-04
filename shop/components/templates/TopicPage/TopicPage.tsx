@@ -10,8 +10,10 @@ import { ITopic } from '@/types/community'
 import Link from 'next/link'
 import styles from '@/styles/community/index.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
+import { useModeratorDelete } from '@/hooks/useModeratorDelete'
+import ModeratorDeleteModal from '@/components/modules/CommunityPage/ModeratorDeleteModal'
 
 const TopicPage = () => {
     const { getDefaultTextGenerator, getTextGenerator } = useBreadcrumbs('topic')
@@ -21,6 +23,7 @@ const TopicPage = () => {
     const { lang, translations } = useLang()
     const t = (translations[lang] as any).community
     const messagesEndRef = useRef<HTMLDivElement>(null)
+    const isModerator = ['moderator', 'admin'].includes(user?.role)
 
     const [topic, setTopic] = useState<ITopic | null>(null)
     const [spinner, setSpinner] = useState(true)
@@ -31,6 +34,13 @@ const TopicPage = () => {
     const [likesCount, setLikesCount] = useState(0)
     const [replyTo, setReplyTo] = useState<{ id: string; userName: string } | null>(null)
     const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+    const { isModalOpen, isDeleting, target, openDeleteModal, closeDeleteModal, handleDelete } =
+        useModeratorDelete((data) => {
+            if (data?.topic) {
+                setTopic(data.topic)
+            }
+        })
 
     useEffect(() => {
         if (!params.id) return
@@ -153,7 +163,7 @@ const TopicPage = () => {
         return (
             <main>
                 <section style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
-                    <FontAwesomeIcon icon={faSpinner} spin size='2x' color='#7b2ff7' />
+                    <FontAwesomeIcon icon={faSpinner} spin size='2x' color='#b8973f' />
                 </section>
             </main>
         )
@@ -263,6 +273,20 @@ const TopicPage = () => {
                                             <span className={styles.topic__message_date}>
                                                 {formatDate(msg.createdAt)}
                                             </span>
+                                            {isModerator && (
+                                                <button
+                                                    className={`btn-reset ${styles.topic__message_delete_btn}`}
+                                                    onClick={() => openDeleteModal({
+                                                        type: 'message',
+                                                        topicId: String(params.id),
+                                                        msgId: String(msg._id),
+                                                        topicTitle: topic.title,
+                                                    })}
+                                                    title={t.delete_message || 'Видалити коментар'}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} />
+                                                </button>
+                                            )}
                                         </div>
                                         <p className={styles.topic__message_text}>{msg.text}</p>
                                         {isUserAuth() && (
@@ -332,6 +356,15 @@ const TopicPage = () => {
 
                 </div>
             </section>
+
+            <ModeratorDeleteModal
+                isOpen={isModalOpen}
+                onClose={closeDeleteModal}
+                onConfirm={handleDelete}
+                isLoading={isDeleting}
+                type={target?.type || 'message'}
+                title={target?.topicTitle}
+            />
         </main>
     )
 }

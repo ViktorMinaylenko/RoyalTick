@@ -24,3 +24,15 @@ export interface ITopic {
     messages: ITopicMessage[]
     messagesCount: number
 }
+
+export type DeleteTarget = {
+    type: 'topic' | 'message'
+    topicId: string
+    msgId?: string
+    topicTitle?: string
+}
+
+export interface IDeleteTopicProps {
+    topic: ITopic
+    onDeleted?: (topicId: string) => void
+}

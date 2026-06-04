@@ -54,7 +54,7 @@ const ModeratorPage = () => {
 
                     {spinner && (
                         <div style={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
-                            <FontAwesomeIcon icon={faSpinner} spin size='2x' color='#7b2ff7' />
+                            <FontAwesomeIcon icon={faSpinner} spin size='2x' color='#b8973f' />
                         </div>
                     )}
 

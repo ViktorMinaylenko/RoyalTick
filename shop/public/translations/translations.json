@@ -839,7 +839,18 @@
       "bid_on_lot_text": "placed a bid of",
       "bid_outbid_text": "outbid you on",
       "new_message_text": "sent a message in chat for",
-      "clear_all": "Clear all"
+      "clear_all": "Clear all",
+      "lot_restored_title": "Lot restored",
+      "lot_restored_text": "Lot has been returned to active auctions",
+      "account_blocked_title": "Account blocked",
+      "account_blocked_text": "Your account has been blocked by a moderator",
+      "topic_deleted_title": "Discussion deleted",
+      "topic_deleted_text": "Moderator deleted your discussion",
+      "message_deleted_title": "Comment deleted",
+      "message_deleted_text": "Moderator deleted your comment in the discussion",
+      "reason": "Reason",
+      "punishment": "Punishment",
+      "punishment_warning": "Warning"
     },
     "password_restore_page": {
       "password_restore": "Password restore",
@@ -847,6 +858,17 @@
       "we_sent_code": "We sent the code to",
       "creaete_pasword": "Create a new password",
       "repeat_pasword": "Repeat pasword"
+    },
+    "moderator": {
+      "delete_topic_title": "Delete discussion",
+      "delete_message_title": "Delete comment",
+      "reason_label": "Reason (optional)",
+      "reason_placeholder": "Describe the reason for deletion...",
+      "punishment_label": "Punishment",
+      "punishment_none": "No punishment",
+      "punishment_warning": "Warning",
+      "cancel": "Cancel",
+      "confirm": "Delete"
     }
   },
   "ua": {
@@ -1688,7 +1710,18 @@
       "bid_on_lot_text": "поставив ставку",
       "bid_outbid_text": "перебив вашу ставку на",
       "new_message_text": "написав у чат по лоту",
-      "clear_all": "Очистити"
+      "clear_all": "Очистити",
+      "lot_restored_title": "Лот відновлено",
+      "lot_restored_text": "Лот повернуто в активні торги",
+      "account_blocked_title": "Акаунт заблоковано",
+      "account_blocked_text": "Ваш акаунт було заблоковано модератором",
+      "topic_deleted_title": "Обговорення видалено",
+      "topic_deleted_text": "Модератор видалив ваше обговорення",
+      "message_deleted_title": "Коментар видалено",
+      "message_deleted_text": "Модератор видалив ваш коментар в обговоренні",
+      "reason": "Причина",
+      "punishment": "Покарання",
+      "punishment_warning": "Попередження"
     },
     "password_restore_page": {
       "password_restore": "Відновлення пароля",
@@ -1696,6 +1729,17 @@
       "we_sent_code": "Ми надіслали код на",
       "creaete_pasword": "Створіть новий пароль",
       "repeat_pasword": "Повторіть пароль"
+    },
+    "moderator": {
+      "delete_topic_title": "Видалення обговорення",
+      "delete_message_title": "Видалення коментаря",
+      "reason_label": "Причина (необов'язково)",
+      "reason_placeholder": "Опишіть причину видалення...",
+      "punishment_label": "Покарання",
+      "punishment_none": "Без покарання",
+      "punishment_warning": "Попередження",
+      "cancel": "Скасувати",
+      "confirm": "Видалити"
     }
   }
 }

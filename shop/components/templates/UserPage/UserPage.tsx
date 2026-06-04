@@ -144,7 +144,7 @@ const UserPage = () => {
         return (
             <main>
                 <section style={{ padding: '80px 0', display: 'flex', justifyContent: 'center' }}>
-                    <FontAwesomeIcon icon={faSpinner} spin size='2x' color='#7b2ff7' />
+                    <FontAwesomeIcon icon={faSpinner} spin size='2x' color='#b8973f' />
                 </section>
             </main>
         )

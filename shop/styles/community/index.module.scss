@@ -133,8 +133,25 @@
 }
 
 .topic_item {
-  background: #0f0f0f;
+  background: hsl(0, 0%, 6%);
   transition: background 0.15s;
+
+  position: relative;
+
+    &__delete {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+        color: #ef4444;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
 
   &:hover {
     background: #141414;
@@ -811,4 +828,188 @@
     color: rgba(240, 237, 232, 0.2);
     margin: 0;
   }
+}
+
+.topic__message_delete_btn {
+    margin-left: auto;
+    color: rgba(239, 68, 68, 0.5);
+    transition: color 0.2s;
+    font-size: 11px;
+    cursor: pointer;
+
+    &:hover {
+        color: #ef4444;
+    }
+}
+
+.moderator_modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #141414;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 32px;
+    width: 100%;
+    max-width: 480px;
+    z-index: 1000;
+
+    &__overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        color: rgba(240, 237, 232, 0.2);
+        cursor: pointer;
+        font-size: 14px;
+        transition: color 0.15s;
+
+        &:hover {
+            color: rgba(240, 237, 232, 0.6);
+        }
+    }
+
+    &__icon {
+        text-align: center;
+        font-size: 28px;
+        color: #ef4444;
+        margin-bottom: 20px;
+    }
+
+    &__title {
+        text-align: center;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #f0ede8;
+        margin-bottom: 8px;
+    }
+
+    &__subtitle {
+        text-align: center;
+        font-size: 12px;
+        color: rgba(240, 237, 232, 0.3);
+        margin-bottom: 24px;
+        letter-spacing: 0.3px;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+
+    &__label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: rgba(240, 237, 232, 0.25);
+    }
+
+    &__textarea {
+        width: 100%;
+        background: #0f0f0f;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: #f0ede8;
+        padding: 12px 14px;
+        font-size: 13px;
+        resize: vertical;
+        outline: none;
+        box-sizing: border-box;
+        font-family: inherit;
+        transition: border-color 0.2s;
+
+        &::placeholder {
+            color: rgba(240, 237, 232, 0.18);
+        }
+
+        &:focus {
+            border-color: #b8973f;
+        }
+    }
+
+    &__select {
+        width: 100%;
+        background: #0f0f0f;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: #f0ede8;
+        padding: 12px 14px;
+        font-size: 13px;
+        outline: none;
+        box-sizing: border-box;
+        cursor: pointer;
+        font-family: inherit;
+        appearance: none;
+        transition: border-color 0.2s;
+
+        &:focus {
+            border-color: #b8973f;
+        }
+
+        option {
+            background: #0f0f0f;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 28px;
+    }
+
+    &__cancel {
+        flex: 1;
+        padding: 11px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: rgba(240, 237, 232, 0.3);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        background: transparent;
+        text-align: center;
+        transition: color 0.2s, border-color 0.2s;
+
+        &:hover {
+            color: rgba(240, 237, 232, 0.6);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+    }
+
+    &__confirm {
+        flex: 1;
+        padding: 11px 20px;
+        border: 1px solid rgba(239, 68, 68, 0.5);
+        color: #ef4444;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        background: transparent;
+        text-align: center;
+        transition: background 0.2s;
+
+        &:hover:not(:disabled) {
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        &:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+    }
 }
