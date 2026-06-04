@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40">
+    <rect width="80" height="40" rx="4" fill="none" />
+    <text x="4" y="27" font-family="Arial, sans-serif" font-size="15" font-weight="400"
+        fill="#4285f4">G</text>
+    <text x="16" y="27" font-family="Arial, sans-serif" font-size="15" font-weight="400"
+        fill="#4285f4">o</text>
+    <text x="26" y="27" font-family="Arial, sans-serif" font-size="15" font-weight="400"
+        fill="#ea4335">o</text>
+    <text x="36" y="27" font-family="Arial, sans-serif" font-size="15" font-weight="400"
+        fill="#fbbc04">g</text>
+    <text x="45" y="27" font-family="Arial, sans-serif" font-size="15" font-weight="400"
+        fill="#34a853">l</text>
+    <text x="50" y="27" font-family="Arial, sans-serif" font-size="15" font-weight="400"
+        fill="#ea4335">e</text>
+    <text x="59" y="27" font-family="Arial, sans-serif" font-size="13" font-weight="600"
+        fill="#b8973f">Pay</text>
+</svg>

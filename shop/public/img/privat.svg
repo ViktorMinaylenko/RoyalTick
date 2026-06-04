@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40">
+    <rect width="80" height="40" rx="4" fill="none" />
+    <!-- Monobank -->
+    <rect x="2" y="10" width="22" height="14" rx="2" fill="#1a1a1a" stroke="#b8973f"
+        stroke-width="1" />
+    <rect x="2" y="14" width="22" height="3" fill="#b8973f" opacity="0.6" />
+    <text x="27" y="22" font-family="Arial, sans-serif" font-size="9" font-weight="700"
+        fill="rgba(240,237,232,0.5)">/</text>
+    <!-- Privat24 -->
+    <rect x="35" y="10" width="22" height="14" rx="2" fill="#1a1a1a" stroke="rgba(240,237,232,0.2)"
+        stroke-width="1" />
+    <rect x="35" y="14" width="22" height="3" fill="rgba(240,237,232,0.15)" />
+    <text x="60" y="22" font-family="Arial, sans-serif" font-size="9" font-weight="700"
+        fill="rgba(240,237,232,0.4)">P24</text>
+</svg>
