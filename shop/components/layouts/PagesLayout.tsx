@@ -40,12 +40,13 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
   const openQuickViewModal = useUnit($openQuickViewModal)
   const [cookieAlertOpen, setCookieAlertOpen] = useState(false)
-  const [shouldShowContent, setShouldShowContent] = useState(false)
   const showSizeTable = useUnit($showSizeTable)
   const openAuthModal = useUnit($openAuthPopup)
   const openShareModal = useUnit($shareModal)
   const protectedRoutes = ['/profile']
   const pathname = usePathname()
+  const isProtected = protectedRoutes.includes(pathname)
+  const [shouldShowContent, setShouldShowContent] = useState(!isProtected)
 
   useEffect(() => {
     if (protectedRoutes.includes(pathname)) {
