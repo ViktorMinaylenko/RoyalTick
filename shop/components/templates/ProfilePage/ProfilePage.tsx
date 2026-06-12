@@ -100,14 +100,13 @@ const ProfilePage = () => {
     if (!user?._id) return null
 
     const handleDeleteUser = () => {
-        const auth = JSON.parse(localStorage.getItem('auth') as string)
-        deleteUser({ jwt: auth.accessToken, id: user._id, handleLogout })
         if (activeLots.length > 0 || reservedLots.length > 0) {
-            toast.error(
-                'Не можна видалити акаунт поки є активні лоти або лоти в резерві'
-            )
+            toast.error('Не можна видалити акаунт поки є активні лоти або лоти в резерві')
             return
         }
+
+        const auth = JSON.parse(localStorage.getItem('auth') as string)
+        deleteUser({ jwt: auth.accessToken, id: user._id, handleLogout })
     }
 
     const renderStars = (rating: number) =>
