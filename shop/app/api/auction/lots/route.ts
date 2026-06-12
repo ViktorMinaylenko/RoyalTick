@@ -117,9 +117,19 @@ export async function POST(req: Request) {
         const startPrice = formData.get('startPrice') as string
         const endDate = formData.get('endDate') as string
 
-        if (!title || !description || !startPrice || !endDate) {
+        const saleType = formData.get('saleType') as string
+        const isFixedPrice = saleType === 'fixed_price'
+
+        if (!title || !description || !startPrice) {
             return NextResponse.json(
                 { message: 'Всі обовʼязкові поля мають бути заповнені', status: 400 },
+                corsHeaders
+            )
+        }
+
+        if (!isFixedPrice && !endDate) {
+            return NextResponse.json(
+                { message: 'Вкажіть дату завершення аукціону', status: 400 },
                 corsHeaders
             )
         }
@@ -169,7 +179,9 @@ export async function POST(req: Request) {
             reservePrice: Number(formData.get('reservePrice')) || null,
             buyNowPrice: Number(formData.get('buyNowPrice')) || null,
             startDate: formData.get('startDate') ? new Date(formData.get('startDate') as string) : null,
-            endDate: new Date(endDate),
+            endDate: isFixedPrice
+                ? new Date('2099-12-31')
+                : new Date(endDate),
             autoExtend: formData.get('autoExtend') === 'true',
             location: formData.get('location') as string,
             deliveryMethods: formData.getAll('deliveryMethods') as string[],

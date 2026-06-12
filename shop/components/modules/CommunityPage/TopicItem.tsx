@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useUnit } from 'effector-react'
 import { $user } from '@/context/user/state'
-import { IDeleteTopicProps, ITopic } from '@/types/community'
+import { IDeleteTopicProps} from '@/types/community'
 import Link from 'next/link'
 import { useLang } from '@/hooks/useLang'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

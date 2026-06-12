@@ -1,33 +1,25 @@
 'use client'
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLang } from '@/hooks/useLang'
 import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
+import { usePhotoUpload } from '@/hooks/usePhotoUpload'
+import { useCreateTopic } from '@/hooks/useCreateTopic'
 import styles from '@/styles/community/index.module.scss'
+import auctionStyles from '@/styles/auction/index.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
-import toast from 'react-hot-toast'
-import { usePhotoUpload } from '@/hooks/usePhotoUpload'
 import PhotoUploadGrid from '@/components/elements/PhotoUploadGrid/PhotoUploadGrid'
 import TagsInput from '@/components/elements/TagsInput/TagsInput'
 import { COMMUNITY_CATEGORIES_KEYS } from '@/constants/community'
-import auctionStyles from '@/styles/auction/index.module.scss'
 
 const CreateTopicPage = () => {
     const router = useRouter()
     const { lang, translations } = useLang()
     const t = (translations[lang] as any).community
-    const { getDefaultTextGenerator, getTextGenerator } = useBreadcrumbs('create_topic')
+    const { getDefaultTextGenerator, getTextGenerator } = useBreadcrumbs('community')
 
     const CATEGORIES = COMMUNITY_CATEGORIES_KEYS.map(key => t.categories[key])
-
-    const [title, setTitle] = useState('')
-    const [body, setBody] = useState('')
-    const [category, setCategory] = useState('')
-    const [tagInput, setTagInput] = useState('')
-    const [tags, setTags] = useState<string[]>([])
-    const [spinner, setSpinner] = useState(false)
 
     const {
         additionalPhotos: photos,
@@ -35,57 +27,16 @@ const CreateTopicPage = () => {
         handleAdditionalPhoto: handlePhotoChange,
     } = usePhotoUpload(4)
 
-    const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && tagInput.trim()) {
-            e.preventDefault()
-            if (tags.length >= 5) return
-            if (!tags.includes(tagInput.trim())) {
-                setTags([...tags, tagInput.trim()])
-            }
-            setTagInput('')
-        }
-    }
-
-    const handleRemoveTag = (tag: string) => setTags(tags.filter(tg => tg !== tag))
-
-    const handleSubmit = async () => {
-        if (!title.trim() || !body.trim() || !category) {
-            toast.error(t.required)
-            return
-        }
-
-        const auth = JSON.parse(localStorage.getItem('auth') as string)
-        setSpinner(true)
-
-        try {
-            const formData = new FormData()
-            formData.append('title', title)
-            formData.append('body', body)
-            formData.append('category', category)
-            formData.append('tags', JSON.stringify(tags))
-            photos.forEach((photo, i) => {
-                if (photo) formData.append(`photo_${i}`, photo)
-            })
-
-            const res = await fetch('/api/community/topics', {
-                method: 'POST',
-                headers: { Authorization: `Bearer ${auth.accessToken}` },
-                body: formData,
-            })
-            const data = await res.json()
-            if (data.status === 201) {
-                toast.success(t.success)
-                router.push(`/community/${data.topic._id}`)
-            } else {
-                toast.error(data.message || t.required)
-            }
-        } catch (error) {
-            console.error(error)
-            toast.error(t.required)
-        } finally {
-            setSpinner(false)
-        }
-    }
+    const {
+        title, setTitle,
+        body, setBody,
+        category, setCategory,
+        tagInput, setTagInput,
+        tags, spinner,
+        handleAddTag,
+        handleRemoveTag,
+        handleSubmit,
+    } = useCreateTopic(t, photos)
 
     return (
         <main>

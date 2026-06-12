@@ -1,0 +1,103 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam entityBackgroundColor #FFFFFF
+skinparam entityBorderColor #555555
+skinparam entityArrowColor #555555
+skinparam entityHeaderBackgroundColor #E8E8E8
+skinparam entityFontStyle bold
+skinparam entityFontSize 12
+skinparam padding 6
+skinparam nodesep 30
+skinparam ranksep 35
+
+title Скорочена діаграма класів RoyalTick
+
+entity "users" as U {
+  * _id : ObjectId
+  --
+  name, email, role
+  balance, rating
+  isBlocked, isVerified
+}
+
+entity "products" as PROD {
+  * _id : ObjectId
+  --
+  name, price, category
+  inStock, characteristics
+}
+
+entity "lots" as LOTS {
+  * _id : ObjectId
+  --
+  title, category, status
+  currentPrice, bidStep
+  userId, bids[]
+}
+
+entity "chats" as CHAT {
+  * _id : ObjectId
+  --
+  lotId, winnerId, ownerId
+  status, messages[]
+}
+
+entity "topics" as TOP {
+  * _id : ObjectId
+  --
+  title, body, category
+  userId, messages[]
+}
+
+entity "cart" as CART {
+  * _id : ObjectId
+  --
+  userId, productId
+  count, price
+}
+
+entity "favorites" as FAV {
+  * _id : ObjectId
+  --
+  userId, productId
+  name, price
+}
+
+entity "comparison" as CMP {
+  * _id : ObjectId
+  --
+  userId, productId
+  characteristics
+}
+
+entity "notifications" as NOTIF {
+  * _id : ObjectId
+  --
+  userId, type
+  isRead, createdAt
+}
+
+entity "codes" as CODES {
+  * _id : ObjectId
+  --
+  code, oldEmail
+  newEmail
+}
+
+U ||--o{ CART : "userId"
+U ||--o{ FAV : "userId"
+U ||--o{ CMP : "userId"
+U ||--o{ LOTS : "userId"
+U ||--o{ TOP : "userId"
+U ||--o{ NOTIF : "userId"
+U ||--o{ CODES : "userId"
+
+PROD ||--o{ CART : "productId"
+PROD ||--o{ FAV : "productId"
+PROD ||--o{ CMP : "productId"
+
+LOTS ||--o| CHAT : "lotId"
+
+@enduml

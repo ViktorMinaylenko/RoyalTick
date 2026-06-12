@@ -21,6 +21,15 @@ export const useUserAvatar = () => {
     }
 
     setSrc('')
+  }, [user.image, user._id])
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      if (!user.image && firebaseUser?.photoURL) {
+        setSrc(firebaseUser.photoURL)
+      }
+    })
+    return () => unsubscribe()
   }, [user.image])
 
   return { src, alt: user.name || 'User avatar' }

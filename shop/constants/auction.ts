@@ -1,4 +1,4 @@
-export const auctionSaleTypes = ['auction', 'fixed', 'combined'] as const
+export const auctionSaleTypes = ['auction', 'fixed_price'] as const
 
 export const auctionConditions = ['new', 'used', 'refurbished'] as const
 

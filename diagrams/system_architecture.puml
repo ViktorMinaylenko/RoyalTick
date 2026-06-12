@@ -12,8 +12,6 @@ skinparam ActorBorderColor #333333
 skinparam ActorBackgroundColor #FFFFFF
 skinparam ActorFontSize 12
 
-title Архітектурна схема вебплатформи RoyalTick
-
 actor "Користувач" as USER
 actor "Модератор" as MOD
 actor "Адміністратор" as ADMIN_ACTOR

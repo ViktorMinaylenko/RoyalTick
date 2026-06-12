@@ -5,6 +5,15 @@ export interface IBid {
     createdAt: string
 }
 
+export interface IPriceProposal {
+    userId: string
+    userName: string
+    amount: number
+    comment: string
+    status: 'pending' | 'accepted' | 'declined'
+    createdAt: string
+}
+
 export interface ILot {
     _id: string
     title: string
@@ -36,6 +45,7 @@ export interface ILot {
     createdAt: string
     status: string
     bids: IBid[]
+    priceProposal?: IPriceProposal
 }
 
 export interface IProfileLotsSliderProps {
@@ -132,4 +142,27 @@ export const initialForm: ILotForm = {
     moderatorNote: '',
     confirmRules: false,
     videoUrl: '',
+}
+
+export interface IPropsProposal {
+    t: any
+    priceProposal: IPriceProposal | undefined
+    proposalAmount: string
+    proposalComment: string
+    proposalSpinner: boolean
+    onAmountChange: (val: string) => void
+    onCommentChange: (val: string) => void
+    onPropose: () => void
+}
+
+export interface ISellerProposalProps {
+    t: any
+    priceProposal: IPriceProposal
+    respondSpinner: boolean
+    onRespond: (action: 'accept' | 'decline') => void
+}
+
+export interface IPropsUserPageLots {
+    lots: any[]
+    t: any
 }

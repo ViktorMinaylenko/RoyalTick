@@ -15,16 +15,11 @@ skinparam packageFontStyle bold
 skinparam nodesep 6
 skinparam ranksep 28
 
-title Діаграма варіантів використання платформи RoyalTick
-
 actor "Гість" as G
 actor "Зареєстрований\nкористувач" as U
 actor "Верифікований\nкористувач" as V
 actor "Модератор" as M
 actor "Адміністратор" as A
-
-U -|> G
-V -|> U
 
 rectangle "Платформа RoyalTick" {
 
@@ -66,8 +61,11 @@ rectangle "Платформа RoyalTick" {
 G --> UC1
 G --> UC2
 G --> UC3
+G --> UC4
 
-U --> UC4
+U --> UC1
+U --> UC2
+U --> UC3
 U --> UC5
 U --> UC6
 U --> UC7
@@ -77,18 +75,27 @@ U --> UC10
 U --> UC11
 U --> UC12
 
+V --> UC1
+V --> UC2
+V --> UC3
+V --> UC5
+V --> UC7
+V --> UC8
+V --> UC12
 V --> UC13
 V --> UC14
 V --> UC15
 V --> UC16
 
+M --> UC1
 M --> UC17
 M --> UC18
 M --> UC19
 M --> UC20
 
-A --> UC21
-A --> UC22
+A --> UC1
 A --> UC17
 A --> UC20
+A --> UC21
+A --> UC22
 @enduml

@@ -31,12 +31,13 @@ import '@/context/goods/index'
 import { $openQuickViewModal, $shareModal, $showSizeTable } from '@/context/modals/state'
 import { $openAuthPopup } from '@/context/auth/state'
 import { usePathname } from 'next/dist/client/components/navigation'
-import router from 'next/router'
+import { useRouter } from 'next/navigation'
 import { loginCheckFx } from '@/context/user'
 import VerificationModal from '@/components/modules/VerificationModal/VerificationModal'
-
+import { AnalyticScripts } from '../modules/Analitycs'
 
 const PagesLayout = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter()
   const openQuickViewModal = useUnit($openQuickViewModal)
   const [cookieAlertOpen, setCookieAlertOpen] = useState(false)
   const [shouldShowContent, setShouldShowContent] = useState(false)
@@ -120,6 +121,7 @@ const PagesLayout = ({ children }: { children: React.ReactNode }) => {
         )}
 
         <Toaster position='top-center' reverseOrder={false} />
+        <AnalyticScripts />
         <VerificationModal /> 
       </body>
     </html>

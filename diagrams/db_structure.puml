@@ -2,278 +2,154 @@
 skinparam backgroundColor #FFFFFF
 skinparam defaultFontName Arial
 skinparam defaultFontSize 11
-skinparam entityBackgroundColor #FFFFFF
-skinparam entityBorderColor #555555
-skinparam entityArrowColor #555555
-skinparam entityHeaderBackgroundColor #E8E8E8
+skinparam entityBackgroundColor #FAFAFA
+skinparam entityBorderColor #333333
+skinparam entityArrowColor #444444
+skinparam entityHeaderBackgroundColor #D0D0D0
 skinparam entityFontStyle bold
 skinparam entityFontSize 12
 skinparam padding 6
-skinparam nodesep 25
-skinparam ranksep 30
+skinparam nodesep 30
+skinparam ranksep 35
+skinparam shadowing false
 
-title Структура колекцій бази даних RoyalTick (MongoDB)
+title Скорочена діаграма колекцій бази даних RoyalTick
 
 entity "users" as U {
   * _id : ObjectId
   --
-  name : String
-  email : String
-  password : String
-  image : String
-  role : String
-  balance : Number
-  sellerRating : Number
-  buyerRating : Number
-  isBlocked : Boolean
-  isVerified : Boolean
-  verifiedAt : String
-  followers : String[]
-  following : String[]
-  sellerReviews : Review[]
-  buyerReviews : Review[]
-}
-
-entity "Review (embedded)" as REV {
-  fromUserId : String
-  rating : Number
-  comment : String
-  lotTitle : String
-  createdAt : String
-}
-
-entity "<<abstract>>\nProduct" as PROD {
-  * _id : ObjectId
-  --
-  name : String
-  price : Number
-  description : String
-  images : String[]
-  vendorCode : String
-  inStock : Number
-  isBestseller : Boolean
-  isNew : Boolean
-  popularity : Number
-  characteristics : Map
-  sizes : Map
+  name, email, role
+  balance, isVerified
+  sellerRating, buyerRating
 }
 
 entity "watches" as W {
   * _id : ObjectId
   --
-  type : String
-  collection : String
-  characteristics : Map
-  (механізм, матеріал,
-  скло, бренд...)
+  name, price, category
+  characteristics, inStock
 }
 
 entity "straps" as ST {
   * _id : ObjectId
   --
-  type : String
-  collection : String
-  characteristics : Map
-  (матеріал, застібка,
-  текстура...)
+  name, price, category
+  characteristics, inStock
 }
 
 entity "boxes" as BX {
   * _id : ObjectId
   --
-  type : String
-  collection : String
-  characteristics : Map
-  (матеріал, місткість,
-  оздоблення...)
+  name, price, category
+  characteristics, inStock
 }
 
 entity "care" as CR {
   * _id : ObjectId
   --
-  type : String
-  collection : String
-  characteristics : Map
-  (поверхня, пакування,
-  склад...)
+  name, price, category
+  characteristics, inStock
 }
 
-entity "lots" as LOTS {
+entity "lots" as L {
   * _id : ObjectId
   --
-  title : String
-  category : String
-  condition : String
-  saleType : String
-  startPrice : Number
-  currentPrice : Number
-  bidStep : Number
-  buyNowPrice : Number
-  startDate : String
-  endDate : String
-  status : String
-  userId : String
-  bids : Bid[]
+  title, saleType, status
+  currentPrice, userId
+  bids[], endDate
 }
 
-entity "Bid (embedded)" as BID {
-  userId : String
-  userName : String
-  amount : Number
-  createdAt : String
-}
-
-entity "chats" as CHAT {
+entity "chats" as CH {
   * _id : ObjectId
   --
-  lotId : String
-  winnerId : String
-  ownerId : String
-  status : String
-  dealCompletedByOwner : Boolean
-  dealCompletedByWinner : Boolean
-  ownerRatedBuyer : Boolean
-  winnerRatedSeller : Boolean
-  messages : Message[]
+  lotId, winnerId, ownerId
+  status, messages[]
+  dealCompletedByOwner
+  dealCompletedByWinner
 }
 
-entity "Message (embedded)" as MSG {
-  _id : String
-  senderId : String
-  text : String
-  createdAt : String
-  isRead : Boolean
-}
-
-entity "cart" as CART {
+entity "cart" as CA {
   * _id : ObjectId
   --
-  userId : String
-  productId : String
-  name : String
-  size : String
-  count : Number
-  price : String
-  totalPrice : String
-  category : String
+  userId, productId
+  category, count, price
 }
 
-entity "favorites" as FAV {
+entity "favorites" as FA {
   * _id : ObjectId
   --
-  userId : String
-  productId : String
-  name : String
-  size : String
-  price : Number
-  category : String
+  userId, productId
+  category, price
 }
 
-entity "comparison" as CMP {
+entity "comparison" as CM {
   * _id : ObjectId
   --
-  userId : String
-  productId : String
-  name : String
-  price : String
-  category : String
-  characteristics : Map
+  userId, productId
+  category, characteristics
 }
 
-entity "topics" as TOP {
+entity "topics" as T {
   * _id : ObjectId
   --
-  title : String
-  body : String
-  category : String
-  tags : String[]
-  userId : String
-  views : Number
-  likes : String[]
-  createdAt : String
-  messages : TopicMessage[]
+  title, body, category
+  userId, messages[]
+  likes[], views
 }
 
-entity "TopicMessage (embedded)" as TOPMSG {
-  _id : String
-  userId : String
-  text : String
-  replyToId : String
-  createdAt : String
-}
-
-entity "notifications" as NOTIF {
+entity "notifications" as N {
   * _id : ObjectId
   --
-  userId : String
-  type : String
-  actorName : String
-  lotTitle : String
-  bidAmount : Number
-  chatId : String
-  isRead : Boolean
-  createdAt : String
+  userId, type
+  isRead, href
 }
 
-entity "codes" as CODES {
+entity "codes" as CO {
   * _id : ObjectId
   --
-  code : String
-  oldEmail : String
-  newEmail : String
+  code, oldEmail
+  newEmail
 }
 
-entity "images" as IMGS {
+entity "images" as IM {
   * _id : ObjectId
   --
-  imgId : String
-  title : String
-  src : String
-  path : String
+  imgId, src, title
 }
-
-W --|> PROD
-ST --|> PROD
-BX --|> PROD
-CR --|> PROD
 
 W -[hidden]right- ST
 ST -[hidden]right- BX
 BX -[hidden]right- CR
 
-CART -[hidden]right- FAV
-FAV -[hidden]right- CMP
+CA -[hidden]right- FA
+FA -[hidden]right- CM
 
-NOTIF -[hidden]right- CODES
-CODES -[hidden]right- IMGS
+N -[hidden]right- CO
+CO -[hidden]right- IM
 
-U -[hidden]down- PROD
-PROD -[hidden]down- LOTS
-LOTS -[hidden]down- CHAT
-CHAT -[hidden]down- TOP
-TOP -[hidden]down- CART
-CART -[hidden]down- NOTIF
+U ||--o{ L : "userId"
+U ||--o{ CA : "userId"
+U ||--o{ FA : "userId"
+U ||--o{ CM : "userId"
+U ||--o{ T : "userId"
+U ||--o{ N : "userId"
+U ||--o{ CO : "userId"
 
-REV -[hidden]right- BID
-BID -[hidden]right- MSG
-MSG -[hidden]right- TOPMSG
+L ||--o| CH : "lotId"
 
-U ||--o{ REV : "embedded"
-LOTS ||--o{ BID : "embedded"
-CHAT ||--o{ MSG : "embedded"
-TOP ||--o{ TOPMSG : "embedded"
+W ||--o{ CA : "productId"
+W ||--o{ FA : "productId"
+W ||--o{ CM : "productId"
 
-U ||--o{ CART : "userId"
-U ||--o{ FAV : "userId"
-U ||--o{ CMP : "userId"
-U ||--o{ LOTS : "userId"
-U ||--o{ TOP : "userId"
-U ||--o{ NOTIF : "userId"
-U ||--o{ CODES : "userId"
+ST ||--o{ CA : "productId"
+ST ||--o{ FA : "productId"
+ST ||--o{ CM : "productId"
 
-PROD ||--o{ CART : "productId"
-PROD ||--o{ FAV : "productId"
-PROD ||--o{ CMP : "productId"
+BX ||--o{ CA : "productId"
+BX ||--o{ FA : "productId"
+BX ||--o{ CM : "productId"
 
-LOTS ||--o| CHAT : "lotId"
+CR ||--o{ CA : "productId"
+CR ||--o{ FA : "productId"
+CR ||--o{ CM : "productId"
 @enduml

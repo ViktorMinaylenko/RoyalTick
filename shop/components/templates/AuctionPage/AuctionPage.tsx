@@ -13,6 +13,7 @@ import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { motion } from 'framer-motion'
 import { basePropsForMotion } from '@/constants/motion'
 import { useAuctionFilters } from '@/hooks/useAuctionFilters'
+import { useAuctionInit } from '@/hooks/useAuctionInit'
 import { LOTS_PER_PAGE } from '@/constants/auction'
 
 const AuctionPage = () => {
@@ -33,11 +34,7 @@ const AuctionPage = () => {
         fetchLots, handleReset, handlePageChange,
     } = useAuctionFilters()
 
-    useEffect(() => {
-        fetch('/api/auction/lots/finalize', { method: 'POST' }).catch(console.error)
-        fetch('/api/auction/lots/restore-inactive', { method: 'POST' }).catch(console.error)
-        fetchLots(0)
-    }, [])
+    useAuctionInit(() => fetchLots(0))
 
     useEffect(() => {
         fetchLots(0)

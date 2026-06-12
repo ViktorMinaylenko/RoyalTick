@@ -1,16 +1,16 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { isUserAuth, handleopenAuthModal } from '@/lib/utils/common'
 import { useLang } from '@/hooks/useLang'
-import { ITopic } from '@/types/community'
+import { useCommunityTopics } from '@/hooks/useCommunityTopics'
+import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 import TopicItem from '@/components/modules/CommunityPage/TopicItem'
 import CategorySidebar from '@/components/modules/CommunityPage/CategorySidebar'
+import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 import styles from '@/styles/community/index.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
-import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 
 const CommunityPage = () => {
     const { getDefaultTextGenerator, getTextGenerator } = useBreadcrumbs('community')
@@ -18,30 +18,8 @@ const CommunityPage = () => {
     const { lang, translations } = useLang()
     const t = (translations[lang] as any).community
 
-    const [topics, setTopics] = useState<ITopic[]>([])
-    const [count, setCount] = useState(0)
-    const [spinner, setSpinner] = useState(true)
     const [category, setCategory] = useState('')
-
-    const fetchTopics = async (cat: string) => {
-        setSpinner(true)
-        try {
-            const params = new URLSearchParams({ limit: '30' })
-            if (cat) params.set('category', cat)
-            const res = await fetch(`/api/community/topics?${params}`)
-            const data = await res.json()
-            if (data.status === 200) {
-                setTopics(data.topics)
-                setCount(data.count)
-            }
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setSpinner(false)
-        }
-    }
-
-    useEffect(() => { fetchTopics(category) }, [category])
+    const { topics, count, spinner } = useCommunityTopics(category)
 
     const handleCreate = () => {
         if (!isUserAuth()) { handleopenAuthModal(); return }

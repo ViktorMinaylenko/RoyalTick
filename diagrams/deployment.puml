@@ -13,8 +13,6 @@ skinparam ArrowColor #444444
 skinparam ArrowFontSize 10
 skinparam padding 10
 
-title Діаграма розгортання платформи RoyalTick
-
 together {
   node "Покупець" as USER
   node "Адміністратор" as ADMIN_USER
@@ -34,7 +32,7 @@ node "MongoDB Atlas\n(Хмарна БД)" as MONGO_NODE {
 }
 
 node "Зовнішні API" as EXTERNAL {
-  component "Платежі\nWayForPay · LiqPay" as PAYMENT
+  component "Платежі\nWayForPay" as PAYMENT
   component "Медіа та геодані\nCloudinary · TomTom\nGeoapify · Nova Poshta" as MEDIA
   component "Авторизація та пошта\nFirebase Auth · Nodemailer" as AUTH
 }

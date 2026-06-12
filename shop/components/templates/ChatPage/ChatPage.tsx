@@ -3,7 +3,7 @@ import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 import { useLang } from '@/hooks/useLang'
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import styles from '@/styles/chats/index.module.scss'
@@ -12,6 +12,7 @@ import { useUnit } from 'effector-react'
 import Link from 'next/link'
 import { IChat } from '@/types/lots'
 import { useChat } from '@/hooks/useChat'
+import { useChatData } from '@/hooks/useChatData'
 import ChatMessages from '@/components/modules/ChatPage/ChatMessages'
 import ChatDealBlock from '@/components/modules/ChatPage/ChatDealBlock'
 import InviteModeratorModal from '@/components/modules/ChatPage/InviteModeratorModal'
@@ -22,19 +23,10 @@ const ChatPage = () => {
     const { getDefaultTextGenerator, getTextGenerator } = useBreadcrumbs('chat')
     const user = useUnit($user) as any
     const params = useParams()
-    const router = useRouter()
     const messagesEndRef = useRef<HTMLDivElement>(null)
-
-    const [chat, setChat] = useState<IChat | null>(null)
-    const [spinner, setSpinner] = useState(true)
     const [showInviteModModal, setShowInviteModModal] = useState(false)
 
-    useEffect(() => {
-        if (chat?.lotTitle) {
-            const lastCrumb = document.querySelector('.last-crumb') as HTMLElement
-            if (lastCrumb) lastCrumb.textContent = chat.lotTitle
-        }
-    }, [chat?.lotTitle])
+    const { chat, setChat, spinner } = useChatData(String(params.id))
 
     const {
         text, setText,
@@ -45,30 +37,11 @@ const ChatPage = () => {
     } = useChat(String(params.id), setChat as (chat: IChat) => void)
 
     useEffect(() => {
-        if (!params.id) return
-        const auth = localStorage.getItem('auth')
-        if (!auth) return
-        const { accessToken } = JSON.parse(auth)
-
-        const fetchChat = async () => {
-            try {
-                const res = await fetch(`/api/chats/${params.id}`, {
-                    headers: { Authorization: `Bearer ${accessToken}` },
-                })
-                const data = await res.json()
-                if (data.status === 200) setChat(data.chat)
-                else router.push('/chats')
-            } catch (error) {
-                console.error(error)
-            } finally {
-                setSpinner(false)
-            }
+        if (chat?.lotTitle) {
+            const lastCrumb = document.querySelector('.last-crumb') as HTMLElement
+            if (lastCrumb) lastCrumb.textContent = chat.lotTitle
         }
-
-        fetchChat()
-        const interval = setInterval(fetchChat, 3000)
-        return () => clearInterval(interval)
-    }, [params.id])
+    }, [chat?.lotTitle])
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })

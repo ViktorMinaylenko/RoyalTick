@@ -246,16 +246,16 @@ export const updateSearchParam = (
   const urlParams = getSearchParamsUrl()
   urlParams.set(key, `${value}`)
   const newUrl = `${pathname}?${urlParams.toString()}`
-  window.history.pushState({path: newUrl}, '', newUrl)
+  window.history.pushState({ path: newUrl }, '', newUrl)
 }
 
-export const checkPriceParam = (price: number) => price && !isNaN(price) &&  price >= 0 && price <= 100000
+export const checkPriceParam = (price: number) => price && !isNaN(price) && price >= 0 && price <= 100000
 
 export const getCheckedArrayParam = (param: string) => {
   try {
     const sizesArr = JSON.parse(decodeURIComponent(param))
 
-    if(Array.isArray(sizesArr) && sizesArr.length) {
+    if (Array.isArray(sizesArr) && sizesArr.length) {
       return sizesArr
     }
   } catch (error) {
@@ -267,9 +267,9 @@ export const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
 
 export const getWatchedProductsFromLS = () => {
-  let watchedProducts: IProduct[] = JSON.parse(localStorage.getItem('watched')as string)
+  let watchedProducts: IProduct[] = JSON.parse(localStorage.getItem('watched') as string)
 
-  if(!watchedProducts || !Array.isArray(watchedProducts)) {
+  if (!watchedProducts || !Array.isArray(watchedProducts)) {
     watchedProducts = []
   }
 
@@ -281,7 +281,7 @@ export const handleCloseShareModal = () => {
   closeShareModal()
 }
 
-export const addScriptToHead = (src:string) => {
+export const addScriptToHead = (src: string) => {
   const script = document.createElement('script')
   document.head.appendChild(script)
 
@@ -312,3 +312,21 @@ export const isValidAvatarImage = (image: File) => {
 
   return true
 }
+
+export const formatLotDate = (dateStr: string, lang: string) =>
+  new Date(dateStr).toLocaleString(lang === 'ua' ? 'uk-UA' : 'en-US', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
+  })
+
+export const formatTopicDate = (dateStr: string, lang: string) =>
+  new Date(dateStr).toLocaleString(
+    lang === 'ua' ? 'uk-UA' : 'en-US',
+    { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }
+  )
+
+export const formatReviewDate = (dateStr: string, lang: string) =>
+  new Date(dateStr).toLocaleDateString(
+    lang === 'ua' ? 'uk-UA' : 'en-US',
+    { day: '2-digit', month: '2-digit', year: 'numeric' }
+  )

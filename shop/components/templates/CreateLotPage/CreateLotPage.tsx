@@ -43,6 +43,7 @@ const CreateLotPage = () => {
 
     const subcategoryOptions = form.category ? auctionSubcategories[form.category] || [] : []
     const hasEnoughBalance = (user?.balance || 0) >= LOT_CREATION_FEE
+    const isFixedPrice = form.saleType === 'fixed_price'
 
     return (
         <main>
@@ -223,10 +224,10 @@ const CreateLotPage = () => {
                                     </select>
                                 </div>
 
-                                <div className={styles.create_lot__row3}>
+                                {isFixedPrice ? (
                                     <div className={styles.create_lot__field}>
                                         <label className={styles.create_lot__label}>
-                                            {t.start_price}<span className={styles.create_lot__label_required}>*</span>
+                                            {t.fixed_price || t.start_price}<span className={styles.create_lot__label_required}>*</span>
                                         </label>
                                         <input
                                             name='startPrice'
@@ -239,87 +240,107 @@ const CreateLotPage = () => {
                                         />
                                         {errors.startPrice && <span className={styles.create_lot__error}>{errors.startPrice}</span>}
                                     </div>
+                                ) : (
+                                    <>
+                                        <div className={styles.create_lot__row3}>
+                                            <div className={styles.create_lot__field}>
+                                                <label className={styles.create_lot__label}>
+                                                    {t.start_price}<span className={styles.create_lot__label_required}>*</span>
+                                                </label>
+                                                <input
+                                                    name='startPrice'
+                                                    type='number'
+                                                    min={1}
+                                                    className={`${styles.create_lot__input} ${errors.startPrice ? styles.create_lot__input_error : ''}`}
+                                                    placeholder='₴'
+                                                    value={form.startPrice}
+                                                    onChange={handleChange}
+                                                />
+                                                {errors.startPrice && <span className={styles.create_lot__error}>{errors.startPrice}</span>}
+                                            </div>
 
-                                    <div className={styles.create_lot__field}>
-                                        <label className={styles.create_lot__label}>
-                                            {t.bid_step}<span className={styles.create_lot__label_required}>*</span>
+                                            <div className={styles.create_lot__field}>
+                                                <label className={styles.create_lot__label}>
+                                                    {t.bid_step}<span className={styles.create_lot__label_required}>*</span>
+                                                </label>
+                                                <input
+                                                    name='bidStep'
+                                                    type='number'
+                                                    min={1}
+                                                    className={`${styles.create_lot__input} ${errors.bidStep ? styles.create_lot__input_error : ''}`}
+                                                    placeholder='₴'
+                                                    value={form.bidStep}
+                                                    onChange={handleChange}
+                                                />
+                                                {errors.bidStep && <span className={styles.create_lot__error}>{errors.bidStep}</span>}
+                                            </div>
+
+                                            <div className={styles.create_lot__field}>
+                                                <label className={styles.create_lot__label}>{t.reserve_price}</label>
+                                                <input
+                                                    name='reservePrice'
+                                                    type='number'
+                                                    min={1}
+                                                    className={styles.create_lot__input}
+                                                    placeholder='₴'
+                                                    value={form.reservePrice}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.create_lot__field}>
+                                            <label className={styles.create_lot__label}>{t.buy_now_price}</label>
+                                            <input
+                                                name='buyNowPrice'
+                                                type='number'
+                                                min={1}
+                                                className={styles.create_lot__input}
+                                                placeholder='₴'
+                                                value={form.buyNowPrice}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+
+                                        <div className={styles.create_lot__row}>
+                                            <div className={styles.create_lot__field}>
+                                                <label className={styles.create_lot__label}>{t.start_date}</label>
+                                                <input
+                                                    name='startDate'
+                                                    type='datetime-local'
+                                                    className={styles.create_lot__input}
+                                                    value={form.startDate}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+
+                                            <div className={styles.create_lot__field}>
+                                                <label className={styles.create_lot__label}>
+                                                    {t.end_date}<span className={styles.create_lot__label_required}>*</span>
+                                                </label>
+                                                <input
+                                                    name='endDate'
+                                                    type='datetime-local'
+                                                    className={`${styles.create_lot__input} ${errors.endDate ? styles.create_lot__input_error : ''}`}
+                                                    value={form.endDate}
+                                                    onChange={handleChange}
+                                                />
+                                                {errors.endDate && <span className={styles.create_lot__error}>{errors.endDate}</span>}
+                                            </div>
+                                        </div>
+
+                                        <label className={styles.create_lot__toggle}>
+                                            <input
+                                                type='checkbox'
+                                                name='autoExtend'
+                                                checked={form.autoExtend}
+                                                onChange={handleChange}
+                                            />
+                                            <span className={styles.create_lot__toggle__track} />
+                                            <span className={styles.create_lot__toggle__label}>{t.auto_extend}</span>
                                         </label>
-                                        <input
-                                            name='bidStep'
-                                            type='number'
-                                            min={1}
-                                            className={`${styles.create_lot__input} ${errors.bidStep ? styles.create_lot__input_error : ''}`}
-                                            placeholder='₴'
-                                            value={form.bidStep}
-                                            onChange={handleChange}
-                                        />
-                                        {errors.bidStep && <span className={styles.create_lot__error}>{errors.bidStep}</span>}
-                                    </div>
-
-                                    <div className={styles.create_lot__field}>
-                                        <label className={styles.create_lot__label}>{t.reserve_price}</label>
-                                        <input
-                                            name='reservePrice'
-                                            type='number'
-                                            min={1}
-                                            className={styles.create_lot__input}
-                                            placeholder='₴'
-                                            value={form.reservePrice}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className={styles.create_lot__field}>
-                                    <label className={styles.create_lot__label}>{t.buy_now_price}</label>
-                                    <input
-                                        name='buyNowPrice'
-                                        type='number'
-                                        min={1}
-                                        className={styles.create_lot__input}
-                                        placeholder='₴'
-                                        value={form.buyNowPrice}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-
-                                <div className={styles.create_lot__row}>
-                                    <div className={styles.create_lot__field}>
-                                        <label className={styles.create_lot__label}>{t.start_date}</label>
-                                        <input
-                                            name='startDate'
-                                            type='datetime-local'
-                                            className={styles.create_lot__input}
-                                            value={form.startDate}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-
-                                    <div className={styles.create_lot__field}>
-                                        <label className={styles.create_lot__label}>
-                                            {t.end_date}<span className={styles.create_lot__label_required}>*</span>
-                                        </label>
-                                        <input
-                                            name='endDate'
-                                            type='datetime-local'
-                                            className={`${styles.create_lot__input} ${errors.endDate ? styles.create_lot__input_error : ''}`}
-                                            value={form.endDate}
-                                            onChange={handleChange}
-                                        />
-                                        {errors.endDate && <span className={styles.create_lot__error}>{errors.endDate}</span>}
-                                    </div>
-                                </div>
-
-                                <label className={styles.create_lot__toggle}>
-                                    <input
-                                        type='checkbox'
-                                        name='autoExtend'
-                                        checked={form.autoExtend}
-                                        onChange={handleChange}
-                                    />
-                                    <span className={styles.create_lot__toggle__track} />
-                                    <span className={styles.create_lot__toggle__label}>{t.auto_extend}</span>
-                                </label>
+                                    </>
+                                )}
                             </div>
 
                             <div className={styles.create_lot__section}>

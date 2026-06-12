@@ -33,6 +33,11 @@ export const useLotBid = (
             return
         }
 
+        if (bidAmount > 1000000) {
+            toast.error(t.bid_max_error || 'Максимальна ставка не може перевищувати 1 000 000 ₴')
+            return
+        }
+
         const auth = JSON.parse(localStorage.getItem('auth') as string)
         setBidSpinner(true)
 

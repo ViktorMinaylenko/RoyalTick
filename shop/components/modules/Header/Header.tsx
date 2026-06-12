@@ -44,6 +44,7 @@ import {
 } from '@/context/comparison/index'
 import { setLang } from '@/context/lang/index'
 import NotificationsPopup from './NotificationsPopup/NotificationsPopup'
+import { $user } from '@/context/user/state'
 
 const Header = () => {
   const isAuth = useUnit($isAuth)
@@ -51,6 +52,8 @@ const Header = () => {
   const { lang, translations } = useLang()
   const currentFavoritesByAuth = useGoodsByAuth($favorites, $favoritesFromLS)
   const currentComparisonByAuth = useGoodsByAuth($comparison, $comparisonFromLs)
+  const user = useUnit($user)
+  const isModerator = user?.role === 'moderator'
 
   const handleOpenMenu = () => {
     addOverflowHiddenToBody()
@@ -173,6 +176,14 @@ const Header = () => {
           {isAuth && (
             <li className='header__link-item'>
               <NotificationsPopup />
+            </li>
+          )}
+          {isAuth && isModerator && (
+            <li className='header__link-item'>
+              <Link
+                href='/moderator'
+                className='header__links__item__btn header__links__item__btn--moderator'
+              />
             </li>
           )}
           <li className='header__link-item'>

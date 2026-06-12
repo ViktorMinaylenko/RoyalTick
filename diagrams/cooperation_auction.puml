@@ -15,8 +15,6 @@ skinparam databaseBackgroundColor #F0F0F0
 
 autonumber
 
-title Діаграма кооперацій: взаємодія компонентів при обробці аукціонної угоди
-
 actor "Користувач" as USER
 participant "Auction\nComponent" as AC
 participant "Bid\nController" as BC

@@ -568,7 +568,9 @@
           color: rgba(240, 237, 232, 0.4);
           font-size: 13px;
           border: 1px solid rgba(255, 255, 255, 0.04);
-          transition: color 0.2s, border-color 0.2s;
+          transition:
+            color 0.2s,
+            border-color 0.2s;
 
           &:hover {
             color: #f0ede8;

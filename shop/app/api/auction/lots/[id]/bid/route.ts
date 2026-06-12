@@ -57,6 +57,13 @@ export async function POST(
             )
         }
 
+        if (bidAmount > 1000000) {
+            return NextResponse.json(
+                { message: 'Максимальна ставка не може перевищувати 1 000 000 ₴', status: 400 },
+                corsHeaders
+            )
+        }
+
         const newBid = {
             userId: user?._id,
             userName: user?.name,

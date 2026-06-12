@@ -24,12 +24,22 @@ export const useCreateLotForm = (
     ) => {
         const { name, value, type } = e.target
         const checked = (e.target as HTMLInputElement).checked
+
         setForm((prev) => ({
             ...prev,
             [name]: type === 'checkbox' ? checked : value,
             ...(name === 'category' ? { subcategory: '' } : {}),
         }))
+
         if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }))
+
+        if (name === 'saleType') {
+            if (value === 'fixed_price') {
+                setErrors((prev) => ({ ...prev, bidStep: '', endDate: '' }))
+            } else {
+                setErrors((prev) => ({ ...prev, startPrice: '' }))
+            }
+        }
     }
 
     const handleDeliveryMethodChange = (method: string) => {
@@ -44,6 +54,8 @@ export const useCreateLotForm = (
 
     const validate = () => {
         const newErrors: Record<string, string> = {}
+        const isFixedPrice = form.saleType === 'fixed_price'
+
         if (!form.title.trim()) newErrors.title = t.error_required
         if (!form.category) newErrors.category = t.error_required
         if (!form.subcategory) newErrors.subcategory = t.error_required
@@ -51,11 +63,12 @@ export const useCreateLotForm = (
         if (!form.condition) newErrors.condition = t.error_required
         if (!mainPhoto) newErrors.mainPhoto = t.error_required
         if (!form.startPrice || +form.startPrice <= 0) newErrors.startPrice = t.error_price
-        if (!form.bidStep || +form.bidStep <= 0) newErrors.bidStep = t.error_price
-        if (!form.endDate) newErrors.endDate = t.error_required
+        if (!isFixedPrice && (!form.bidStep || +form.bidStep <= 0)) newErrors.bidStep = t.error_price
+        if (!isFixedPrice && !form.endDate) newErrors.endDate = t.error_required
         if (!form.location.trim()) newErrors.location = t.error_required
         if (!form.deliveryMethods.length) newErrors.deliveryMethods = t.error_required
         if (!form.confirmRules) newErrors.confirmRules = t.error_rules
+
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
     }

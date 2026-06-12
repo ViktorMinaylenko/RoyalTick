@@ -131,7 +131,9 @@ const OrderInfoBlock = ({
               <span className={styles.order_block__info__text}>
                 {pickupTab
                   ? translations[lang].order.pickup_free
-                  : translations[lang].order.courier_delivery}
+                  : novaPoshtaTab
+                    ? translations[lang].order.nova_poshta
+                    : translations[lang].order.courier_delivery}
               </span>
             </p>
             <p className={styles.order_block__info}>

@@ -11,8 +11,6 @@ skinparam PartitionBorderColor #888888
 skinparam PartitionBackgroundColor #F8F8F8
 skinparam ArrowFontSize 10
 
-title Діаграма активності: пошук товару та оформлення замовлення
-
 |Користувач|
 start
 fork

@@ -22,8 +22,6 @@ export const useBreadcrumbs = (page: string) => {
   const getDefaultTextGenerator = useCallback(() => crumbText, [crumbText])
 
   const getTextGenerator = useCallback((param: string) => {
-    if (!isMounted) return ''
-
     const breadcrumbsTranslations = translations[lang].breadcrumbs as Record<string, string>
 
     const translation = breadcrumbsTranslations[param]
@@ -32,7 +30,7 @@ export const useBreadcrumbs = (page: string) => {
     if (param === 'catalog') return breadcrumbsTranslations.catalog
 
     return crumbText
-  }, [lang, translations, crumbText, isMounted])
+  }, [lang, translations, crumbText])
 
   usePageTitle(page, dynamicTitle)
 

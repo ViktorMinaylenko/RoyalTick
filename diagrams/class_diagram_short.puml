@@ -1,0 +1,93 @@
+@startuml
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam classBackgroundColor #FAFAFA
+skinparam classBorderColor #333333
+skinparam classArrowColor #444444
+skinparam classHeaderBackgroundColor #D0D0D0
+skinparam classFontStyle bold
+skinparam classFontSize 12
+skinparam padding 6
+skinparam nodesep 30
+skinparam ranksep 40
+skinparam roundcorner 0
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+hide stereotype
+hide circle
+
+class User {
+  _id, name, email
+  role, balance
+  isBlocked, isVerified
+}
+
+class Product {
+  _id, name, price
+  category, inStock
+  characteristics
+}
+
+class AuctionLot {
+  _id, title, status
+  currentPrice, bidStep
+  userId
+}
+
+class Chat {
+  _id, lotId
+  winnerId, ownerId
+  status
+}
+
+class Topic {
+  _id, title, body
+  category, userId
+  views, likes[]
+}
+
+class CartItem {
+  _id, userId
+  productId, size
+  count, price
+}
+
+class FavoriteItem {
+  _id, userId
+  productId, price
+}
+
+class ComparisonItem {
+  _id, userId
+  productId
+  characteristics
+}
+
+class Notification {
+  _id, userId
+  type, isRead
+  createdAt
+}
+
+class EmailCode {
+  _id, code
+  oldEmail, newEmail
+}
+
+User "1" --> "*" AuctionLot : lists
+User "1" --> "*" Topic : authors
+User "1" o-- "*" CartItem
+User "1" o-- "*" FavoriteItem
+User "1" o-- "*" ComparisonItem
+User "1" --> "*" Notification : receives
+User "1" --> "*" EmailCode : issues
+
+Product "1" o-- "*" CartItem
+Product "1" o-- "*" FavoriteItem
+Product "1" o-- "*" ComparisonItem
+
+AuctionLot "1" --> "0..1" Chat
+@enduml

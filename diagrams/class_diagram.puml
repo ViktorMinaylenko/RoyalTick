@@ -16,8 +16,6 @@ skinparam roundcorner 5
 
 hide stereotype
 
-title Діаграма класів доменних моделей RoyalTick
-
 class User {
   _id : String
   name : String

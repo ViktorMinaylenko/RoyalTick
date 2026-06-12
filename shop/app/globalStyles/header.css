@@ -38,6 +38,11 @@
   overflow: hidden;
 }
 
+.header__links__item__btn--moderator::before {
+  -webkit-mask-image: url(/img/moderator.svg);
+  mask-image: url(/img/moderator.svg);
+}
+
 .logo-royal {
   background: linear-gradient(145deg, #b8973f 0%, #e8d48b 45%, #b8973f 100%);
   -webkit-background-clip: text;

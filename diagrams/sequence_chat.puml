@@ -18,8 +18,6 @@ skinparam databaseBackgroundColor #F0F0F0
 skinparam ParticipantPadding 120
 skinparam BoxPadding 80
 
-title Діаграма послідовності: завершення торгів та приватний чат
-
 actor "Продавець  (Owner)" as OWNER
 actor "Переможець  (Winner)" as WINNER
 participant "Next.js  API" as API

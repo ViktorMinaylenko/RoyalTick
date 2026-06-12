@@ -11,8 +11,6 @@ skinparam NoteBackgroundColor #F9F9F9
 skinparam NoteBorderColor #AAAAAA
 skinparam packageBorderThickness 2
 
-title Порівняльний аналіз архітектурних стратегій
-
 package "1. Класичний моноліт" as M #FFE8E8 {
   rectangle " Інтерфейс " as ui1 #FFBBBB
   rectangle " Каталог " as cat1 #FFBBBB

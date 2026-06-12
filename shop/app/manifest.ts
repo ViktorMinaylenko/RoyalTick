@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'RoyalTick Application',
     short_name: 'RoyalTick App',
     description:
-      'RoyalTick магазин годинникыв, аксесуаров',
+      'RoyalTick магазин годинників, аксесуаров',
     start_url: '/',
     background_color: '#fff',
     theme_color: '#fff',

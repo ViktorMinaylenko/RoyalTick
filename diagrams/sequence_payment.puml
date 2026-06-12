@@ -18,8 +18,6 @@ skinparam databaseBackgroundColor #F0F0F0
 skinparam ParticipantPadding 80
 skinparam BoxPadding 60
 
-title Діаграма послідовності: оформлення замовлення та обробка платежу
-
 actor "Користувач" as USER
 participant "Next.js  API" as API
 participant "WayForPay" as WFP
