@@ -4,7 +4,7 @@ import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 import { useLang } from '@/hooks/useLang'
 import { formatPrice, formatLotDate, isUserAuth } from '@/lib/utils/common'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import styles from '@/styles/auction/index.module.scss'
 import { handleopenAuthModal } from '@/lib/utils/common'
 import { $user } from '@/context/user/state'
@@ -37,12 +37,12 @@ const LotPage = () => {
     const [activeImg, setActiveImg] = useState('')
     const [activeTab, setActiveTab] = useState<'description' | 'photos'>('description')
     
-    
+    const setLotRef = useRef<(lot: ILot) => void>(() => { })
 
     const { bidAmount, setBidAmount, bidSpinner, handleBid, initBidAmount } = useLotBid(
         String(params.id),
         null,
-        () => { }
+        (lot) => setLotRef.current(lot)
     )
 
     const { lot, setLot, spinner } = useLotData(
@@ -50,6 +50,8 @@ const LotPage = () => {
         initBidAmount,
         setActiveImg
     )
+
+    setLotRef.current = setLot as (lot: ILot) => void
 
     const { sellerLots } = useSellerLots(lot)
 
@@ -228,7 +230,7 @@ const LotPage = () => {
                                     ) : (
                                         <button
                                             className={`btn-reset ${styles.lot_page__bid__submit}`}
-                                            onClick={handleBid}
+                                            onClick={() => handleBid(lot)}
                                             disabled={bidSpinner || !canBid}
                                         >
                                             {bidSpinner ? '...' : t.make_bid_btn}

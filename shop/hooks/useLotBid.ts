@@ -23,9 +23,10 @@ export const useLotBid = (
         setBidAmount(currentPrice + bidStep)
     }
 
-    const handleBid = async () => {
+    const handleBid = async (currentLot?: ILot | null) => {
+        const activeLot = currentLot ?? lot
         if (!isUserAuth()) { handleopenAuthModal(); return }
-        if (!lot) return
+        if (!activeLot) return
 
         if (!currentUser?.isVerified) {
             addOverflowHiddenToBody()

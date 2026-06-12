@@ -107,8 +107,9 @@ export async function POST(
         }
 
         const updatedLot = await db.collection('lots').findOne({ _id: new ObjectId(id) })
+        const serialized = JSON.parse(JSON.stringify(updatedLot))
 
-        return NextResponse.json({ status: 200, lot: updatedLot }, corsHeaders)
+        return NextResponse.json({ status: 200, lot: serialized }, corsHeaders)
     } catch (error) {
         return NextResponse.json({ message: (error as Error).message, status: 500 }, corsHeaders)
     }
